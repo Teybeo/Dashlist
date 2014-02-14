@@ -1,5 +1,6 @@
-package Pack;
+package GUI;
 
+import Core.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -18,11 +19,9 @@ public class Login extends Observable {
 	private JButton connexion_btn;
 	private JButton sinscrire_btn;
 	private JFrame frame;
-	Core core;
 
-	public Login(Core core) {
+	public Login() {
 
-		this.core = core;
 		frame = new JFrame("Login - Dashlist");
 		$$$setupUI$$$();
 
@@ -36,13 +35,6 @@ public class Login extends Observable {
 		frame.setResizable(false);
 	}
 
-	private void signalSucces() {
-
-		frame.setVisible(false);
-		setChanged();
-		notifyObservers();
-	}
-
 	private void createUIComponents() {
 
 		connexion_btn = new JButton("Connexion");
@@ -53,10 +45,17 @@ public class Login extends Observable {
 				String login_str = login_field.getText();
 				String pwd_str = String.valueOf(pwd_field.getPassword());
 
-				int status = core.login(login_str, pwd_str);
+				UserDAO dao = new UserDAO(BddConnection.getInstance());
 
-				if (status != 0) // User is logged in
-					signalSucces();
+				User user = dao.login(login_str, pwd_str);
+
+				if (user != null) // User is logged in
+				{
+					frame.setVisible(false);
+					setChanged();
+					notifyObservers(user);
+					clearChanged();
+				}
 				else             // Failed login
 					System.out.println("Error: Wrong login or password");
 			}

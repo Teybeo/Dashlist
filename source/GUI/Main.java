@@ -1,4 +1,4 @@
-package Pack;
+package GUI;
 
 import javax.swing.*;
 
@@ -13,10 +13,9 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		Core core = new Core();
-		Interface gui = new Interface(core);
+		Accueil gui = new Accueil();
 
-		Login login = new Login(core);
+		Login login = new Login();
 		login.addObserver(gui);
 	}
 }
