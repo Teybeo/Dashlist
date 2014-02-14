@@ -28,7 +28,7 @@ public class Login extends Observable {
 
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
 		frame.setContentPane(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		login_field.requestFocus();
@@ -55,12 +55,10 @@ public class Login extends Observable {
 
 				int status = core.login(login_str, pwd_str);
 
-				if (status == 0) // User is logged in
+				if (status != 0) // User is logged in
 					signalSucces();
-				else if (status == 1) // Unknown login
-					System.out.println("Error: Login [" + login_str + "] is unknown");
-				else if (status == 2) // Wrong password
-					System.out.println("Error: Wrong password");
+				else             // Failed login
+					System.out.println("Error: Wrong login or password");
 			}
 		});
 	}
