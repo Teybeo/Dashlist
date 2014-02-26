@@ -1,27 +1,33 @@
 package Core;
 
-import java.util.HashSet;
-
 public class User {
 
 	int id;
 	String name;
-	HashSet<Board> boards;
 
-	public User( int id, String name, HashSet<Board> boards) {
+	public User( int id, String name) {
 
-		this.id = id;
-		this.boards = boards;
-		this.name = name;
-	}
-
-	public User(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public HashSet<Board> getBoards() {
+	public int getId() {
 
-		return boards;
+		return id;
+	}
+
+	public void setId(int id) {
+
+		this.id = id;
+	}
+
+	public String getName() {
+
+		return name;
+	}
+
+	public void setName(String name) {
+
+		this.name = name;
 	}
 }

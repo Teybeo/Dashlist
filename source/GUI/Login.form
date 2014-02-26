@@ -44,7 +44,7 @@
               </grid>
             </constraints>
             <properties>
-              <text value=""/>
+              <text value="Pierre"/>
             </properties>
           </component>
           <component id="97959" class="javax.swing.JPasswordField" binding="pwd_field">

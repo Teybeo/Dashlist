@@ -5,9 +5,10 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.HashSet;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,10 +16,10 @@ public class Accueil implements Observer {
 
 	private JFrame frame;
 	private JButton créerUnProjetButton;
-	private JList list1;
 	private JPanel panel;
+	private JPanel panel_list;
 	private User user;
-	private DefaultListModel list_data;
+	ArrayList<Board> boards;
 
 	public Accueil() {
 
@@ -27,7 +28,7 @@ public class Accueil implements Observer {
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
 		frame.setContentPane(panel);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.pack();
+		frame.setMinimumSize(new Dimension(350, 220));
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(false);
 
@@ -35,17 +36,48 @@ public class Accueil implements Observer {
 
 	public void loadAccount(User user) {
 
-		HashSet<Board> boards = user.getBoards();
+		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
+
+		boards = dao.getUserBoards(user.getId());
+
+		MouseAdapter mouse_action = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				String text = ((JLabel) (e.getSource())).getText();
+
+				for (int i = 0; i < boards.size(); i++) {
+					if (boards.get(i).getName().equals(text))
+						launchBoard(boards.get(i));
+				}
+			}
+		};
+
+		Cursor main = new Cursor(Cursor.HAND_CURSOR);
 
 		for (Board board : boards) {
 
-			list_data.addElement(board.getName());
+			JLabel tmp = new JLabel(board.getName());
+			tmp.setCursor(main);
+			tmp.addMouseListener(mouse_action);
+			panel_list.add(tmp);
 		}
 
-		frame.revalidate();
 		frame.pack();
-
 		frame.setVisible(true);
+	}
+
+
+	public void launchBoard(Board board) {
+
+		frame.setVisible(false);
+
+		// On charge les listes du tableau avant de lancer la fenêtre tableau
+		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
+		dao.loadLists(board);
+
+		new Tableau(user, board);
+		System.out.println("Load board " + board.getName());
 	}
 
 	@Override
@@ -59,8 +91,8 @@ public class Accueil implements Observer {
 
 	private void createUIComponents() {
 
-		list_data = new DefaultListModel();
-		list1 = new JList(list_data);
+		panel_list = new JPanel();
+		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
 	}
 
 	/**
@@ -75,16 +107,16 @@ public class Accueil implements Observer {
 		createUIComponents();
 		panel = new JPanel();
 		panel.setLayout(new GridLayoutManager(1, 2, new Insets(10, 10, 10, 10), -1, -1));
+		panel.setMinimumSize(new Dimension(408, 135));
+		panel.setPreferredSize(new Dimension(409, 135));
+		panel.add(panel_list, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+		panel_list.setBorder(BorderFactory.createTitledBorder("Mes projets"));
+		final JPanel panel1 = new JPanel();
+		panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+		panel.add(panel1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
 		créerUnProjetButton = new JButton();
 		créerUnProjetButton.setText("Créer un projet");
-		panel.add(créerUnProjetButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-		final JPanel panel1 = new JPanel();
-		panel1.setLayout(new GridLayoutManager(1, 1, new Insets(10, 10, 10, 10), -1, -1));
-		panel.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		panel1.setBorder(BorderFactory.createTitledBorder(null, "Mes projets", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font(panel1.getFont().getName(), panel1.getFont().getStyle(), 16)));
-		list1.setVisibleRowCount(8);
-		list1.putClientProperty("List.isFileList", Boolean.FALSE);
-		panel1.add(list1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+		panel1.add(créerUnProjetButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 	}
 
 	/**
