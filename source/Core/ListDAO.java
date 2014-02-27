@@ -34,7 +34,7 @@ public class ListDAO {
 
 				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-				lists.add(new List(dao.getListItems(list_id), res.getString("name"), res.getInt("position")));
+				lists.add(new List(list_id, res.getString("name"), res.getInt("position"), dao.getListItems(list_id)));
 
 			}
 

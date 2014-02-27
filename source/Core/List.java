@@ -9,15 +9,17 @@ public class List {
 	int position;
 	HashSet<Item> items;
 
-	public List(HashSet<Item> items, String name, int position) {
+	public List(int id, String name, int position, HashSet<Item> items) {
 
-		this.items = items;
+		this.id = id;
 		this.name = name;
 		this.position = position;
+		this.items = items;
 	}
 
 	public int getId() {
 
+		System.out.println(id);
 		return id;
 	}
 

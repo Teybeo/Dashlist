@@ -1,10 +1,7 @@
 package Core;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashSet;
+import java.sql.*;
+import java.util.*;
 
 public class ItemDAO {
 
@@ -13,6 +10,22 @@ public class ItemDAO {
 
 	public ItemDAO(Connection link) {
 		this.link = link;
+	}
+
+	public void add(String name, int list_id, int position) {
+
+		try {
+			Statement query = link.createStatement();
+
+			System.out.println("list_id: "+list_id+" pos: "+position);
+
+			query.execute("" +
+					"INSERT INTO item " +
+					"VALUES(default, "+list_id+",'"+name+"', CURDATE(), NULL, "+position+", NULL);");
+
+			} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 	}
 
 	public HashSet<Item> getListItems(int list_id) {
