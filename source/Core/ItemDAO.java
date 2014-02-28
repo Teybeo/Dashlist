@@ -12,16 +12,16 @@ public class ItemDAO {
 		this.link = link;
 	}
 
-	public void add(String name, int list_id, int position) {
+	public void add(Item item, int list_id) {
 
 		try {
 			Statement query = link.createStatement();
 
-			System.out.println("list_id: "+list_id+" pos: "+position);
+			System.out.println("list_id: "+list_id+" pos: "+item.getPosition());
 
 			query.execute("" +
 					"INSERT INTO item " +
-					"VALUES(default, "+list_id+",'"+name+"', CURDATE(), NULL, "+position+", NULL);");
+					"VALUES(default, "+list_id+",'"+item.getName()+"', CURDATE(), NULL, "+item.getPosition()+", NULL);");
 
 			} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

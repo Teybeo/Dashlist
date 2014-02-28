@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Date;
 
 public class Tableau {
 
@@ -68,47 +69,30 @@ public class Tableau {
 	// Lorsqu'on clique sur le bouton Ajouter, celui-ci disparaît et est remplacé par un champ de texte
 	// Un nouvel item est créé lorsque l'utilisateur rentre du texte et appuie sur Entrée
 	// Si le champ de texte perd le focus, aucun nouvel item n'est créé et le bouton Ajouter revient
-	private void presentItemNameInput(JButton source) {
+	private void presentItemNameInput(JButton btn_additem) {
 
-		source.setVisible(false);
-		JPanel list = (JPanel)source.getParent();
+		btn_additem.setVisible(false);
+		JPanel list = (JPanel)btn_additem.getParent();
 		JTextArea text_input = new JTextArea(1, 2);
 		text_input.setWrapStyleWord(true);
 		text_input.setLineWrap(true);
-		Action action = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
 
-				System.out.println("Enter pressed");
-				JTextArea source = (JTextArea)e.getSource();
-				String item_text = source.getText();
-				String list_name = (source.getParent()).getName();
-				System.out.println(list_name);
-
-				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
-
-				List list = null;
-				for (List l : board.getLists())
-					if (l.getName().equals(list_name))
-						list = l;
-
-				int position = -1;
-				position = list.getItems().size() + 1;
-
-				dao.add(source.getText(), list.getId(), position);
-			}
-
-			};
-
+		// Quand on perd le focus, on supprime le textarea et on remet un bouton Ajouter
 		text_input.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
 
-				super.focusLost(e);    //To change body of overridden methods use File | Settings | File Templates.
-				JTextArea source = (JTextArea)(e.getSource());
-				JPanel panel_list = (JPanel)(source.getParent());
+				super.focusLost(e);
+				System.out.println("Textarea lost focus");
+				JTextArea textarea = (JTextArea)(e.getSource());
+				JPanel panel_list = (JPanel)(textarea.getParent());
 
-				panel_list.remove(source);
+				// Quand la création est validée, le textarea est enlevé du panel et une perte de focus est lancée
+				// Si on est dans ce cas-là on s'arrête tout de suite
+				if (panel_list == null)
+					return;
+
+				panel_list.remove(textarea);
 
 				JButton add_item = new JButton("Ajouter");
 				add_item.addActionListener(new AjoutItemListener());
@@ -119,11 +103,49 @@ public class Tableau {
 		String keyStrokeAndKey = "ENTER";
 		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
 		text_input.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, keyStrokeAndKey);
-		text_input.getActionMap().put(keyStrokeAndKey, action);
+		text_input.getActionMap().put(keyStrokeAndKey, new AddItemAction());
 		list.add(text_input);
 		text_input.requestFocusInWindow();
 
 	}
+
+	private class AddItemAction	extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			System.out.println("Enter pressed");
+			JTextArea textarea = (JTextArea)e.getSource();
+			JPanel panel_list = (JPanel)textarea.getParent();
+			String item_text = textarea.getText();
+			String list_name = panel_list.getName();
+
+			ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+
+			List list = null;
+			for (List l : board.getLists())
+				if (l.getName().equals(list_name))
+					list = l;
+
+			int position = -1;
+			position = list.getItems().size() + 1;
+
+
+			Item item = new Item(textarea.getText(), position);
+			list.getItems().add(item);
+			dao.add(item, list.getId());
+
+			panel_list.remove(textarea);
+			panel_list.add(new JLabel(item.getName()));
+
+			JButton add_item = new JButton("Ajouter");
+			add_item.addActionListener(new AjoutItemListener());
+			panel_list.add(add_item);
+
+			panel_list.revalidate();
+			panel_list.repaint();
+		}
+
+	};
 
 	private class AjoutItemListener implements ActionListener
 	{
@@ -131,7 +153,7 @@ public class Tableau {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			System.out.println("New item");
+			System.out.println("Ajouter button pressed");
 			presentItemNameInput(((JButton) e.getSource()));
 		}
 	}

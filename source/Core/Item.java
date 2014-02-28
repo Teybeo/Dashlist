@@ -1,5 +1,7 @@
 package Core;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Item {
@@ -16,6 +18,16 @@ public class Item {
 		this.name = name;
 		this.position = position;
 		this.text = text;
+	}
+
+	public Item(String name, int position) {
+
+		this.name = name;
+		this.position = position;
+		Date date = new Date();
+		DateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+		format.format(date);
+		this.date = date;
 	}
 
 	public Date getDate() {
