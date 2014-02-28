@@ -28,9 +28,9 @@ public class ItemDAO {
 		}
 	}
 
-	public HashSet<Item> getListItems(int list_id) {
+	public ArrayList<Item> getListItems(int list_id) {
 
-		HashSet<Item> items = new HashSet<>();
+		ArrayList<Item> items = new ArrayList<>();
 
 		try {
 			Statement query = link.createStatement();
@@ -38,7 +38,8 @@ public class ItemDAO {
 			ResultSet res = query.executeQuery(
 					"SELECT * " +
 					"FROM item " +
-					"WHERE id_list='" + list_id + "';"
+					"WHERE id_list='" + list_id + "'" +
+					"ORDER BY position ASC;"
 			);
 
 			while (res.next()) {

@@ -1,5 +1,6 @@
 package Core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class List {
@@ -7,9 +8,9 @@ public class List {
 	int id;
 	String name;
 	int position;
-	HashSet<Item> items;
+	ArrayList<Item> items;
 
-	public List(int id, String name, int position, HashSet<Item> items) {
+	public List(int id, String name, int position, ArrayList<Item> items) {
 
 		this.id = id;
 		this.name = name;
@@ -23,12 +24,12 @@ public class List {
 		return id;
 	}
 
-	public HashSet<Item> getItems() {
+	public ArrayList<Item> getItems() {
 
 		return items;
 	}
 
-	public void setItems(HashSet<Item> items) {
+	public void setItems(ArrayList<Item> items) {
 
 		this.items = items;
 	}
