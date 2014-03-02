@@ -17,8 +17,6 @@ public class ItemDAO {
 		try {
 			Statement query = link.createStatement();
 
-			System.out.println("list_id: "+list_id+" pos: "+item.getPosition());
-
 			query.execute("" +
 					"INSERT INTO item " +
 					"VALUES(default, "+list_id+",'"+item.getName()+"', CURDATE(), NULL, "+item.getPosition()+", NULL);");
@@ -52,5 +50,25 @@ public class ItemDAO {
 		}
 
 		return items;
+	}
+
+	public void add(Item item, String list_name) {
+
+		try {
+			Statement query = link.createStatement();
+
+			ResultSet res = query.executeQuery("" +
+					"SELECT id " +
+					"FROM list " +
+					"WHERE name='" + list_name + "';");
+
+			if (res.next())
+			{
+				add(item, res.getInt("id"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 	}
 }

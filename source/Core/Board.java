@@ -41,6 +41,16 @@ public class Board {
 		this.name = name;
 	}
 
+	public List getListByName(String name) {
+
+		List list = null;
+		for (List l : lists)
+			if (l.getName().equals(name))
+				return l;
+
+		return null;
+	}
+
 	public ArrayList<List> getLists() {
 
 		return lists;

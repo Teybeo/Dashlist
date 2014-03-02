@@ -45,6 +45,19 @@ public class ListDAO {
 		return lists;
 	}
 
+	public void add(List liste, int board_id) {
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("" +
+					"INSERT INTO list " +
+					"VALUES(default, "+board_id+",'"+liste.getName()+"', "+liste.getPosition()+");");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
 
 	public void loadItems(List list) {
 
@@ -52,5 +65,4 @@ public class ListDAO {
 		list.setItems(dao.getListItems(list.getId()));
 
 	}
-
 }

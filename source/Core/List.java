@@ -10,6 +10,13 @@ public class List {
 	int position;
 	ArrayList<Item> items;
 
+	public List(String name, int position) {
+
+		this.name = name;
+		this.position = position;
+		this.items = new ArrayList<>();
+	}
+
 	public List(int id, String name, int position, ArrayList<Item> items) {
 
 		this.id = id;
