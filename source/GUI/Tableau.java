@@ -6,16 +6,14 @@ import Core.List;
 import javax.swing.*;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 import java.util.Date;
 
 public class Tableau {
 
 	private JPanel main;
 	private JPanel lists_zone;
+	private JPanel empty_list;
 	private JScrollPane horizontal_scroll;
 	private JButton button1;
 	private JButton button2;
@@ -34,10 +32,21 @@ public class Tableau {
 
 		lists_zone = new JPanel();
 
+		// HACK: Pour defocuser les textinput si on clique ailleurs,
+		// on vole le focus si on clique sur le panel principal
+		lists_zone.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				super.mouseReleased(e);
+				lists_zone.grabFocus();
+			}
+		});
+
 		for (Core.List list : board.getLists())
 			setup_list(list);
 
-		setup_empty_list();
+		create_empty_list();
 
 		horizontal_scroll = new JScrollPane(lists_zone);
 
@@ -51,17 +60,16 @@ public class Tableau {
 		frame.setVisible(true);
 	}
 
-	private void setup_empty_list() {
+	private void create_empty_list() {
 
-		JPanel panel_list = new JPanel();
-		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
-		panel_list.setName("vide");
+		empty_list = new JPanel();
+		empty_list.setLayout(new BoxLayout(empty_list, BoxLayout.Y_AXIS));
+		empty_list.setName("vide");
 
-		JButton add_list = new JButton("Ajouter Liste");
-		add_list.addActionListener(new AjoutListeListener());
-		panel_list.add(add_list);
+		TogglableTextInput add_list = new TogglableTextInput("Ajouter Liste", new AjoutListeListener());
+		empty_list.add(add_list);
 
-		lists_zone.add(panel_list);
+		lists_zone.add(empty_list);
 	}
 
 	private void setup_list(List list) {
@@ -74,144 +82,60 @@ public class Tableau {
 		for (Item item : list.getItems())
 			panel_list.add(new JLabel(item.getName()));
 
-		JButton add_item = new JButton("Ajouter");
-		add_item.addActionListener(new AjoutItemListener());
+		TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
 		panel_list.add(add_item);
 
 		lists_zone.add(panel_list);
 	}
 
-	// Lorsqu'on clique sur le bouton Ajouter, celui-ci disparaît et est remplacé par un champ de texte
-	// Une action est effectuée lorsque l'utilisateur rentre du texte et appuie sur Entrée
-	// Si le champ de texte perd le focus, rien n'est créé le bouton Ajouter revient
-	private void presentTextInput(JButton btn_addlist, AbstractAction action, FocusAdapter focus) {
+	private void AddItemAction(TogglableTextInput t) {
 
-		btn_addlist.setVisible(false);
-		JPanel list = (JPanel)btn_addlist.getParent();
-		JTextArea text_input = new JTextArea(1, 2);
-		text_input.setWrapStyleWord(true);
-		text_input.setLineWrap(true);
+		JPanel panel_list = (JPanel)t.getParent();
 
-		// Quand on perd le focus, on supprime le textarea et on remet le bouton
-		text_input.addFocusListener(focus);
+		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-		String keyStrokeAndKey = "ENTER";
-		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyStrokeAndKey);
-		text_input.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, keyStrokeAndKey);
-		text_input.getActionMap().put(keyStrokeAndKey, action);
-		list.add(text_input);
-		text_input.requestFocusInWindow();
+		List list = board.getListByName(panel_list.getName());
+
+		int position = -1;
+		position = list.getItems().size() + 1;
+
+		Item item = new Item(t.getText(), position);
+		list.getItems().add(item);
+		dao.add(item, list.getName());
+
+		panel_list.remove(t);
+		panel_list.add(new JLabel(item.getName()));
+
+		panel_list.add(t);
+
+		panel_list.revalidate();
+		panel_list.repaint();
 
 	}
 
-	private class AddItemAction	extends AbstractAction {
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	private void AddListAction(TogglableTextInput t) {
 
-			JTextArea textarea = (JTextArea)e.getSource();
-			JPanel panel_list = (JPanel)textarea.getParent();
-			String item_text = textarea.getText();
-			String list_name = panel_list.getName();
+		JPanel panel_list = (JPanel)t.getParent();
 
-			ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+		ListDAO dao = new ListDAO(BddConnection.getInstance());
 
-			List list = board.getListByName(list_name);
+		int position = -1;
+		position = board.getLists().size() + 1;
 
-			int position = -1;
-			position = list.getItems().size() + 1;
+		// On crée la nouvelle liste et on l'entre dans la base
+		List liste = new List(t.getText(), position);
+		board.getLists().add(liste);
+		dao.add(liste, board.getId());
 
-			Item item = new Item(textarea.getText(), position);
-			list.getItems().add(item);
-			dao.add(item, list.getName());
+		// 1. On enlève la liste vide
+		// 2. On ajoute la nouvelle liste
+		// 3. On remet la liste vide
+		lists_zone.remove(panel_list);
+		setup_list(liste);
+		lists_zone.add(panel_list);
 
-			panel_list.remove(textarea);
-			panel_list.add(new JLabel(item.getName()));
-
-			JButton add_item = new JButton("Ajouter");
-			add_item.addActionListener(new AjoutItemListener());
-			panel_list.add(add_item);
-
-			panel_list.revalidate();
-			panel_list.repaint();
-		}
-
-	};
-
-	private class AddListAction	extends AbstractAction {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			JTextArea textarea = (JTextArea)e.getSource();
-			JPanel panel_list = (JPanel)textarea.getParent();
-
-			ListDAO dao = new ListDAO(BddConnection.getInstance());
-
-			int position = -1;
-			position = board.getLists().size() + 1;
-
-			// On crée la nouvelle liste et on l'entre dans la base
-			List liste = new List(textarea.getText(), position);
-			board.getLists().add(liste);
-			dao.add(liste, board.getId());
-
-			lists_zone.remove(panel_list);
-
-			setup_list(liste);
-			setup_empty_list();
-//
-//			JButton add_item = new JButton("Ajouter");
-//			add_item.addActionListener(new AjoutItemListener());
-//			panel_list.add(add_item);
-
-			lists_zone.revalidate();
-			lists_zone.repaint();
-		}
-
-	};
-
-
-	private class AddItemButtonFocusAdapter extends FocusAdapter {
-		@Override
-		public void focusLost(FocusEvent e) {
-
-			super.focusLost(e);
-			System.out.println("Textarea lost focus");
-			JTextArea textarea = (JTextArea)(e.getSource());
-			JPanel panel_list = (JPanel)(textarea.getParent());
-
-			// Quand la création est validée, le textarea est enlevé du panel et une perte de focus est lancée
-			// Si on est dans ce cas-là on s'arrête tout de suite
-			if (panel_list == null)
-				return;
-
-			panel_list.remove(textarea);
-
-			JButton add_item = new JButton("Ajouter Item");
-			add_item.addActionListener(new AjoutItemListener());
-			panel_list.add(add_item);
-		}
-	}
-
-	private class AddListButtonFocusAdapter extends FocusAdapter {
-		@Override
-		public void focusLost(FocusEvent e) {
-
-			super.focusLost(e);
-			System.out.println("Textarea lost focus");
-			JTextArea textarea = (JTextArea)(e.getSource());
-			JPanel panel_list = (JPanel)(textarea.getParent());
-
-			// Quand la création est validée, le textarea est enlevé du panel et une perte de focus est lancée
-			// Si on est dans ce cas-là on s'arrête tout de suite
-			if (panel_list == null)
-				return;
-
-			panel_list.remove(textarea);
-
-			JButton add_item = new JButton("Ajouter Liste");
-			add_item.addActionListener(new AjoutListeListener());
-			panel_list.add(add_item);
-		}
+		lists_zone.revalidate();
+		lists_zone.repaint();
 	}
 
 	private class AjoutItemListener implements ActionListener
@@ -219,7 +143,7 @@ public class Tableau {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			presentTextInput(((JButton) e.getSource()), new AddItemAction(), new AddItemButtonFocusAdapter());
+			AddItemAction((TogglableTextInput)e.getSource());
 		}
 	}
 	private class AjoutListeListener implements ActionListener
@@ -227,7 +151,7 @@ public class Tableau {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			presentTextInput(((JButton) e.getSource()), new AddListAction(), new AddListButtonFocusAdapter());
+			AddListAction((TogglableTextInput)e.getSource());
 		}
 	}
 
