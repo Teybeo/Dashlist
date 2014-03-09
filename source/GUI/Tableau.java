@@ -4,6 +4,7 @@ import Core.*;
 import Core.List;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.*;
@@ -32,6 +33,8 @@ public class Tableau extends Observable {
 		this.user = user;
 
 		lists_zone = new JPanel();
+		lists_zone.setLayout(new BoxLayout(lists_zone, BoxLayout.X_AXIS));
+		lists_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
 		// HACK: Pour defocuser les textinput si on clique ailleurs,
 		// on vole le focus si on clique sur le panel principal
@@ -80,6 +83,7 @@ public class Tableau extends Observable {
 		panel_list.setBorder(new BorderUIResource.TitledBorderUIResource(list.getName()));
 		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
 		panel_list.setName(list.getName());
+		panel_list.setMinimumSize(new Dimension(100, 0));
 
 		for (Item item : list.getItems())
 			panel_list.add(new JLabel(item.getName()));
