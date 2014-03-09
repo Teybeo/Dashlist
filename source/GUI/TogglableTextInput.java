@@ -100,10 +100,12 @@ public class TogglableTextInput extends JPanel {
 		public void focusLost(FocusEvent e) {
 
 			super.focusLost(e);
-			System.out.println("Textarea lost focus");
-			setButtonMode();
-			getParent().repaint();
-
+			if (getCurrent_mode() != BUTTON)
+			{
+				System.out.println("Textarea lost focus");
+				setButtonMode();
+				getParent().repaint();
+			}
 		}
 	}
 
@@ -172,5 +174,10 @@ public class TogglableTextInput extends JPanel {
 
 	public String getText() {
 		return text_area.getText();
+	}
+
+	public int getCurrent_mode() {
+
+		return current_mode;
 	}
 }
