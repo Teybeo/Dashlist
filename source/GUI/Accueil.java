@@ -76,8 +76,9 @@ public class Accueil implements Observer {
 		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
 		dao.loadLists(board);
 
-		new Tableau(user, board);
-		System.out.println("Load board " + board.getName());
+		Tableau current = new Tableau(user, board);
+		current.addObserver(this);
+		System.out.println("Board " + board.getName() + " Loaded");
 	}
 
 	@Override
@@ -87,6 +88,9 @@ public class Accueil implements Observer {
 
 		if (sender.equals("GUI.Login"))
 			loadAccount((User) arg);
+		if (sender.equals("GUI.Tableau"))
+			frame.setVisible(true);
+
 	}
 
 	private void createUIComponents() {

@@ -8,8 +8,9 @@ import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Date;
+import java.util.Observable;
 
-public class Tableau {
+public class Tableau extends Observable {
 
 	private JPanel main;
 	private JPanel lists_zone;
@@ -50,9 +51,10 @@ public class Tableau {
 
 		horizontal_scroll = new JScrollPane(lists_zone);
 
-		JFrame frame = new JFrame(board.getName() + " - Dashlist");
+		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
 
+		buildMenuBar();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(800, 500));
 		frame.setLocationRelativeTo(null);
@@ -155,4 +157,29 @@ public class Tableau {
 		}
 	}
 
+	private void buildMenuBar() {
+
+		JMenuBar menu_bar = new JMenuBar();
+		JMenu board_menu = new JMenu("Board");
+		JMenuItem accueil = new JMenuItem("Retour à l'accueil");
+
+		accueil.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				closeBoard();
+			}
+		});
+		board_menu.add(accueil);
+		menu_bar.add(board_menu);
+
+		frame.setJMenuBar(menu_bar);
+	}
+
+	private void closeBoard() {
+
+		frame.setVisible(false);
+		setChanged();
+		notifyObservers(user);
+		clearChanged();
+	}
 }
