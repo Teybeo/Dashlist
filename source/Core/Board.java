@@ -8,6 +8,11 @@ public class Board {
 	private String name;
 	private ArrayList<List> lists;
 
+	public Board(String name) {
+
+		this.name = name;
+	}
+
 	public Board(int id, String name) {
 
 		this.id = id;

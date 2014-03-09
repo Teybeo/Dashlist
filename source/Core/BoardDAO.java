@@ -72,6 +72,30 @@ public class BoardDAO {
 		return null;
 	}
 
+	public void add(Board board, int user_id) {
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("" +
+					"INSERT INTO board " +
+					"VALUES(default, "+user_id+",'"+board.getName()+"');");
+
+			ResultSet res = query.executeQuery("SELECT id " +
+												"FROM board " +
+												"WHERE name='"+board.getName()+"' AND " +
+												"id_user="+user_id+";");
+			// On récupère l'id créé par MySQL
+			if (res.next())
+			{
+				board.setId(res.getInt("id"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
+
 	public void loadLists(Board board) {
 
 		ListDAO dao = new ListDAO(link);

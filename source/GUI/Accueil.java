@@ -6,6 +6,8 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -36,37 +38,29 @@ public class Accueil implements Observer {
 
 	public void loadAccount(User user) {
 
+		this.user = user;
+
 		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
 
 		boards = dao.getUserBoards(user.getId());
 
-		MouseAdapter mouse_action = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		for (Board board : boards)
+			setupBoard(board);
 
-				String text = ((JLabel) (e.getSource())).getText();
-
-				for (int i = 0; i < boards.size(); i++) {
-					if (boards.get(i).getName().equals(text))
-						launchBoard(boards.get(i));
-				}
-			}
-		};
-
-		Cursor main = new Cursor(Cursor.HAND_CURSOR);
-
-		for (Board board : boards) {
-
-			JLabel tmp = new JLabel(board.getName());
-			tmp.setCursor(main);
-			tmp.addMouseListener(mouse_action);
-			panel_list.add(tmp);
-		}
+		TogglableTextInput add_board = new TogglableTextInput("Nouveau tableau", new NewBoardActionListener());
+		panel_list.add(add_board);
 
 		frame.pack();
 		frame.setVisible(true);
 	}
 
+	private void setupBoard(Board board) {
+
+		JLabel tmp = new JLabel(board.getName());
+		tmp.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		tmp.addMouseListener(new boardClicked());
+		panel_list.add(tmp);
+	}
 
 	public void launchBoard(Board board) {
 
@@ -79,24 +73,6 @@ public class Accueil implements Observer {
 		Tableau current = new Tableau(user, board);
 		current.addObserver(this);
 		System.out.println("Board " + board.getName() + " Loaded");
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-
-		String sender = o.getClass().getName();
-
-		if (sender.equals("GUI.Login"))
-			loadAccount((User) arg);
-		if (sender.equals("GUI.Tableau"))
-			frame.setVisible(true);
-
-	}
-
-	private void createUIComponents() {
-
-		panel_list = new JPanel();
-		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
 	}
 
 	/**
@@ -130,4 +106,62 @@ public class Accueil implements Observer {
 
 		return panel;
 	}
+
+	private class NewBoardActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			TogglableTextInput t = (TogglableTextInput) e.getSource();
+
+			BoardDAO dao = new BoardDAO(BddConnection.getInstance());
+
+			// On crée le nouveau tableau et on l'entre dans la base
+			Board board = new Board(t.getText());
+			boards.add(board);
+			dao.add(board, user.getId());
+
+			panel_list.remove(t);
+			setupBoard(board);
+			panel_list.add(t);
+
+			panel_list.revalidate();
+			panel_list.repaint();
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+
+		if (sender.equals("GUI.Login"))
+			loadAccount((User) arg);
+		if (sender.equals("GUI.Tableau"))
+			frame.setVisible(true);
+
+	}
+
+	private class boardClicked extends MouseAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+
+			String text = ((JLabel) (e.getSource())).getText();
+
+			for (int i = 0; i < boards.size(); i++) {
+				if (boards.get(i).getName().equals(text))
+					launchBoard(boards.get(i));
+			}
+		}
+	}
+
+
+	private void createUIComponents() {
+
+		panel_list = new JPanel();
+		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
+	}
+
+
 }
