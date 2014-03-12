@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Dashlist</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="../css/style.css" type="text/css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 	<script src="../js/generator.js"></script>
     
