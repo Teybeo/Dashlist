@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7612bfa6-baeb-42a5-ae54-16cfcf508500" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\Guillaume\Documents\GitHub\Dashlist\website\about.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Guillaume\Documents\GitHub\Dashlist\website\contact.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Guillaume\Documents\GitHub\Dashlist\website\features.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Guillaume\Documents\GitHub\Dashlist\website\index.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Guillaume\Documents\GitHub\Dashlist\website\news.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Guillaume\Documents\GitHub\Dashlist\website\post.php" afterPath="" />
-    </list>
+    <list default="true" id="7612bfa6-baeb-42a5-ae54-16cfcf508500" name="Default" comment="" />
     <ignored path="Dashlist.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
