@@ -32,7 +32,7 @@
 	<div id="header">
 		<div>
 			<div class="logo">
-				<a href="index.html"><img src="images/logo.png" width="130px" height="130px"/></a>
+				<a href="index.html"><img src="../images/logo.png" width="130px" height="130px"/></a>
 			</div>
 			
 			<div id="navigation">

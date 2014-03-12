@@ -3,22 +3,21 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Dashlist - Contact</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="../css/style.css" type="text/css">
 </head>
 <body>
 	<div id="header">
 		<div>
 			<div class="logo">
-				<a href="index.html"><img src="images/logo.png" width="130px" height="130px"/></a>
+				<a href="index.html"><img src="../images/logo.png" width="130px" height="130px"/></a>
 			</div>
 			
 			<div id="navigation">
-					<a href="index.html">Accueil</a>
-					<a href="features.html">Téléchargement</a>
-					<a href="news.html">News</a>
-					<a href="contact.html">Contact</a>
-					
-					<a href="log.html">Connexion</a>
+					<a href="index.php">Accueil</a>
+					<a href="features.php">Téléchargement</a>
+					<a href="news.php">News</a>
+					<a href="contact.php">Contact</a>
+					<a href="log.php">Connexion</a>
 			</div>
 		</div>
 	</div>
