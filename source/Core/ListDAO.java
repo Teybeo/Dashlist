@@ -45,19 +45,46 @@ public class ListDAO {
 		return lists;
 	}
 
-	public void add(List liste, int board_id) {
+	public void add(List list, int board_id) {
 
 		try {
 			Statement query = link.createStatement();
 
 			query.execute("" +
 					"INSERT INTO list " +
-					"VALUES(default, "+board_id+",'"+liste.getName()+"', "+liste.getPosition()+");");
+					"VALUES(default, "+board_id+",'"+list.getName()+"', "+list.getPosition()+");");
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 	}
+
+    public void edit(List list) {
+
+        try {
+            Statement query = link.createStatement();
+
+            query.execute("" +
+                    "UPDATE list " +
+                    "SET name ='"+list.getName()+"', " +
+                    "position = "+list.getPosition() +
+                    " WHERE id ="+list.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public void delete(List list) {
+        try {
+            Statement query = link.createStatement();
+
+            query.execute("" +
+                    "DELETE list " +
+                    " WHERE id ="+ list.getId());
+        } catch (SQLException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 
 	public void loadItems(List list) {
 

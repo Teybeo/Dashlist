@@ -58,6 +58,7 @@ public class Tableau extends Observable {
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
 
 		buildMenuBar();
+		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(800, 500));
 		frame.setLocationRelativeTo(null);
@@ -111,7 +112,6 @@ public class Tableau extends Observable {
 
 		panel_list.remove(t);
 		panel_list.add(new JLabel(item.getName()));
-
 		panel_list.add(t);
 
 		panel_list.revalidate();

@@ -6,14 +6,15 @@ import java.util.Date;
 
 public class Item {
 
+    int id;
 	String name;
 	int position;
 	Date date;
 	String text;
 
-	public Item(Date date, String name, int position, String text) {
+	public Item(int id, Date date, String name, int position, String text) {
 
-
+        this.id = id;
 		this.date = date;
 		this.name = name;
 		this.position = position;
@@ -29,6 +30,12 @@ public class Item {
 		format.format(date);
 		this.date = date;
 	}
+
+    public int getId() {
+
+        System.out.println(id);
+        return id;
+    }
 
 	public Date getDate() {
 
