@@ -1,0 +1,77 @@
+
+/* Style des conteneurs */
+.error, .info, .ok, .success {
+	border-radius: 4px;
+	padding: 15px;
+	display: block;
+}
+
+.ok, .success {
+	background-color: #dff0d8;
+	border: 1px solid #d6e9c6;
+	color: #3c763d;
+}
+
+.error {
+	background-color: #f2dede;
+	border: 1px solid #ebccd1;
+	color: #a94442;
+}
+
+.info {
+	background-color: #d9edf7;
+	border: 1px solid #bce8f1;
+	color: #31708f;
+}
+
+/* Titres */
+.error h2,.info h2, .ok h2, .success h2 {
+	margin-top: 0px;
+	font-weight: normal;
+}
+
+/* Pop-up */
+.msg-pop-up {
+    position: absolute;
+  	left:50%;
+   	width: 450px;
+    margin-left:-210px;
+   	top: 255px;
+	box-shadow: 0px 0px 35px #CCC;
+	z-index: 1500;
+}
+
+.msg-pop-up .close:before {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	-webkit-font-smoothing: antialiased;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	content: "\e088";
+	color: black;
+}
+
+.msg-pop-up .close {
+	float: right;
+	margin: -13px  -10px 0 0;
+	cursor: pointer
+}
+
+.msg-pop-up .close:hover:before {
+	color: orange;
+}
+
+/* Pop-up modale */
+.modal-pop-up {
+	display: block;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	cursor: default;
+	top: 0;
+	right: 0;
+	z-index: 900;
+}

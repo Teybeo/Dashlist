@@ -1,0 +1,61 @@
+
+/* Fond gris */
+.ttbox-global
+{
+	display: block;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	display: none;
+	background-color: rgba(130,130,130,.5);
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 800;
+}
+
+/* Fenêtre */
+.ttbox-frame
+{
+	position: fixed;
+	background-color: white;
+	border: solid 5px #DEDEDE;
+	opacity: 1;
+	box-shadow: #222 0px 0px 10px;
+	top: 200px;
+	color: black;
+ 	border-radius: 4px;
+
+ 	left: 50%;
+
+ 	/* Taille de base */
+	margin-left: -250px;
+	width: 500px;
+ 	min-height: 150px;
+
+ 	padding: 25px;
+}
+
+/* Bouton de fermeture */
+.ttbox-frame .close:before {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	-webkit-font-smoothing: antialiased;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	content: "\e088";
+	color: black;
+}
+
+.ttbox-frame .close {
+	float: right;
+	margin: -15px  -10px 0 0;
+	cursor: pointer
+}
+
+.ttbox-frame .close:hover:before {
+	color: orange;
+}
