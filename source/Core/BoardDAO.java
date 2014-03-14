@@ -27,8 +27,8 @@ public class BoardDAO {
 			Statement query = link.createStatement();
 			ResultSet res = query.executeQuery(
 				"SELECT * " +
-				"FROM board " +
-				"WHERE id_user = '"+ user_id + "';"
+				"FROM board, (SELECT board_id FROM board_members WHERE user_id = '"+ user_id + "') temp " +
+				"WHERE board.id = temp.board_id;"
 			);
 
 			while (res.next())
@@ -36,7 +36,7 @@ public class BoardDAO {
 
 
 		} catch (SQLException e) {
-		e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 
 		return boards;
@@ -77,19 +77,26 @@ public class BoardDAO {
 		try {
 			Statement query = link.createStatement();
 
+			// On enregistre la board dans la table board
 			query.execute("" +
 					"INSERT INTO board " +
-					"VALUES(default, "+user_id+",'"+board.getName()+"');");
+					"VALUES(default, '"+board.getName()+"');");
 
 			ResultSet res = query.executeQuery("SELECT id " +
 												"FROM board " +
-												"WHERE name='"+board.getName()+"' AND " +
-												"id_user="+user_id+";");
+												"WHERE name='" + board.getName() + "' " +
+												"ORDER BY id DESC");
 			// On récupère l'id créé par MySQL
 			if (res.next())
 			{
 				board.setId(res.getInt("id"));
 			}
+
+			// On enregistre l'user actuel comme membre de cette board
+			query.execute("" +
+					"INSERT INTO board_members " +
+					"VALUES('" + board.getId() + "', '" + user_id + "', '1', '0');");
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
