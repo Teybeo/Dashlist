@@ -125,13 +125,12 @@ public class Tableau extends Observable {
 
 		ListDAO dao = new ListDAO(BddConnection.getInstance());
 
-		int position = -1;
-		position = board.getLists().size() + 1;
+		int position = board.getLists().size() + 1;
 
 		// On crée la nouvelle liste et on l'entre dans la base
 		List liste = new List(t.getText(), position);
 		board.getLists().add(liste);
-		dao.add(liste, board.getId());
+		dao.add(liste, board.getId(), user.getId());
 
 		// 1. On enlève la liste vide
 		// 2. On ajoute la nouvelle liste

@@ -45,7 +45,7 @@ public class ListDAO {
 		return lists;
 	}
 
-	public void add(List list, int board_id) {
+	public void add(List list, int board_id, int user_id) {
 
 		try {
 			Statement query = link.createStatement();
@@ -60,6 +60,8 @@ public class ListDAO {
 			if (res.next())
 				list.setId(res.getInt(1));
 
+			EventDAO dao = new EventDAO(link);
+			dao.add(list, user_id);
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
