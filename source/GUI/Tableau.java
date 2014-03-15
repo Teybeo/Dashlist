@@ -24,6 +24,7 @@ public class Tableau extends Observable {
 	private JPanel east;
 	private JLabel board_title;
 	private JFrame frame;
+	private EventLog event_log;
 	Board board;
 	User user;
 
@@ -56,6 +57,9 @@ public class Tableau extends Observable {
 
 		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
+
+		event_log = new EventLog(board.getId());
+		frame.add(event_log.getScroll_pane(), BorderLayout.EAST);
 
 		buildMenuBar();
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));

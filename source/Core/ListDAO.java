@@ -52,7 +52,7 @@ public class ListDAO {
 
 			query.execute("" +
 					"INSERT INTO list " +
-					"VALUES(default, "+board_id+",'"+list.getName()+"', "+list.getPosition()+");", Statement.RETURN_GENERATED_KEYS);
+					"VALUES(default, " + board_id + ",'" + list.getName() + "', " + list.getPosition() + ");", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
@@ -66,6 +66,33 @@ public class ListDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
+	}
+
+	public List get(int list_id_new, boolean complete_load) {
+
+		List list = null;
+
+        try {
+            Statement query = link.createStatement();
+
+            query.execute("" +
+		            "SELECT * FROM list WHERE id = '" + list_id_new + "';");
+
+	        ResultSet res = query.getResultSet();
+
+	        if (res.next())
+	        {
+		        list = new List(res.getInt("id"), res.getString("name"), res.getInt("position"), null);
+
+	            if (complete_load == true)
+			        loadItems(list);
+	        }
+
+        } catch (SQLException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+		return list;
 	}
 
     public void edit(List list) {
@@ -84,6 +111,7 @@ public class ListDAO {
     }
 
     public void delete(List list) {
+
         try {
             Statement query = link.createStatement();
 
