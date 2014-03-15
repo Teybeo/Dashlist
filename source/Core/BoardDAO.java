@@ -80,17 +80,13 @@ public class BoardDAO {
 			// On enregistre la board dans la table board
 			query.execute("" +
 					"INSERT INTO board " +
-					"VALUES(default, '"+board.getName()+"');");
+					"VALUES(default, '"+board.getName()+"');", Statement.RETURN_GENERATED_KEYS);
 
-			ResultSet res = query.executeQuery("SELECT id " +
-												"FROM board " +
-												"WHERE name='" + board.getName() + "' " +
-												"ORDER BY id DESC");
 			// On récupère l'id créé par MySQL
+			ResultSet res = query.getGeneratedKeys();
+
 			if (res.next())
-			{
-				board.setId(res.getInt("id"));
-			}
+				board.setId(res.getInt(1));
 
 			// On enregistre l'user actuel comme membre de cette board
 			query.execute("" +

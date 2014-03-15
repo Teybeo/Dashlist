@@ -19,7 +19,13 @@ public class ItemDAO {
 
 			query.execute("" +
 					"INSERT INTO item " +
-					"VALUES(default, "+list_id+",'"+item.getName()+"', CURDATE(), NULL, "+item.getPosition()+", NULL);");
+					"VALUES(default, "+list_id+",'"+item.getName()+"', CURDATE(), NULL, "+item.getPosition()+", NULL);", Statement.RETURN_GENERATED_KEYS);
+
+			// On récupère l'id créé par MySQL
+			ResultSet res = query.getGeneratedKeys();
+
+			if (res.next())
+				item.setId(res.getInt(1));
 
 			} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

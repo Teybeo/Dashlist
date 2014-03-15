@@ -60,4 +60,9 @@ public class List {
 
 		this.position = position;
 	}
+
+	public void setId(int id) {
+
+		this.id = id;
+	}
 }

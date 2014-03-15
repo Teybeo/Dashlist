@@ -76,4 +76,9 @@ public class Item {
 
 		this.text = text;
 	}
+
+	public void setId(int id) {
+
+		this.id = id;
+	}
 }

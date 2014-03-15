@@ -52,7 +52,14 @@ public class ListDAO {
 
 			query.execute("" +
 					"INSERT INTO list " +
-					"VALUES(default, "+board_id+",'"+list.getName()+"', "+list.getPosition()+");");
+					"VALUES(default, "+board_id+",'"+list.getName()+"', "+list.getPosition()+");", Statement.RETURN_GENERATED_KEYS);
+
+			// On récupère l'id créé par MySQL
+			ResultSet res = query.getGeneratedKeys();
+
+			if (res.next())
+				list.setId(res.getInt(1));
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
