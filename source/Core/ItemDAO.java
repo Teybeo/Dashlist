@@ -88,23 +88,4 @@ public class ItemDAO {
 		return items;
 	}
 
-	public void add(Item item, String list_name) {
-
-		try {
-			Statement query = link.createStatement();
-
-			ResultSet res = query.executeQuery("" +
-					"SELECT id " +
-					"FROM list " +
-					"WHERE name='" + list_name + "';");
-
-			if (res.next())
-			{
-				add(item, res.getInt("id"));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-		}
-	}
 }

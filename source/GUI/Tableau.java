@@ -108,7 +108,7 @@ public class Tableau extends Observable {
 
 		Item item = new Item(t.getText(), position);
 		list.getItems().add(item);
-		dao.add(item, list.getName());
+		dao.add(item, list.getId());
 
 		panel_list.remove(t);
 		panel_list.add(new JLabel(item.getName()));
