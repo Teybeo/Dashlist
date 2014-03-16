@@ -2,6 +2,7 @@ package Core;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 public class ItemDAO {
 
@@ -12,7 +13,7 @@ public class ItemDAO {
 		this.link = link;
 	}
 
-	public void add(Item item, int list_id) {
+	public void add(Item item, int list_id, int user_id) {
 
 		try {
 			Statement query = link.createStatement();
@@ -26,6 +27,9 @@ public class ItemDAO {
 
 			if (res.next())
 				item.setId(res.getInt(1));
+
+			EventDAO dao = new EventDAO(link);
+			dao.add(item, user_id);
 
 			} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -88,4 +92,34 @@ public class ItemDAO {
 		return items;
 	}
 
+	public Item get(int item_id, boolean complete_load) {
+
+		Item item = null;
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("" +
+					"SELECT * FROM item WHERE id = '" + item_id + "';");
+
+			ResultSet res = query.getResultSet();
+
+			if (res.next())
+			{
+				item = new Item(res.getInt("id"), new Date(res.getTimestamp("date").getTime()), res.getString("name"), res.getInt("position"), null);
+
+				if (complete_load == true)
+					loadComments(item);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+
+		return item;
+	}
+
+	private void loadComments(Item item) {
+		//TODO: fonction loadcomments()
+	}
 }
