@@ -41,10 +41,17 @@ public class EventLog {
 		System.out.println(event.toString());
 	}
 
+	// Va chercher les nouveaux events et les affiche
 	public void refresh() {
 
 		EventDAO dao = new EventDAO(BddConnection.getInstance());
-		ArrayList<Event> new_events = dao.getEventsByBoardAfter(board_id, events.get(events.size() - 1).getDate());
+        ArrayList<Event> new_events;
+
+		// On ne récupère que les events générés après le dernier de ceux qu'on a déjà
+		if (events.size() >= 1)
+			new_events = dao.getEventsByBoardAfter(board_id, events.get(events.size() - 1).getDate());
+		else
+			new_events = dao.getEventsByBoard(board_id); // Si on en avait pas, on prend tout
 
 		System.out.println(new_events.size() + " new events found");
 
@@ -54,8 +61,8 @@ public class EventLog {
 
 		events.addAll(new_events);
 
-		log_zone.revalidate();
-		log_zone.getParent().repaint();
+		scroll_pane.getParent().revalidate();
+		scroll_pane.getParent().repaint();
 
 	}
 
