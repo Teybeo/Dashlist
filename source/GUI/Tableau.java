@@ -24,6 +24,7 @@ public class Tableau extends Observable {
 	private JPanel east;
 	private JLabel board_title;
 	private JFrame frame;
+	private EventLog event_log;
 	Board board;
 	User user;
 
@@ -56,6 +57,9 @@ public class Tableau extends Observable {
 
 		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
+
+		event_log = new EventLog(board.getId());
+		frame.add(event_log.getScroll_pane(), BorderLayout.EAST);
 
 		buildMenuBar();
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
@@ -125,13 +129,13 @@ public class Tableau extends Observable {
 
 		ListDAO dao = new ListDAO(BddConnection.getInstance());
 
-		int position = -1;
-		position = board.getLists().size() + 1;
+		int position = board.getLists().size() + 1;
 
 		// On crée la nouvelle liste et on l'entre dans la base
 		List liste = new List(t.getText(), position);
 		board.getLists().add(liste);
-		dao.add(liste, board.getId());
+		dao.add(liste, board.getId(), user.getId());
+		event_log.refresh();
 
 		// 1. On enlève la liste vide
 		// 2. On ajoute la nouvelle liste

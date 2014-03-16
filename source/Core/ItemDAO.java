@@ -19,7 +19,7 @@ public class ItemDAO {
 
 			query.execute("" +
 					"INSERT INTO item " +
-					"VALUES(default, "+list_id+",'"+item.getName()+"', CURDATE(), NULL, "+item.getPosition()+", NULL);", Statement.RETURN_GENERATED_KEYS);
+					"VALUES(default, "+list_id+",'"+item.getName()+"', NOW(), NULL, "+item.getPosition()+", NULL);", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
