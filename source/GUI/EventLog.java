@@ -41,6 +41,24 @@ public class EventLog {
 		System.out.println(event.toString());
 	}
 
+	public void refresh() {
+
+		EventDAO dao = new EventDAO(BddConnection.getInstance());
+		ArrayList<Event> new_events = dao.getEventsByBoardAfter(board_id, events.get(events.size() - 1).getDate());
+
+		System.out.println(new_events.size() + " new events found");
+
+		for (Event event : new_events) {
+			setup_event(event);
+		}
+
+		events.addAll(new_events);
+
+		log_zone.revalidate();
+		log_zone.getParent().repaint();
+
+	}
+
 	public JScrollPane getScroll_pane() {
 
 		return scroll_pane;

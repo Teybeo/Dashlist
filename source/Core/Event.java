@@ -51,10 +51,15 @@ public class Event {
 		ListDAO list_dao = new ListDAO(BddConnection.getInstance());
 		List list = list_dao.get(list_id_new, false);
 
-		string.append(user.getName() + " added " + list.getName());
+		string.append(user.getName() + " created list " + list.getName());
 
 		readable_description = string.toString();
 
 		return readable_description;
+	}
+
+	public Date getDate() {
+
+		return date;
 	}
 }

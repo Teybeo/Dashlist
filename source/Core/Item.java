@@ -25,15 +25,11 @@ public class Item {
 
 		this.name = name;
 		this.position = position;
-		Date date = new Date();
-		DateFormat format = new SimpleDateFormat("YYYY-MM-DD");
-		format.format(date);
-		this.date = date;
+		this.date = new Date();
 	}
 
     public int getId() {
 
-        System.out.println(id);
         return id;
     }
 

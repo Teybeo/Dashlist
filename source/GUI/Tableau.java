@@ -135,6 +135,7 @@ public class Tableau extends Observable {
 		List liste = new List(t.getText(), position);
 		board.getLists().add(liste);
 		dao.add(liste, board.getId(), user.getId());
+		event_log.refresh();
 
 		// 1. On enlève la liste vide
 		// 2. On ajoute la nouvelle liste
