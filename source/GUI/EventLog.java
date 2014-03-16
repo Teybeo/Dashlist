@@ -41,7 +41,9 @@ public class EventLog {
 		System.out.println(event.toString());
 	}
 
-	// Va chercher les nouveaux events et les affiche
+	/**
+	 *	Va chercher les nouveaux events et met à jour l'affichage
+ 	 */
 	public void refresh() {
 
 		EventDAO dao = new EventDAO(BddConnection.getInstance());

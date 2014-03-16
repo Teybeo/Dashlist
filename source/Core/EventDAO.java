@@ -32,6 +32,20 @@ public class EventDAO {
 
 	}
 
+	public void add(Item item, int user_id) {
+
+		try {
+
+			Statement query = link.createStatement();
+
+			query.execute("INSERT INTO event "+
+					"VALUES ( default, null, null, null, '"+ item.getId() +"','"+ user_id +"', NOW());");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
+
 	public ArrayList<Event> getEventsByBoard(int board_id) {
 
 		return getEventsByBoardAfter(board_id, new Date(0));
@@ -46,11 +60,19 @@ public class EventDAO {
 
 			Statement query = link.createStatement();
 
-			query.execute(  "SELECT * " +
-					"FROM event, list " +
-					"WHERE (list.id = event.list_id_old OR list.id = event.list_id_new) AND " +
-					"list.id_board ='"+board_id+"' AND " +
-					"event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "';");
+			/* Récupérer tous les events contenant soit
+			 	- un id de liste appartenant à la board spécifié par boarad_id
+				- un id d'item appartenant à une liste appartenant à la board spécifiée par board_id  5*/
+			query.execute(
+					"SELECT * " +
+					"FROM event, list, item " +
+					"WHERE list.id_board = '"+board_id+"' AND " +
+					"(" +
+					"      (list.id = event.list_id_old OR list.id = event.list_id_new) OR" +
+					"      (list.id = item.id_list AND (item.id = event.item_id_old OR item.id = event.item_id_new))" +
+					")" +
+					"AND event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "' " +
+					"GROUP BY event.id ");
 
 			ResultSet res = query.getResultSet();
 
@@ -69,4 +91,5 @@ public class EventDAO {
 
 
 	}
+
 }

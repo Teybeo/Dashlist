@@ -68,7 +68,7 @@ public class ListDAO {
 		}
 	}
 
-	public List get(int list_id_new, boolean complete_load) {
+	public List get(int list_id, boolean complete_load) {
 
 		List list = null;
 
@@ -76,7 +76,7 @@ public class ListDAO {
             Statement query = link.createStatement();
 
             query.execute("" +
-		            "SELECT * FROM list WHERE id = '" + list_id_new + "';");
+		            "SELECT * FROM list WHERE id = '" + list_id + "';");
 
 	        ResultSet res = query.getResultSet();
 
@@ -95,7 +95,35 @@ public class ListDAO {
 		return list;
 	}
 
-    public void edit(List list) {
+	/**
+	 *	Récupère la liste contenant un certain item
+	 */
+	public List get(int item_id) {
+
+		List list = null;
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("" +
+					"SELECT list.id, list.name, list.position " +
+					"FROM list, item " +
+					"WHERE list.id = item.id_list AND " +
+					"item.id = '" + item_id + "';");
+
+			ResultSet res = query.getResultSet();
+
+			if (res.next())
+				list = new List(res.getInt("id"), res.getString("name"), res.getInt("position"), null);
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+
+		return list;
+	}
+
+	public void edit(List list) {
 
         try {
             Statement query = link.createStatement();
