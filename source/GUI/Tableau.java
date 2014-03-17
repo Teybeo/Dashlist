@@ -25,6 +25,8 @@ public class Tableau extends Observable {
 	private JLabel board_title;
 	private JFrame frame;
 	private EventLog event_log;
+	private MouseListener label_menu_listener;
+	private ItemMenu item_menu;
 	Board board;
 	User user;
 
@@ -47,6 +49,25 @@ public class Tableau extends Observable {
 				lists_zone.grabFocus();
 			}
 		});
+
+		label_menu_listener = new MouseAdapter()
+		{
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				super.mouseReleased(e);    //To change body of overridden methods use File | Settings | File Templates.
+
+				if (e.isPopupTrigger()) {
+					if (e.getSource().getClass().getName().equals("javax.swing.JLabel"))
+					{
+						item_menu.setClickedLabel((JLabel)e.getSource());
+						item_menu.show(e.getComponent(), e.getX(), e.getY());
+					}
+				}
+			}
+		};
+
+		item_menu = new ItemMenu();
 
 		for (Core.List list : board.getLists())
 			setup_list(list);
@@ -82,6 +103,13 @@ public class Tableau extends Observable {
 		lists_zone.add(empty_list);
 	}
 
+	private JLabel setup_item(Item item) {
+
+		JLabel label = new JLabel(item.getName());
+		label.addMouseListener(label_menu_listener);
+		return label;
+	}
+
 	private void setup_list(List list) {
 
 		JPanel panel_list = new JPanel();
@@ -91,7 +119,7 @@ public class Tableau extends Observable {
 		panel_list.setMinimumSize(new Dimension(100, 0));
 
 		for (Item item : list.getItems())
-			panel_list.add(new JLabel(item.getName()));
+			panel_list.add(setup_item(item));
 
 		TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
 		panel_list.add(add_item);
@@ -114,14 +142,33 @@ public class Tableau extends Observable {
 		list.getItems().add(item);
 		dao.add(item, list.getId(), user.getId());
 		event_log.refresh();
-		
+
 		panel_list.remove(t);
-		panel_list.add(new JLabel(item.getName()));
+		panel_list.add(setup_item(item));
 		panel_list.add(t);
 
 		panel_list.revalidate();
 		panel_list.repaint();
 
+	}
+
+	private void SupprItemAction(JLabel source) {
+
+		JPanel panel_list = (JPanel)source.getParent();
+
+		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+
+		List list = board.getListByName(panel_list.getName());
+
+		Item item = list.getItem(source.getText());
+		list.getItems().remove(item);
+		dao.delete(item, user.getId());
+		event_log.refresh();
+
+		panel_list.remove(source);
+
+		panel_list.revalidate();
+		panel_list.repaint();
 	}
 
 	private void AddListAction(TogglableTextInput t) {
@@ -157,6 +204,20 @@ public class Tableau extends Observable {
 			AddItemAction((TogglableTextInput)e.getSource());
 		}
 	}
+	private class SupprItemListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			JLabel clicked_label = ((ItemMenu)((JMenuItem)e.getSource()).getParent()).getClicked_label();
+
+			if (clicked_label == null)
+				System.out.println("Le clicked label était null");
+			else
+				SupprItemAction(clicked_label);
+		}
+	}
+
 	private class AjoutListeListener implements ActionListener
 	{
 		@Override
@@ -182,6 +243,30 @@ public class Tableau extends Observable {
 		menu_bar.add(board_menu);
 
 		frame.setJMenuBar(menu_bar);
+	}
+	
+	private class ItemMenu extends JPopupMenu {
+
+		private JLabel clicked_label;
+
+		public ItemMenu() {
+
+			super("Menu");
+			JMenuItem delete_item = new JMenuItem("Supprimer");
+			delete_item.addActionListener(new SupprItemListener());
+
+			add(delete_item);
+		}
+
+		private JLabel getClicked_label() {
+
+			return clicked_label;
+		}
+
+		public void setClickedLabel(JLabel clicked_Label) {
+
+			this.clicked_label = clicked_Label;
+		}
 	}
 
 	private void closeBoard() {

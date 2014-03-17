@@ -20,7 +20,7 @@ public class ItemDAO {
 
 			query.execute("" +
 					"INSERT INTO item " +
-					"VALUES(default, "+list_id+",'"+item.getName()+"', NOW(), NULL, "+item.getPosition()+", NULL);", Statement.RETURN_GENERATED_KEYS);
+					"VALUES(default, "+list_id+",'"+item.getName()+"', NOW(), NULL, "+item.getPosition()+", FALSE, NULL);", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
@@ -29,7 +29,7 @@ public class ItemDAO {
 				item.setId(res.getInt(1));
 
 			EventDAO dao = new EventDAO(link);
-			dao.add(item, user_id);
+			dao.add(null, item, user_id);
 
 			} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -53,13 +53,18 @@ public class ItemDAO {
         }
     }
 
-    public void delete(Item item) {
+    public void delete(Item item, int user_id) {
         try {
             Statement query = link.createStatement();
 
             query.execute("" +
-                    "DELETE item " +
-                    " WHERE id ="+item.getId());
+                    "UPDATE item " +
+                    "SET is_deleted = TRUE " +
+		            "WHERE id ="+item.getId());
+
+	        EventDAO dao = new EventDAO(link);
+	        dao.add(item, null, user_id);
+
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -75,7 +80,8 @@ public class ItemDAO {
 			ResultSet res = query.executeQuery(
 					"SELECT * " +
 					"FROM item " +
-					"WHERE id_list='" + list_id + "'" +
+					"WHERE id_list='" + list_id + "' " +
+					"AND is_deleted = FALSE " +
 					"ORDER BY position ASC;"
 			);
 

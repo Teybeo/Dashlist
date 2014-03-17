@@ -31,6 +31,17 @@ public class List {
 		return id;
 	}
 
+	public Item getItem(String name) {
+
+		for (Item item : items)
+		{
+			if (item.getName().equals(name) == true)
+				return item;
+
+		}
+		return null;
+	}
+
 	public ArrayList<Item> getItems() {
 
 		return items;

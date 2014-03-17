@@ -32,14 +32,27 @@ public class EventDAO {
 
 	}
 
-	public void add(Item item, int user_id) {
+	/**
+	 * Enregistre un event d'item dans la base
+	 *<P> Si old_item est null et new_item est valide, cet event est un ajout </P>
+	 *<P> Si old_item est valide et new_item est null, cet event est un suppression </P>
+	 *<P> Si old_item et new_item sont valides, cet event est une modification </P>
+	 *
+	 * @param old_item Id de l'ancien item
+	 * @param new_item Id du nouvel item
+	 * @param user_id Id de l'user ayant fait l'action
+	 */
+	public void add(Item old_item, Item new_item, int user_id) {
 
 		try {
 
 			Statement query = link.createStatement();
 
+			String old_item_id = (old_item == null) ? "null" : Integer.toString(old_item.getId());
+			String new_item_id = (new_item == null) ? "null" : Integer.toString(new_item.getId());
+
 			query.execute("INSERT INTO event "+
-					"VALUES ( default, null, null, null, '"+ item.getId() +"','"+ user_id +"', NOW());");
+					"VALUES ( default, null, null, "+ old_item_id +", "+ new_item_id +",'"+ user_id +"', NOW());");
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
