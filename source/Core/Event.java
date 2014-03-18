@@ -97,4 +97,9 @@ public class Event {
 
 		return date;
 	}
+
+	public int getId() {
+
+		return id;
+	}
 }
