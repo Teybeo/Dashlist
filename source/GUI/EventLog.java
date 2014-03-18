@@ -8,6 +8,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class EventLog {
 
@@ -16,6 +17,8 @@ public class EventLog {
 	ArrayList<Event> events;
 	private EventMenu event_menu;
 	private int board_id;
+	private static final int FIRST = 1;
+	private static final int LAST = -1;
 
 	public EventLog(int board_id) {
 
@@ -32,19 +35,19 @@ public class EventLog {
 		events = dao.getEventsByBoard(board_id);
 
 		for (Event event : events)
-			setup_event(event);
+			setup_event(event, LAST);
 
 		log_zone.revalidate();
 
 	}
 
-	private void setup_event(Event event) {
+	private void setup_event(Event event, int position) {
 
 		JLabel label = new JLabel(event.getReadableDescription());
 		label.setName(String.valueOf(event.getId()));
 		label.addMouseListener(event_menu.getLabelListener());
-		log_zone.add(label);
 		System.out.println(event.toString());
+		log_zone.add(label, position);
 	}
 
 	/**
@@ -57,17 +60,20 @@ public class EventLog {
 
 		// On ne récupère que les events générés après le dernier de ceux qu'on a déjà
 		if (events.size() >= 1)
-			new_events = dao.getEventsByBoardAfter(board_id, events.get(events.size() - 1).getDate());
+			new_events = dao.getEventsByBoardAfter(board_id, events.get(1).getDate());
 		else
 			new_events = dao.getEventsByBoard(board_id); // Si on en avait pas, on prend tout
 
 		System.out.println(new_events.size() + " new events found");
 
+		// On les insère en haut de la liste d'affichage
 		for (Event event : new_events) {
-			setup_event(event);
+			setup_event(event, FIRST);
 		}
 
-		events.addAll(new_events);
+		// Et on les insère en premier dans la mémoire
+		for (Event new_ev : new_events)
+			events.add(1, new_ev);
 
 		scroll_pane.getParent().revalidate();
 		scroll_pane.getParent().repaint();
@@ -79,9 +85,40 @@ public class EventLog {
 		return scroll_pane;
 	}
 
-	private void RevertTo(Event event) {
+	private void revertTo(Event event) {
 
-		System.out.println("Annulation de "+event.getReadableDescription());
+		Iterator<Event> iterator = events.iterator();
+		Event ev_tmp = null;
+		EventDAO dao = new EventDAO(BddConnection.getInstance());
+
+		while (iterator.hasNext())
+		{
+			ev_tmp = iterator.next();
+			System.out.println("Annulation de "+ev_tmp.getReadableDescription());
+
+			if (dao.revert(ev_tmp) == true)
+			{
+				events.remove(ev_tmp);
+				log_zone.remove(findLabel(ev_tmp.getId()));
+			}
+
+			// Une fois atteint l'event ciblé, on s'arrête
+			if (ev_tmp.getId() == event.getId())
+				break;
+		}
+
+		scroll_pane.getParent().revalidate();
+		scroll_pane.getParent().repaint();
+
+	}
+
+	private JLabel findLabel(int id) {
+
+		for (Component c : log_zone.getComponents())
+			if (Integer.parseInt(c.getName()) == id)
+				return (JLabel)c;
+
+		return null;
 	}
 
 	private class EventMenu extends JPopupMenu {
@@ -129,7 +166,7 @@ public class EventLog {
 					if (clicked_event == null)
 						System.out.println("Le clicked label était null");
 					else
-						RevertTo(clicked_event);
+						revertTo(clicked_event);
 				}
 			};
 

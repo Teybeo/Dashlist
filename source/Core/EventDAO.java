@@ -85,7 +85,8 @@ public class EventDAO {
 					"      (list.id = item.id_list AND (item.id = event.item_id_old OR item.id = event.item_id_new))" +
 					")" +
 					"AND event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "' " +
-					"GROUP BY event.id ");
+					"GROUP BY event.id "+
+					"ORDER BY event.date DESC");
 
 			ResultSet res = query.getResultSet();
 
@@ -102,6 +103,55 @@ public class EventDAO {
 		}
 		return events;
 
+	}
+
+	public boolean revert(Event event) {
+
+		boolean done = false;
+
+		int event_type = event.getEventType();
+
+		switch (event_type)
+		{
+			case Event.LIST_CREATED:
+				System.out.println("Not implemented yet");
+				break;
+			case Event.LIST_DELETED:
+				System.out.println("Not implemented yet");
+				break;
+			case Event.LIST_CHANGED:
+				System.out.println("Not implemented yet");
+				break;
+			case Event.ITEM_CREATED:
+				System.out.println("Not implemented yet");
+				break;
+			case Event.ITEM_DELETED:
+				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+				dao.revertDelete(event.getItem_id_old());
+				delete(event);
+				done = true;
+				break;
+			case Event.ITEM_CHANGED:
+				System.out.println("Not implemented yet");
+				break;
+			default:
+				System.out.println("Error: unrecognized event type: "+event_type+"\n"+this);
+				break;
+		}
+
+		return done;
+	}
+
+	public void delete(Event event) {
+		try {
+
+			Statement query = link.createStatement();
+
+			query.execute("DELETE FROM event WHERE id ='" + event.getId() + "'");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 
 	}
 

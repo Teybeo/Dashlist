@@ -102,4 +102,17 @@ public class Event {
 
 		return id;
 	}
+
+	public int getItem_id_old() {
+
+		return item_id_old;
+	}
+
+	public int getEventType() {
+
+		int event_list_code = (list_id_old != 0 ? LIST_DELETED : 0) + (list_id_new != 0 ? LIST_CREATED : 0);
+		int event_item_code = (item_id_old != 0 ? ITEM_DELETED : 0) + (item_id_new != 0 ? ITEM_CREATED : 0);
+
+		return event_item_code + event_list_code;
+	}
 }

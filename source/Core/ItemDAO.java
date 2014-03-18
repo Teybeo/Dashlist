@@ -125,6 +125,19 @@ public class ItemDAO {
 		return item;
 	}
 
+	public void revertDelete(int item_id) {
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("" +
+					"UPDATE item SET is_deleted=FALSE WHERE id = '" + item_id + "';");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
+
 	private void loadComments(Item item) {
 		//TODO: fonction loadcomments()
 	}
