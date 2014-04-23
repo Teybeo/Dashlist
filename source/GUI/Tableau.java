@@ -8,7 +8,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
 import java.util.Observable;
 
 public class Tableau extends Observable {
@@ -59,7 +58,7 @@ public class Tableau extends Observable {
                 if (e.isPopupTrigger()) {
 					if (e.getSource().getClass().getName().equals("GUI.ItemUI"))
 					{
-						item_menu.setClickedLabel((JLabel)e.getSource());
+						item_menu.setClickedItem((ItemUI) e.getSource());
 						item_menu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
@@ -144,17 +143,19 @@ public class Tableau extends Observable {
 
 	}
 
-	private void SupprItemAction(JLabel source) {
+	private void SupprItemAction(ItemUI source) {
 
-		JPanel panel_list = (JPanel)source.getParent();
+        if(source.getItem() == null)
+            System.out.println("bhbhbvhvlvuvuvulvlhl");
+        JPanel panel_list = (JPanel)source.getParent();
 
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
 		List list = board.getListByName(panel_list.getName());
 
-		Item item = list.getItem(source.getText());
-		list.getItems().remove(item);
-		dao.delete(item, user.getId());
+		//Item item = list.getItem(source.getText());
+		list.getItems().remove(source.getItem());
+		dao.delete(source.getItem(), user.getId());
 		event_log.refresh();
 
 		panel_list.remove(source);
@@ -201,12 +202,12 @@ public class Tableau extends Observable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			JLabel clicked_label = ((ItemMenu)((JMenuItem)e.getSource()).getParent()).getClicked_label();
+			ItemUI clicked_item = ((ItemMenu)((JMenuItem)e.getSource()).getParent()).getClicked_item();
 
-			if (clicked_label == null)
-				System.out.println("Le clicked label était null");
+			if (clicked_item == null)
+				System.out.println("Le clicked item était null");
 			else
-				SupprItemAction(clicked_label);
+				SupprItemAction(clicked_item);
 		}
 	}
 
@@ -239,7 +240,7 @@ public class Tableau extends Observable {
 	
 	private class ItemMenu extends JPopupMenu {
 
-		private JLabel clicked_label;
+		private ItemUI clicked_item;
 
 		public ItemMenu() {
 
@@ -250,14 +251,14 @@ public class Tableau extends Observable {
 			add(delete_item);
 		}
 
-		private JLabel getClicked_label() {
+		private ItemUI getClicked_item() {
 
-			return clicked_label;
+			return clicked_item;
 		}
 
-		public void setClickedLabel(JLabel clicked_Label) {
+		public void setClickedItem(ItemUI clicked_item) {
 
-			this.clicked_label = clicked_Label;
+			this.clicked_item = clicked_item;
 		}
 	}
 
