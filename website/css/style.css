@@ -13,6 +13,12 @@
 	font-weight: normal;
 	font-style: normal;
 }
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.eot');
+  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
 
 body 
 {
@@ -396,4 +402,126 @@ p a {
 }
 #connect a.tumbler:hover {
 	background-position: -40px -120px;
+}
+
+/* Icones */
+.icon:before {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	-webkit-font-smoothing: antialiased;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	margin-right: 4px;
+}
+
+.arrow-left:before {
+	content: "\e091";
+}
+
+.reset:before {
+	content: "\e031";
+}
+
+.star:before {
+	content: "\e006";
+}
+
+.floppy-disk:before {
+	content: "\e172";
+}
+
+.warning-sign:before {
+	content: "\e101";
+}
+
+.tick:before {
+	content: "\e013";
+}
+
+.magnifier:before {
+	content: "\e003";
+}
+
+.cross:before {
+	content: "\e014";
+}
+
+.user:before {
+	content: "\e008";
+}
+
+.list:before {
+	content: "\e056";
+}
+
+.edit:before {
+	content: "\e065";
+}
+
+.pencil:before {
+	content: "\270f";
+}
+
+.respond:before {
+	content: "\e095";
+}
+
+.home:before {
+	content: "\e021";
+}
+
+
+.contact:before {
+	content: "\e041";
+}
+
+.plus:before {
+	content: "\2b";
+}
+
+.like:before {
+	content: "\2b";
+	font-size: 80%;
+}
+
+.like:hover {
+	color: green;
+	cursor: pointer;
+}
+
+.dislike:before {
+	content: "\2212";
+	font-size: 80%;
+}
+
+.dislike:hover{
+	color: red;
+	cursor: pointer;
+}
+
+.ok-sign:before {
+	background-color: green;
+}
+
+.false:before {
+	background-color: red;
+}
+
+.best:before {
+	content: "\e013";
+}
+
+.search:before {
+	content: "\e003";
+}
+
+.chev-right:before {
+	content: "\e011";
+}
+
+.eye:before {
+	content: "\e105";
 }

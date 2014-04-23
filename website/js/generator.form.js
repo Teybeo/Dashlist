@@ -207,7 +207,7 @@ generator.Form.prototype.init = function() {
 		setTimeout( function() { me.fields[0].element.focus() }, 500 );
 
 	// Submit
-	me.submit = $('<input type="submit" class="btn" style="display: inline-block;" />');
+	me.submit = $('<input type="submit" class="btn" style="display: inline-block; cursor: pointer;" />');
 	me.submit.val(this.submit_value);
 	me.submit.on("click", function(e) {
 		me.send(e);
