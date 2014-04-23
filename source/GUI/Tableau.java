@@ -44,7 +44,6 @@ public class Tableau extends Observable {
 		lists_zone.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-
 				super.mouseReleased(e);
 				lists_zone.grabFocus();
 			}
@@ -57,8 +56,8 @@ public class Tableau extends Observable {
 			{
 				super.mouseReleased(e);    //To change body of overridden methods use File | Settings | File Templates.
 
-				if (e.isPopupTrigger()) {
-					if (e.getSource().getClass().getName().equals("javax.swing.JLabel"))
+                if (e.isPopupTrigger()) {
+					if (e.getSource().getClass().getName().equals("GUI.ItemUI"))
 					{
 						item_menu.setClickedLabel((JLabel)e.getSource());
 						item_menu.show(e.getComponent(), e.getX(), e.getY());
@@ -103,13 +102,6 @@ public class Tableau extends Observable {
 		lists_zone.add(empty_list);
 	}
 
-	private JLabel setup_item(Item item) {
-
-		JLabel label = new JLabel(item.getName());
-		label.addMouseListener(label_menu_listener);
-		return label;
-	}
-
 	private void setup_list(List list) {
 
 		JPanel panel_list = new JPanel();
@@ -119,7 +111,7 @@ public class Tableau extends Observable {
 		panel_list.setMinimumSize(new Dimension(100, 0));
 
 		for (Item item : list.getItems())
-			panel_list.add(setup_item(item));
+            panel_list.add(new ItemUI(item, label_menu_listener));
 
 		TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
 		panel_list.add(add_item);
@@ -144,7 +136,7 @@ public class Tableau extends Observable {
 		event_log.refresh();
 
 		panel_list.remove(t);
-		panel_list.add(setup_item(item));
+        panel_list.add(new ItemUI(item, label_menu_listener));
 		panel_list.add(t);
 
 		panel_list.revalidate();
