@@ -25,10 +25,16 @@ public class ListUI extends JPanel{
         this.setBorder(new BorderUIResource.TitledBorderUIResource(list.getName()));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setName(list.getName());
-        this.setMinimumSize(new Dimension(100, 0));
-        this.
-        for (Item item : list.getItems())
+        //this.setFont();
+        //this.setSize(new Dimension(300,0));
+        this.setPreferredSize(new Dimension(200,0));
+
+        //this.setMinimumSize(new Dimension(100, 0));
+        for (Item item : list.getItems()){
             this.add(new ItemUI(item, ml));
+            //this.add(Box.createVerticalGlue());
+            this.add(Box.createRigidArea(new Dimension(0, 5)));
+        }
 
         TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
         this.add(add_item);

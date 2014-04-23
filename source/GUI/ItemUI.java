@@ -12,14 +12,21 @@ import java.awt.event.MouseListener;
 public class ItemUI extends JPanel{
 
     private Item item;
-    private JLabel label;
+    private JTextArea label;
 
     public ItemUI(Item item, MouseListener ml) {
 
         this.item = item;
-        label = new JLabel(item.getName());
+        label = new JTextArea(item.getName());
+        label.setEditable(false);
+        label.setFocusable(false);
+        label.setLineWrap(true);
+        label.setFont(new Font("Arial", Font.PLAIN, 16));
+        this.setPreferredSize(new Dimension(200, 50));
+        this.setMaximumSize(new Dimension(200, 50));
         this.setOpaque(true);
         this.setBackground(new Color(255, 255, 255));
+        //this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.addMouseListener(ml);
         this.add(label);
     }
@@ -30,7 +37,7 @@ public class ItemUI extends JPanel{
         label.repaint();
     }
 
-    public JLabel getLabel() {
+    public JTextArea getLabel() {
         return label;
     }
 
