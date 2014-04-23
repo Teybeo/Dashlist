@@ -53,6 +53,8 @@ public class Login extends Observable {
 
 				if (user != null) // User is logged in
 				{
+                    CurrentUser.getInstance();
+                    CurrentUser.setCurrentUser(user);
 					frame.setVisible(false);
 					setChanged();
 					notifyObservers(user);

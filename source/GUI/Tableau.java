@@ -68,7 +68,8 @@ public class Tableau extends Observable {
 		item_menu = new ItemMenu();
 
 		for (Core.List list : board.getLists())
-			setup_list(list);
+			//setup_list(list);
+            lists_zone.add(new ListUI(list, label_menu_listener));
 
 		create_empty_list();
 
@@ -101,52 +102,8 @@ public class Tableau extends Observable {
 		lists_zone.add(empty_list);
 	}
 
-	private void setup_list(List list) {
-
-		JPanel panel_list = new JPanel();
-		panel_list.setBorder(new BorderUIResource.TitledBorderUIResource(list.getName()));
-		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
-		panel_list.setName(list.getName());
-		panel_list.setMinimumSize(new Dimension(100, 0));
-
-		for (Item item : list.getItems())
-            panel_list.add(new ItemUI(item, label_menu_listener));
-
-		TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
-		panel_list.add(add_item);
-
-		lists_zone.add(panel_list);
-	}
-
-	private void AddItemAction(TogglableTextInput t) {
-
-		JPanel panel_list = (JPanel)t.getParent();
-
-		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
-
-		List list = board.getListByName(panel_list.getName());
-
-		int position = -1;
-		position = list.getItems().size() + 1;
-
-		Item item = new Item(t.getText(), position);
-		list.getItems().add(item);
-		dao.add(item, list.getId(), user.getId());
-		event_log.refresh();
-
-		panel_list.remove(t);
-        panel_list.add(new ItemUI(item, label_menu_listener));
-		panel_list.add(t);
-
-		panel_list.revalidate();
-		panel_list.repaint();
-
-	}
-
 	private void SupprItemAction(ItemUI source) {
 
-        if(source.getItem() == null)
-            System.out.println("bhbhbvhvlvuvuvulvlhl");
         JPanel panel_list = (JPanel)source.getParent();
 
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
@@ -182,21 +139,14 @@ public class Tableau extends Observable {
 		// 2. On ajoute la nouvelle liste
 		// 3. On remet la liste vide
 		lists_zone.remove(panel_list);
-		setup_list(liste);
+		//setup_list(liste);
+
 		lists_zone.add(panel_list);
 
 		lists_zone.revalidate();
 		lists_zone.repaint();
 	}
 
-	private class AjoutItemListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			AddItemAction((TogglableTextInput)e.getSource());
-		}
-	}
 	private class SupprItemListener implements ActionListener
 	{
 		@Override
