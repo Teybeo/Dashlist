@@ -19,7 +19,7 @@ public class ItemUI extends JPanel{
         this.item = item;
         label = new JLabel(item.getName());
         this.setOpaque(true);
-        this.setBackground(Color.RED);
+        this.setBackground(new Color(255, 255, 255));
         this.addMouseListener(ml);
         this.add(label);
     }
@@ -28,7 +28,6 @@ public class ItemUI extends JPanel{
         g.setColor(getBackground());
         g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
         label.repaint();
-
     }
 
     public JLabel getLabel() {
