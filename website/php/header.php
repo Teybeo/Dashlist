@@ -41,7 +41,7 @@
 					<a href="news.php">News</a>
 					<a href="contact.php">Contact</a>
 					<a href="log.php">Connexion</a>
-                    <a class="inscription">Inscription</a>
+                    <a href="#" class="inscription">Inscription</a>
 			</div>
 		</div>
 	</div>
