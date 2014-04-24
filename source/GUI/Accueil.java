@@ -20,7 +20,6 @@ public class Accueil implements Observer {
 	private JButton créerUnProjetButton;
 	private JPanel panel;
 	private JPanel panel_list;
-	private User user;
 	ArrayList<Board> boards;
 
 	public Accueil() {
@@ -36,13 +35,11 @@ public class Accueil implements Observer {
 
 	}
 
-	public void loadAccount(User user) {
-
-		this.user = user;
+	public void loadAccount() {
 
 		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
 
-		boards = dao.getUserBoards(user.getId());
+		boards = dao.getUserBoards(CurrentUser.getInstance().getId());
 
 		for (Board board : boards)
 			setupBoard(board);
@@ -70,7 +67,7 @@ public class Accueil implements Observer {
 		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
 		dao.loadLists(board);
 
-		Tableau current = new Tableau(user, board);
+		Tableau current = new Tableau(board);
 		current.addObserver(this);
 		System.out.println("Board " + board.getName() + " Loaded");
 	}
@@ -119,7 +116,7 @@ public class Accueil implements Observer {
 			// On crée le nouveau tableau et on l'entre dans la base
 			Board board = new Board(t.getText());
 			boards.add(board);
-			dao.add(board, user.getId());
+			dao.add(board, CurrentUser.getInstance().getId());
 
 			panel_list.remove(t);
 			setupBoard(board);
@@ -136,7 +133,7 @@ public class Accueil implements Observer {
 		String sender = o.getClass().getName();
 
 		if (sender.equals("GUI.Login"))
-			loadAccount((User) arg);
+			loadAccount();
 		if (sender.equals("GUI.Tableau"))
 			frame.setVisible(true);
 

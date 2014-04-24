@@ -27,12 +27,10 @@ public class Tableau extends Observable {
 	private MouseListener label_menu_listener;
 	private ItemMenu item_menu;
 	Board board;
-	User user;
 
-	public Tableau(User user, Board board) {
+	public Tableau(Board board) {
 
 		this.board = board;
-		this.user = user;
 
 		lists_zone = new JPanel();
 		lists_zone.setLayout(new BoxLayout(lists_zone, BoxLayout.X_AXIS));
@@ -119,7 +117,7 @@ public class Tableau extends Observable {
 
 		//Item item = list.getItem(source.getText());
 		list.getItems().remove(source.getItem());
-		dao.delete(source.getItem(), user.getId());
+		dao.delete(source.getItem(), CurrentUser.getInstance().getId());
 		event_log.refresh();
 
 		panel_list.remove(source);
@@ -139,7 +137,7 @@ public class Tableau extends Observable {
 		// On crée la nouvelle liste et on l'entre dans la base
 		List liste = new List(t.getText(), position);
 		board.getLists().add(liste);
-		dao.add(liste, board.getId(), user.getId());
+		dao.add(liste, board.getId(), CurrentUser.getInstance().getId());
 		event_log.refresh();
 
 		// 1. On enlève la liste vide
@@ -223,7 +221,7 @@ public class Tableau extends Observable {
 
 		frame.setVisible(false);
 		setChanged();
-		notifyObservers(user);
+		notifyObservers();
 		clearChanged();
 	}
 }
