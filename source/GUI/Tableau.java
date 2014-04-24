@@ -146,8 +146,7 @@ public class Tableau extends Observable {
 		// 2. On ajoute la nouvelle liste
 		// 3. On remet la liste vide
 		lists_zone.remove(panel_list);
-		//setup_list(liste);
-
+		lists_zone.add(new ListUI(liste, label_menu_listener));
 		lists_zone.add(panel_list);
 
 		lists_zone.revalidate();
