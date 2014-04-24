@@ -115,4 +115,9 @@ public class Event {
 
 		return event_item_code + event_list_code;
 	}
+
+	public int getItem_id_new() {
+
+		return item_id_new;
+	}
 }

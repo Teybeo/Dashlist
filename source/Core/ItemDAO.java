@@ -125,6 +125,10 @@ public class ItemDAO {
 		return item;
 	}
 
+	/**
+	 * Annule la suppression d'un item. Le flag is_deleted de cet item est simplement remis à false
+	 * @param item_id l'id de l'item dont la suppression est à annuler
+	 */
 	public void revertDelete(int item_id) {
 
 		try {
@@ -137,8 +141,25 @@ public class ItemDAO {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 	}
+	/**
+	 * Annule la création d'un item. L'item est complétement effacé.
+	 * @param item_id l'id de l'item dont la création est à annuler
+	 */
+	public void revertCreate(int item_id) {
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("" +
+					"DELETE FROM item WHERE id = '" + item_id + "';");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
 
 	private void loadComments(Item item) {
 		//TODO: fonction loadcomments()
 	}
+
 }

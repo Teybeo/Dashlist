@@ -111,6 +111,8 @@ public class EventDAO {
 
 		int event_type = event.getEventType();
 
+		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+
 		switch (event_type)
 		{
 			case Event.LIST_CREATED:
@@ -123,12 +125,14 @@ public class EventDAO {
 				System.out.println("Not implemented yet");
 				break;
 			case Event.ITEM_CREATED:
-				System.out.println("Not implemented yet");
+				// On supprime d'abord l'event dans la BDD car il référence l'id de l'event à supprimer
+				delete(event);
+				dao.revertCreate(event.getItem_id_new());
+				done = true;
 				break;
 			case Event.ITEM_DELETED:
-				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
-				dao.revertDelete(event.getItem_id_old());
 				delete(event);
+				dao.revertDelete(event.getItem_id_old());
 				done = true;
 				break;
 			case Event.ITEM_CHANGED:
