@@ -63,7 +63,7 @@ public class Tableau extends Observable {
 							item_menu.setClickedItem((ItemUI) e.getSource());
 						if (class_src.equals("javax.swing.JTextArea"))
 							item_menu.setClickedItem((ItemUI) (e.getComponent().getParent()));
-						
+
 						item_menu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}
@@ -89,9 +89,11 @@ public class Tableau extends Observable {
 		buildMenuBar();
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setMinimumSize(new Dimension(800, 500));
-		frame.setLocationRelativeTo(null);
+		Dimension current_resolution = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setMinimumSize(new Dimension((int)(current_resolution.width*0.5), (int)(current_resolution.height*0.5)));
+		frame.setPreferredSize(new Dimension((int)(current_resolution.width*0.7), (int)(current_resolution.height*0.7)));
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 
