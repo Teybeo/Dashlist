@@ -55,10 +55,17 @@ public class Tableau extends Observable {
 			{
 				super.mouseReleased(e);    //To change body of overridden methods use File | Settings | File Templates.
 
-                if (e.isPopupTrigger()) {
-					if (e.getSource().getClass().getName().equals("GUI.ItemUI"))
+				// On vérifie que c'était un clic sensé ouvrir un menu
+                if (e.isPopupTrigger())
+                {
+					String class_src = e.getSource().getClass().getName();
+					if (class_src.equals("GUI.ItemUI") || class_src.equals("javax.swing.JTextArea"))
 					{
-						item_menu.setClickedItem((ItemUI) e.getSource());
+						if (class_src.equals("GUI.ItemUI"))
+							item_menu.setClickedItem((ItemUI) e.getSource());
+						if (class_src.equals("javax.swing.JTextArea"))
+							item_menu.setClickedItem((ItemUI) (e.getComponent().getParent()));
+						
 						item_menu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				}

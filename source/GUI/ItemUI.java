@@ -27,7 +27,11 @@ public class ItemUI extends JPanel{
         this.setOpaque(true);
         this.setBackground(new Color(255, 255, 255));
         //this.setBorder(BorderFactory.createLineBorder(Color.black));
+
+	    /* On ajoute l'écouteur sur le panel et sur le label
+	    pour que le clic-droit fonctionne sur toute la zone de l'item*/
         this.addMouseListener(ml);
+	    label.addMouseListener(ml);
         this.add(label);
     }
 
