@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
@@ -18,7 +19,8 @@ public class TogglableTextInput extends JPanel {
 
 	public TogglableTextInput(String text) {
 
-		super();
+        super();
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setFocusable(true);
 		button = new JButton(text);
 		text_area = new JTextArea(1, 2);
@@ -32,10 +34,16 @@ public class TogglableTextInput extends JPanel {
 		text_area.getInputMap().put(KeyStroke.getKeyStroke(keycode_escape), "escape");
 		text_area.getActionMap().put("enter", new ValidateAction());
 		text_area.getActionMap().put("escape", new UnfocusAction());
+        text_area.setMaximumSize(new Dimension(200, 50));
 
 		button.addActionListener(new ButtonListener());
 
+        this.setBackground(new Color(200, 100, 150));
+        this.setAlignmentY(Component.TOP_ALIGNMENT);
+
 		add(button);
+        button.setAlignmentY(Component.TOP_ALIGNMENT);
+        revalidate();
 	}
 
 	public TogglableTextInput(String text, ActionListener action_listener) {
@@ -54,7 +62,6 @@ public class TogglableTextInput extends JPanel {
 
 		remove(button);
 		add(text_area);
-
 		text_area.setVisible(true);
 		text_area.setText("");
 		text_area.requestFocusInWindow();

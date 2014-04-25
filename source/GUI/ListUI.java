@@ -4,6 +4,7 @@ import Core.*;
 import Core.List;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,28 +18,33 @@ public class ListUI extends JPanel{
 
     private List list;
     private MouseListener ml;
+    private JLabel title;
 
     public ListUI(List list, MouseListener ml){
 
         this.list = list;
         this.ml = ml;
-        this.setBorder(new BorderUIResource.TitledBorderUIResource(list.getName()));
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setName(list.getName());
-        //this.setFont();
-        //this.setSize(new Dimension(300,0));
-        this.setPreferredSize(new Dimension(200,0));
+        title = new JLabel(list.getName());
+        this.add(title);
+        this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-        //this.setMinimumSize(new Dimension(100, 0));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setPreferredSize(new Dimension(200,50));
+        this.setMinimumSize(new Dimension(200, 50));
+        this.setBackground(new Color(51, 204, 153));
+        this.setAlignmentY(Component.TOP_ALIGNMENT);
+
         for (Item item : list.getItems()){
             this.add(new ItemUI(item, ml));
-            //this.add(Box.createVerticalGlue());
             this.add(Box.createRigidArea(new Dimension(0, 5)));
         }
 
         TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
         this.add(add_item);
+
+        this.revalidate();
     }
+
     private class AjoutItemListener implements ActionListener
     {
         @Override
@@ -65,11 +71,17 @@ public class ListUI extends JPanel{
 
         remove(t);
         add(new ItemUI(item, ml));
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
         add(t);
 
         revalidate();
         repaint();
 
+    }
+
+    @Override protected void paintComponent(Graphics g) {
+        g.setColor(getBackground());
+        g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
     }
 
 }
