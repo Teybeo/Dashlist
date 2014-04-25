@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.5
+-- version 4.0.4
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le : Mer 23 Avril 2014 à 09:58
--- Version du serveur: 5.5.16
--- Version de PHP: 5.3.8
+-- Généré le: Ven 25 Avril 2014 à 17:57
+-- Version du serveur: 5.1.41-community-log
+-- Version de PHP: 5.4.12
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données: `dashlist`
 --
+CREATE DATABASE IF NOT EXISTS `dashlist` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `dashlist`;
 
 -- --------------------------------------------------------
 
@@ -30,7 +32,14 @@ CREATE TABLE IF NOT EXISTS `board` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+
+--
+-- Contenu de la table `board`
+--
+
+INSERT INTO `board` (`id`, `name`) VALUES
+(12, 'Test1');
 
 -- --------------------------------------------------------
 
@@ -47,6 +56,13 @@ CREATE TABLE IF NOT EXISTS `board_members` (
   KEY `user_id` (`user_id`),
   KEY `board_id_2` (`board_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `board_members`
+--
+
+INSERT INTO `board_members` (`board_id`, `user_id`, `is_admin`, `is_pending`) VALUES
+(12, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -85,7 +101,32 @@ CREATE TABLE IF NOT EXISTS `event` (
   KEY `item_id_new` (`item_id_new`),
   KEY `list_id_old` (`list_id_old`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=104 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=123 ;
+
+--
+-- Contenu de la table `event`
+--
+
+INSERT INTO `event` (`id`, `list_id_old`, `list_id_new`, `item_id_old`, `item_id_new`, `user_id`, `date`) VALUES
+(104, NULL, 99, NULL, NULL, 1, '2014-04-23 16:00:18'),
+(105, NULL, NULL, NULL, 107, 1, '2014-04-23 16:01:02'),
+(106, NULL, 100, NULL, NULL, 1, '2014-04-23 16:01:17'),
+(107, NULL, NULL, NULL, 108, 1, '2014-04-23 16:02:31'),
+(108, NULL, NULL, NULL, 109, 1, '2014-04-23 16:02:57'),
+(109, NULL, NULL, NULL, 110, 1, '2014-04-23 16:03:05'),
+(110, NULL, NULL, NULL, 111, 1, '2014-04-23 16:03:53'),
+(111, NULL, NULL, NULL, 112, 1, '2014-04-23 16:03:58'),
+(112, NULL, NULL, NULL, 113, 1, '2014-04-23 16:04:01'),
+(113, NULL, NULL, NULL, 114, 1, '2014-04-23 16:04:06'),
+(114, NULL, NULL, NULL, 115, 1, '2014-04-23 16:04:12'),
+(115, NULL, NULL, NULL, 116, 1, '2014-04-23 16:04:17'),
+(116, NULL, NULL, NULL, 117, 1, '2014-04-23 16:04:20'),
+(117, NULL, NULL, NULL, 118, 1, '2014-04-23 16:04:24'),
+(118, NULL, NULL, NULL, 119, 1, '2014-04-23 16:04:27'),
+(119, NULL, NULL, NULL, 120, 1, '2014-04-23 16:04:30'),
+(120, NULL, NULL, NULL, 121, 1, '2014-04-23 16:04:35'),
+(121, NULL, NULL, NULL, 122, 1, '2014-04-23 16:04:42'),
+(122, NULL, NULL, NULL, 123, 1, '2014-04-23 16:04:47');
 
 -- --------------------------------------------------------
 
@@ -104,7 +145,30 @@ CREATE TABLE IF NOT EXISTS `item` (
   `cover` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_list` (`id_list`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=107 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=124 ;
+
+--
+-- Contenu de la table `item`
+--
+
+INSERT INTO `item` (`id`, `id_list`, `name`, `date`, `description`, `position`, `is_deleted`, `cover`) VALUES
+(107, 99, 'capturer pikachu', '2014-04-23', NULL, 1, 0, NULL),
+(108, 100, 'élever gabumon', '2014-04-23', NULL, 1, 0, NULL),
+(109, 99, 'lol', '2014-04-23', NULL, 2, 0, NULL),
+(110, 99, 'prout', '2014-04-23', NULL, 3, 0, NULL),
+(111, 99, 'haha', '2014-04-23', NULL, 4, 0, NULL),
+(112, 99, 'slip', '2014-04-23', NULL, 5, 0, NULL),
+(113, 99, 'string', '2014-04-23', NULL, 6, 0, NULL),
+(114, 99, 'crac', '2014-04-23', NULL, 7, 0, NULL),
+(115, 99, 'weep', '2014-04-23', NULL, 8, 0, NULL),
+(116, 99, 'node', '2014-04-23', NULL, 9, 0, NULL),
+(117, 99, 'js', '2014-04-23', NULL, 10, 0, NULL),
+(118, 99, 'php', '2014-04-23', NULL, 11, 0, NULL),
+(119, 99, 'html', '2014-04-23', NULL, 12, 0, NULL),
+(120, 99, 'css', '2014-04-23', NULL, 13, 0, NULL),
+(121, 99, '.net', '2014-04-23', NULL, 14, 0, NULL),
+(122, 99, 'crack', '2014-04-23', NULL, 15, 0, NULL),
+(123, 99, 'cuir', '2014-04-23', NULL, 16, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -119,7 +183,15 @@ CREATE TABLE IF NOT EXISTS `list` (
   `position` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_board` (`id_board`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=99 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
+
+--
+-- Contenu de la table `list`
+--
+
+INSERT INTO `list` (`id`, `id_board`, `name`, `position`) VALUES
+(99, 12, 'pokemon', 1),
+(100, 12, 'digimon', 2);
 
 -- --------------------------------------------------------
 
@@ -131,17 +203,19 @@ CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `password` varchar(40) NOT NULL,
+  `mail` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Contenu de la table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `password`) VALUES
-(1, 'Pierre', ''),
-(2, 'Paul', ''),
-(3, 'Jacques', '');
+INSERT INTO `user` (`id`, `name`, `password`, `mail`) VALUES
+(1, 'Pierre', 'azerty', 'pierre@hotmail.fr'),
+(2, 'Paul', 'azerty', 'paul@free.fr'),
+(3, 'Jacques', 'azerty', 'jacques@gmail.com'),
+(4, 'Bernard', 'azerty', 'bernard@pivot.com');
 
 --
 -- Contraintes pour les tables exportées
