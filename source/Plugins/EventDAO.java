@@ -1,4 +1,9 @@
-package Core;
+package Plugins;
+
+import Core.BddConnection;
+import Core.Item;
+import Core.ItemDAO;
+import Core.List;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,7 +29,7 @@ public class EventDAO {
 			Statement query = link.createStatement();
 
 			query.execute("INSERT INTO event "+
-						  "VALUES ( default, null, '"+ list.getId() +"', null, null, '"+ user_id +"', NOW());");
+					"VALUES ( default, null, '"+ list.getId() +"', null, null, '"+ user_id +"', NOW());");
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -78,15 +83,15 @@ public class EventDAO {
 				- un id d'item appartenant à une liste appartenant à la board spécifiée par board_id  5*/
 			query.execute(
 					"SELECT * " +
-					"FROM event, list, item " +
-					"WHERE list.id_board = '"+board_id+"' AND " +
-					"(" +
-					"      (list.id = event.list_id_old OR list.id = event.list_id_new) OR" +
-					"      (list.id = item.id_list AND (item.id = event.item_id_old OR item.id = event.item_id_new))" +
-					")" +
-					"AND event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "' " +
-					"GROUP BY event.id "+
-					"ORDER BY event.date DESC");
+							"FROM event, list, item " +
+							"WHERE list.id_board = '"+board_id+"' AND " +
+							"(" +
+							"      (list.id = event.list_id_old OR list.id = event.list_id_new) OR" +
+							"      (list.id = item.id_list AND (item.id = event.item_id_old OR item.id = event.item_id_new))" +
+							")" +
+							"AND event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "' " +
+							"GROUP BY event.id "+
+							"ORDER BY event.date DESC");
 
 			ResultSet res = query.getResultSet();
 

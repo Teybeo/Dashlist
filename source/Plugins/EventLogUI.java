@@ -1,10 +1,6 @@
 package Plugins;
 
-import Core.BddConnection;
-import Core.Board;
-import Core.Event;
-import Core.EventDAO;
-import PluginSystem.PluginInterface;
+import Core.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,20 +8,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class EventLogUI implements PluginInterface {
+public class EventLogUI {
 
 	private JPanel log_zone;
 	private JScrollPane scroll_pane;
 	ArrayList<Event> events;
 	private EventMenu event_menu;
-	private Board board;
+	private int board_id;
 	private static final int FIRST = 0;
 	private static final int LAST = -1;
-
-	public EventLogUI() {
-
-		System.out.println("Instanciation de EventLogUI");
-	}
 
 	public EventLogUI(int board_id) {
 
@@ -37,6 +28,7 @@ public class EventLogUI implements PluginInterface {
 
 		event_menu = new EventMenu();
 
+		this.board_id = board_id;
 		EventDAO dao = new EventDAO(BddConnection.getInstance());
 		events = dao.getEventsByBoard(board_id);
 
@@ -46,15 +38,6 @@ public class EventLogUI implements PluginInterface {
 			setup_event(event, LAST);
 
 		log_zone.revalidate();
-
-	}
-
-	@Override
-	public void ReferenceBoard(Board board) {
-
-		this.board = board;
-
-		System.out.println("EventLogPlugin acquired board: " + board.getName());
 
 	}
 
@@ -78,9 +61,9 @@ public class EventLogUI implements PluginInterface {
 
 		// On ne récupère que les events générés après le plus récent (premier) de ceux qu'on à déjà
 		if (events.size() > 0)
-			new_events = dao.getEventsByBoardAfter(board.getId(), events.get(0).getDate());
+			new_events = dao.getEventsByBoardAfter(board_id, events.get(0).getDate());
 		else
-			new_events = dao.getEventsByBoard(board.getId()); // Si on en avait pas, on prend tout
+			new_events = dao.getEventsByBoard(board_id); // Si on en avait pas, on prend tout
 
 		System.out.println(new_events.size() + " new events found");
 
@@ -233,5 +216,4 @@ public class EventLogUI implements PluginInterface {
 			return label_listener;
 		}
 	}
-
 }

@@ -1,4 +1,6 @@
-package Core;
+package Plugins;
+
+import Core.*;
 
 import java.util.Date;
 
