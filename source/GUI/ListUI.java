@@ -18,21 +18,30 @@ public class ListUI extends JPanel{
 
     private List list;
     private MouseListener ml;
+    private JPanel panelTitle;
     private JLabel title;
 
     public ListUI(List list, MouseListener ml){
 
         this.list = list;
         this.ml = ml;
-        title = new JLabel(list.getName());
-        this.add(title);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setPreferredSize(new Dimension(200, 50));
+        this.setMinimumSize(new Dimension(200, 50));
+        this.setBackground(new Color(224, 224, 224));
+        this.setAlignmentY(Component.TOP_ALIGNMENT);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setPreferredSize(new Dimension(200,50));
-        this.setMinimumSize(new Dimension(200, 50));
-        this.setBackground(new Color(51, 204, 153));
-        this.setAlignmentY(Component.TOP_ALIGNMENT);
+        panelTitle = new JPanel();
+        panelTitle.setLayout(new BoxLayout(panelTitle, BoxLayout.Y_AXIS));
+        panelTitle.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        panelTitle.setBackground(this.getBackground());
+        panelTitle.setMaximumSize(new Dimension(200, 30));
+
+        title = new JLabel(list.getName());
+        title.setFont(new Font("Arial", Font.BOLD, 16));
+        panelTitle.add(title);
+        this.add(panelTitle);
 
         for (Item item : list.getItems()){
             this.add(new ItemUI(item, ml));
