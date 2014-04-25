@@ -36,6 +36,7 @@ public class Tableau extends Observable implements Observer{
 		lists_zone = new JPanel();
 		lists_zone.setLayout(new BoxLayout(lists_zone, BoxLayout.X_AXIS));
 		lists_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
+        lists_zone.setBackground(new Color(100,150,200));
 
 		// HACK: Pour defocuser les textinput si on clique ailleurs,
 		// on vole le focus si on clique sur le panel principal
@@ -78,7 +79,8 @@ public class Tableau extends Observable implements Observer{
 			list.addObserver(this);
 			//setup_list(list);
             lists_zone.add(new ListUI(list, label_menu_listener));
-		}
+            lists_zone.add(Box.createRigidArea(new Dimension(10, 0)));
+        }
 
 		create_empty_list();
 
@@ -106,6 +108,7 @@ public class Tableau extends Observable implements Observer{
 		empty_list = new JPanel();
 		empty_list.setLayout(new BoxLayout(empty_list, BoxLayout.Y_AXIS));
 		empty_list.setName("vide");
+        empty_list.setAlignmentY(Component.TOP_ALIGNMENT);
 
 		TogglableTextInput add_list = new TogglableTextInput("Ajouter Liste", new AjoutListeListener());
 		empty_list.add(add_list);

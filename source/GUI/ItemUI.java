@@ -17,35 +17,37 @@ import java.util.Observer;
 public class ItemUI extends JPanel implements Observer {
 
     private Item item;
-    private JTextArea label;
+    private JTextArea text;
 
     public ItemUI(Item item, MouseListener ml) {
 
         this.item = item;
+
 	    item.addObserver(this);
 
-        label = new JTextArea(item.getName());
-        label.setEditable(false);
-        label.setFocusable(false);
-        label.setLineWrap(true);
-        label.setFont(new Font("Arial", Font.PLAIN, 16));
+	    text = new JTextArea(item.getName());
+        text.setEditable(false);
+        text.setFocusable(false);
+        text.setLineWrap(true);
+        text.setFont(new Font("Arial", Font.PLAIN, 16));
+        text.setSize(180, 50);
+
         this.setPreferredSize(new Dimension(200, 50));
         this.setMaximumSize(new Dimension(200, 50));
         this.setOpaque(true);
         this.setBackground(new Color(255, 255, 255));
-        //this.setBorder(BorderFactory.createLineBorder(Color.black));
 
-	    /* On ajoute l'écouteur sur le panel et sur le label
+        /*On ajoute l'écouteur sur le panel et sur le label
 	    pour que le clic-droit fonctionne sur toute la zone de l'item*/
         this.addMouseListener(ml);
-	    label.addMouseListener(ml);
-        this.add(label);
+	    text.addMouseListener(ml);
+        this.add(text);
     }
 
     @Override protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
         g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
-        label.repaint();
+        text.repaint();
     }
 
 	public void SupprItemAction() {
@@ -57,7 +59,7 @@ public class ItemUI extends JPanel implements Observer {
 	}
 
     public JTextArea getLabel() {
-        return label;
+        return text;
     }
 
     public Item getItem() {
