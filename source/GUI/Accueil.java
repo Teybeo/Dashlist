@@ -1,6 +1,7 @@
 package GUI;
 
 import Core.*;
+import PluginSystem.PluginInterface;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -21,10 +22,12 @@ public class Accueil implements Observer {
 	private JPanel panel;
 	private JPanel panel_list;
 	ArrayList<Board> boards;
+	PluginInterface[] plugins;
 
-	public Accueil() {
+	public Accueil(PluginInterface[] plugins) {
 
 		frame = new JFrame("Accueil - Dashlist");
+		this.plugins = plugins;
 		$$$setupUI$$$();
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
 		frame.setContentPane(panel);
@@ -69,6 +72,11 @@ public class Accueil implements Observer {
 
 		Tableau current = new Tableau(board);
 		current.addObserver(this);
+
+		if (plugins != null)
+		for (PluginInterface plugin : plugins)
+			plugin.ReferenceBoard(board);
+
 		System.out.println("Board " + board.getName() + " Loaded");
 	}
 
