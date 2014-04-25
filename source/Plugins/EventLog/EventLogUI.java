@@ -1,4 +1,4 @@
-package Plugins;
+package Plugins.EventLog;
 
 import Core.*;
 
@@ -12,7 +12,7 @@ public class EventLogUI {
 
 	private JPanel log_zone;
 	private JScrollPane scroll_pane;
-	ArrayList<Event> events;
+	ArrayList<Plugins.EventLog.Event> events;
 	private EventMenu event_menu;
 	private int board_id;
 	private static final int FIRST = 0;
@@ -34,14 +34,14 @@ public class EventLogUI {
 
 		// Les events sont triés du plus récent au plus vieux
 		// donc on les insère chacun après tous les autres
-		for (Event event : events)
+		for (Plugins.EventLog.Event event : events)
 			setup_event(event, LAST);
 
 		log_zone.revalidate();
 
 	}
 
-	private void setup_event(Event event, int position) {
+	private void setup_event(Plugins.EventLog.Event event, int position) {
 
 		JLabel label = new JLabel(event.getReadableDescription());
 		label.setName(String.valueOf(event.getId()));
@@ -57,7 +57,7 @@ public class EventLogUI {
 	public void refresh() {
 
 		EventDAO dao = new EventDAO(BddConnection.getInstance());
-		ArrayList<Event> new_events;
+		ArrayList<Plugins.EventLog.Event> new_events;
 
 		// On ne récupère que les events générés après le plus récent (premier) de ceux qu'on à déjà
 		if (events.size() > 0)
@@ -68,7 +68,7 @@ public class EventLogUI {
 		System.out.println(new_events.size() + " new events found");
 
 		// On les insère en haut de la liste d'affichage
-		for (Event event : new_events) {
+		for (Plugins.EventLog.Event event : new_events) {
 			setup_event(event, FIRST);
 		}
 
@@ -86,13 +86,13 @@ public class EventLogUI {
 		return scroll_pane;
 	}
 
-	private void revertTo(Event event) {
+	private void revertTo(Plugins.EventLog.Event event) {
 
 		EventDAO dao = new EventDAO(BddConnection.getInstance());
 
-		ArrayList<Event> following_events = findFollowingEvents(event);
+		ArrayList<Plugins.EventLog.Event> following_events = findFollowingEvents(event);
 
-		for (Event event_to_revert : following_events) {
+		for (Plugins.EventLog.Event event_to_revert : following_events) {
 
 			System.out.println("Annulation de "+event_to_revert.getReadableDescription());
 
@@ -116,12 +116,12 @@ public class EventLogUI {
 	 * @param event L'event auquel sont postérieurs les events renvoyés par la fonction
 	 * @return La liste des events de la board actuelle postérieurs à event. Liste vide si pas d'events postérieurs
 	 */
-	private ArrayList<Event> findFollowingEvents(Event event) {
+	private ArrayList<Plugins.EventLog.Event> findFollowingEvents(Plugins.EventLog.Event event) {
 
-		ArrayList<Event> following_events = new ArrayList<>();
+		ArrayList<Plugins.EventLog.Event> following_events = new ArrayList<>();
 
 		// Les events sont triés du plus récent au plus vieux
-		for (Event event_tmp : events)
+		for (Plugins.EventLog.Event event_tmp : events)
 		{
 			// Une fois atteint l'event ciblé, on s'arrête
 			if (event_tmp.getId() == event.getId())
@@ -147,7 +147,7 @@ public class EventLogUI {
 
 	private class EventMenu extends JPopupMenu {
 
-		private Event event_clicked;
+		private Plugins.EventLog.Event event_clicked;
 		private MouseAdapter label_listener;
 
 		public EventMenu() {
@@ -167,7 +167,7 @@ public class EventLogUI {
 						int id = Integer.parseInt(e.getComponent().getName());
 
 						// On récupère l'event et le garde en mémoire pour les actions du menu
-						for (Event event : events)
+						for (Plugins.EventLog.Event event : events)
 							if (event.getId() == id)
 							{
 								setEventClicked(event);
@@ -185,7 +185,7 @@ public class EventLogUI {
 				public void actionPerformed(ActionEvent e) {
 
 					// On récupère l'event sur lequel avait été invoqué le menu contextuel
-					Event clicked_event = ((EventMenu)((JMenuItem)e.getSource()).getParent()).getEventClicked();
+					Plugins.EventLog.Event clicked_event = ((EventMenu)((JMenuItem)e.getSource()).getParent()).getEventClicked();
 
 					if (clicked_event == null)
 						System.out.println("Le clicked label était null");
@@ -200,12 +200,12 @@ public class EventLogUI {
 
 		}
 
-		private void setEventClicked(Event event_clicked) {
+		private void setEventClicked(Plugins.EventLog.Event event_clicked) {
 
 			this.event_clicked = event_clicked;
 		}
 
-		private Event getEventClicked() {
+		private Plugins.EventLog.Event getEventClicked() {
 
 
 			return event_clicked;

@@ -1,4 +1,4 @@
-package Plugins;
+package Plugins.EventLog;
 
 import Core.*;
 
