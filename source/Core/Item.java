@@ -1,10 +1,9 @@
 package Core;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Observable;
 
-public class Item {
+public class Item extends Observable {
 
     int id;
 	String name;
@@ -76,5 +75,12 @@ public class Item {
 	public void setId(int id) {
 
 		this.id = id;
+	}
+
+	public void delete() {
+
+		setChanged();
+		notifyObservers("Item deleted");
+		clearChanged();
 	}
 }

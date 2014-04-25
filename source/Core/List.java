@@ -2,8 +2,10 @@ package Core;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
 
-public class List {
+public class List extends Observable implements Observer {
 
 	int id;
 	String name;
@@ -23,6 +25,9 @@ public class List {
 		this.name = name;
 		this.position = position;
 		this.items = items;
+		if (items != null)
+		for (Item item : items)
+			item.addObserver(this);
 	}
 
 	public int getId() {
@@ -75,5 +80,34 @@ public class List {
 	public void setId(int id) {
 
 		this.id = id;
+	}
+
+	public void addItem(Item item) {
+
+		items.add(item);
+		item.addObserver(this);
+		// On a modifié les données, on notifie les observers
+		setChanged();
+		notifyObservers(item);
+		clearChanged();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+
+		System.out.println("List received ["+ arg +"] from ["+ o +"]");
+
+		if (sender.equals("Core.Item"))
+		{
+			String param = ((String)arg);
+			if (param.equals("Item deleted"))
+			{
+				items.remove(o);
+
+			}
+		}
+
 	}
 }

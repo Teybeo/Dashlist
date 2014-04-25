@@ -62,6 +62,8 @@ public class ItemDAO {
                     "SET is_deleted = TRUE " +
 		            "WHERE id ="+item.getId());
 
+	        item.delete();
+
 	        EventDAO dao = new EventDAO(link);
 	        dao.add(item, null, user_id);
 
@@ -152,6 +154,7 @@ public class ItemDAO {
 
 			query.execute("" +
 					"DELETE FROM item WHERE id = '" + item_id + "';");
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

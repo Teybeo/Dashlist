@@ -1,15 +1,20 @@
 package GUI;
 
+import Core.BddConnection;
+import Core.CurrentUser;
 import Core.Item;
+import Core.ItemDAO;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Guillaume on 23/04/14.
  */
-public class ItemUI extends JPanel{
+public class ItemUI extends JPanel implements Observer {
 
     private Item item;
     private JTextArea label;
@@ -17,6 +22,8 @@ public class ItemUI extends JPanel{
     public ItemUI(Item item, MouseListener ml) {
 
         this.item = item;
+	    item.addObserver(this);
+
         label = new JTextArea(item.getName());
         label.setEditable(false);
         label.setFocusable(false);
@@ -41,6 +48,14 @@ public class ItemUI extends JPanel{
         label.repaint();
     }
 
+	public void SupprItemAction() {
+
+		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+
+		dao.delete(getItem(), CurrentUser.getInstance().getId());
+
+	}
+
     public JTextArea getLabel() {
         return label;
     }
@@ -48,4 +63,24 @@ public class ItemUI extends JPanel{
     public Item getItem() {
         return item;
     }
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+
+		System.out.println("ItemUI received ["+ arg +"] from ["+ o +"]");
+
+		if (sender.equals("Core.Item"))
+		{
+			String param = ((String)arg);
+			if (param.equals("Item deleted"))
+			{
+				Container parent = getParent();
+				parent.remove(this);
+				parent.revalidate();
+				parent.repaint();
+			}
+		}
+	}
 }

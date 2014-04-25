@@ -9,8 +9,9 @@ import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
+import java.util.Observer;
 
-public class Tableau extends Observable {
+public class Tableau extends Observable implements Observer{
 
 	private JPanel main;
 	private JPanel lists_zone;
@@ -73,8 +74,11 @@ public class Tableau extends Observable {
 		item_menu = new ItemMenu();
 
 		for (Core.List list : board.getLists())
+		{
+			list.addObserver(this);
 			//setup_list(list);
             lists_zone.add(new ListUI(list, label_menu_listener));
+		}
 
 		create_empty_list();
 
@@ -109,25 +113,6 @@ public class Tableau extends Observable {
 		lists_zone.add(empty_list);
 	}
 
-	private void SupprItemAction(ItemUI source) {
-
-        JPanel panel_list = (JPanel)source.getParent();
-
-		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
-
-		List list = board.getListByName(panel_list.getName());
-
-		//Item item = list.getItem(source.getText());
-		list.getItems().remove(source.getItem());
-		dao.delete(source.getItem(), CurrentUser.getInstance().getId());
-		event_log.refresh();
-
-		panel_list.remove(source);
-
-		panel_list.revalidate();
-		panel_list.repaint();
-	}
-
 	private void AddListAction(TogglableTextInput t) {
 
 		JPanel panel_list = (JPanel)t.getParent();
@@ -138,6 +123,8 @@ public class Tableau extends Observable {
 
 		// On crée la nouvelle liste et on l'entre dans la base
 		List liste = new List(t.getText(), position);
+		liste.addObserver(this);
+
 		board.getLists().add(liste);
 		dao.add(liste, board.getId(), CurrentUser.getInstance().getId());
 		event_log.refresh();
@@ -153,6 +140,13 @@ public class Tableau extends Observable {
 		lists_zone.repaint();
 	}
 
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+		System.out.println(sender +" sent: "+ arg);
+	}
+
 	private class SupprItemListener implements ActionListener
 	{
 		@Override
@@ -163,7 +157,7 @@ public class Tableau extends Observable {
 			if (clicked_item == null)
 				System.out.println("Le clicked item était null");
 			else
-				SupprItemAction(clicked_item);
+				clicked_item.SupprItemAction();
 		}
 	}
 
