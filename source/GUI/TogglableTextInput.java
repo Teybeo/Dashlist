@@ -50,8 +50,6 @@ public class TogglableTextInput extends JPanel {
 		if (current_mode == TEXTINPUT)
 			return;
 
-		System.out.println("setTextInputMode");
-
 		remove(button);
 		add(text_area);
 
@@ -68,8 +66,6 @@ public class TogglableTextInput extends JPanel {
 
 		if (current_mode == BUTTON)
 			return;
-
-		System.out.println("setButtonMode");
 
 		remove(text_area);
 		add(button);
@@ -88,7 +84,6 @@ public class TogglableTextInput extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			System.out.println("Button clicked");
 			setTextInputMode();
 			getParent().repaint();
 		}
@@ -102,7 +97,6 @@ public class TogglableTextInput extends JPanel {
 			super.focusLost(e);
 			if (getCurrent_mode() != BUTTON)
 			{
-				System.out.println("Textarea lost focus");
 				setButtonMode();
 				getParent().repaint();
 			}
@@ -119,7 +113,6 @@ public class TogglableTextInput extends JPanel {
 			if (((JTextArea)e.getSource()).getText().isEmpty() == true)
 				return;
 
-			System.out.println("Text validated");
 			setButtonMode();
 			getParent().repaint();
 			notifyListeners();
@@ -161,7 +154,6 @@ public class TogglableTextInput extends JPanel {
 
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println("Button Clicked!");
 	}
 
 	private void notifyListeners()
