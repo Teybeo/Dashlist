@@ -13,13 +13,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventDAO {
+public class EventLogController {
 
 	private Connection link;
+	private EventLog log;
 
-	public EventDAO(Connection link) {
+	public EventLogController(EventLog log, Connection link) {
 
 		this.link = link;
+		this.log = log;
 	}
 
 	public void add(List list, int user_id) {
@@ -64,15 +66,13 @@ public class EventDAO {
 		}
 	}
 
-	public ArrayList<Event> getEventsByBoard(int board_id) {
+	public void loadEvents() {
 
-		return getEventsByBoardAfter(board_id, new Date(0));
+		loadEventsAfter(new Date(0));
 
 	}
 
-	public ArrayList<Event> getEventsByBoardAfter(int board_id, Date date) {
-
-		ArrayList<Event> events = new ArrayList<>();
+	public void loadEventsAfter(Date date) {
 
 		try {
 
@@ -84,7 +84,7 @@ public class EventDAO {
 			query.execute(
 					"SELECT * " +
 							"FROM event, list, item " +
-							"WHERE list.id_board = '"+board_id+"' AND " +
+							"WHERE list.id_board = '"+log.getBoard().getId()+"' AND " +
 							"(" +
 							"      (list.id = event.list_id_old OR list.id = event.list_id_new) OR" +
 							"      (list.id = item.id_list AND (item.id = event.item_id_old OR item.id = event.item_id_new))" +
@@ -97,7 +97,7 @@ public class EventDAO {
 
 			while (res.next()) {
 
-				events.add(new Event(res.getInt("id"),
+				log.add(new Event(res.getInt("id"),
 						res.getInt("list_id_old"), res.getInt("list_id_new"),
 						res.getInt("item_id_old"), res.getInt("item_id_new"),
 						res.getInt("user_id"),     new Date(res.getTimestamp("date").getTime())));
@@ -106,7 +106,6 @@ public class EventDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
-		return events;
 
 	}
 

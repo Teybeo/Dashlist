@@ -70,12 +70,12 @@ public class Accueil implements Observer {
 		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
 		dao.loadLists(board);
 
-		Tableau current = new Tableau(board);
-		current.addObserver(this);
-
 		if (plugins != null)
 		for (PluginInterface plugin : plugins)
-			plugin.ReferenceBoard(board);
+			plugin.acquireBoard(board);
+
+		Tableau current = new Tableau(board, plugins);
+		current.addObserver(this);
 
 		System.out.println("Board " + board.getName() + " Loaded");
 	}
@@ -154,9 +154,13 @@ public class Accueil implements Observer {
 
 			String text = ((JLabel) (e.getSource())).getText();
 
-			for (int i = 0; i < boards.size(); i++) {
+			for (int i = 0; i < boards.size(); i++)
+			{
 				if (boards.get(i).getName().equals(text))
+				{
 					launchBoard(boards.get(i));
+					break;
+				}
 			}
 		}
 	}

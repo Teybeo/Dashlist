@@ -2,10 +2,10 @@ package GUI;
 
 import Core.*;
 import Core.List;
+import PluginSystem.PluginInterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
@@ -24,12 +24,11 @@ public class Tableau extends Observable implements Observer{
 	private JPanel east;
 	private JLabel board_title;
 	private JFrame frame;
-	private EventLog event_log;
 	private MouseListener label_menu_listener;
 	private ItemMenu item_menu;
 	Board board;
 
-	public Tableau(Board board) {
+	public Tableau(Board board, PluginInterface[] plugins) {
 
 		this.board = board;
 
@@ -89,8 +88,24 @@ public class Tableau extends Observable implements Observer{
 		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
 
-		event_log = new EventLog(board.getId());
-		frame.add(event_log.getScroll_pane(), BorderLayout.EAST);
+//		event_log = new Plugins.EventLog(board.getId());
+		for (PluginInterface plugin : plugins)
+		{
+			String[] target = plugin.getTargetContainer().split("[:]");
+
+			// On teste si le plugin veut s'attacher à un container de cette classe
+			if (target[0].equals(this.getClass().getName()))
+			{
+				try {
+					plugin.acquireContainer(((Container) (getClass().getDeclaredField(target[1]).get(this))));
+				} catch (NoSuchFieldException e) {
+					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+				}
+
+			}
+		}
 
 		buildMenuBar();
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
@@ -130,7 +145,7 @@ public class Tableau extends Observable implements Observer{
 
 		board.getLists().add(liste);
 		dao.add(liste, board.getId(), CurrentUser.getInstance().getId());
-		event_log.refresh();
+//		event_log.refresh();
 
 		// 1. On enlève la liste vide
 		// 2. On ajoute la nouvelle liste

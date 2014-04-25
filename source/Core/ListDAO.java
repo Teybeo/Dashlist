@@ -60,8 +60,8 @@ public class ListDAO {
 			if (res.next())
 				list.setId(res.getInt(1));
 
-			EventDAO dao = new EventDAO(link);
-			dao.add(list, user_id);
+//			Plugins.EventLog.EventLogController dao = new Plugins.EventLog.EventLogController(link);
+//			dao.add(list, user_id);
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

@@ -1,6 +1,7 @@
 package Plugins.EventLog;
 
 import Core.*;
+import PluginSystem.PluginInterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,37 +9,25 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class EventLogUI {
+public class EventLogUI implements PluginInterface {
 
 	private JPanel log_zone;
 	private JScrollPane scroll_pane;
-	ArrayList<Plugins.EventLog.Event> events;
+	EventLog log;
+	EventLogController controller;
 	private EventMenu event_menu;
-	private int board_id;
 	private static final int FIRST = 0;
 	private static final int LAST = -1;
 
-	public EventLogUI(int board_id) {
+	public EventLogUI() {
 
 		log_zone = new JPanel();
 		log_zone.setLayout(new BoxLayout(log_zone, BoxLayout.Y_AXIS));
 		log_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
 		scroll_pane = new JScrollPane(log_zone);
-
+		System.out.println("lol");
 		event_menu = new EventMenu();
-
-		this.board_id = board_id;
-		EventDAO dao = new EventDAO(BddConnection.getInstance());
-		events = dao.getEventsByBoard(board_id);
-
-		// Les events sont triés du plus récent au plus vieux
-		// donc on les insère chacun après tous les autres
-		for (Plugins.EventLog.Event event : events)
-			setup_event(event, LAST);
-
-		log_zone.revalidate();
-
 	}
 
 	private void setup_event(Plugins.EventLog.Event event, int position) {
@@ -53,11 +42,11 @@ public class EventLogUI {
 
 	/**
 	 *	Va chercher les nouveaux events et met à jour l'affichage
-	 */
+	 *//*
 	public void refresh() {
 
-		EventDAO dao = new EventDAO(BddConnection.getInstance());
-		ArrayList<Plugins.EventLog.Event> new_events;
+		EventLogController dao = new EventLogController(BddConnection.getInstance());
+		ArrayList<Plugins.Plugins.EventLog.Event> new_events;
 
 		// On ne récupère que les events générés après le plus récent (premier) de ceux qu'on à déjà
 		if (events.size() > 0)
@@ -68,7 +57,7 @@ public class EventLogUI {
 		System.out.println(new_events.size() + " new events found");
 
 		// On les insère en haut de la liste d'affichage
-		for (Plugins.EventLog.Event event : new_events) {
+		for (Plugins.Plugins.EventLog.Event event : new_events) {
 			setup_event(event, FIRST);
 		}
 
@@ -81,18 +70,13 @@ public class EventLogUI {
 
 	}
 
-	public JScrollPane getScroll_pane() {
+	private void revertTo(Plugins.Plugins.EventLog.Event event) {
 
-		return scroll_pane;
-	}
+		EventLogController dao = new EventLogController(BddConnection.getInstance());
 
-	private void revertTo(Plugins.EventLog.Event event) {
+		ArrayList<Plugins.Plugins.EventLog.Event> following_events = findFollowingEvents(event);
 
-		EventDAO dao = new EventDAO(BddConnection.getInstance());
-
-		ArrayList<Plugins.EventLog.Event> following_events = findFollowingEvents(event);
-
-		for (Plugins.EventLog.Event event_to_revert : following_events) {
+		for (Plugins.Plugins.EventLog.Event event_to_revert : following_events) {
 
 			System.out.println("Annulation de "+event_to_revert.getReadableDescription());
 
@@ -109,19 +93,19 @@ public class EventLogUI {
 		scroll_pane.getParent().revalidate();
 		scroll_pane.getParent().repaint();
 
-	}
-
+	}*/
+/*
 	/**
 	 * Récupère la liste de tous les events du journal actuel qui se sont déroulés après l'event donné en paramètre
 	 * @param event L'event auquel sont postérieurs les events renvoyés par la fonction
 	 * @return La liste des events de la board actuelle postérieurs à event. Liste vide si pas d'events postérieurs
-	 */
-	private ArrayList<Plugins.EventLog.Event> findFollowingEvents(Plugins.EventLog.Event event) {
+	 *
+	private ArrayList<Plugins.Plugins.EventLog.Event> findFollowingEvents(Event event) {
 
-		ArrayList<Plugins.EventLog.Event> following_events = new ArrayList<>();
+		ArrayList<Plugins.Plugins.EventLog.Event> following_events = new ArrayList<>();
 
 		// Les events sont triés du plus récent au plus vieux
-		for (Plugins.EventLog.Event event_tmp : events)
+		for (Plugins.Plugins.EventLog.Event event_tmp : events)
 		{
 			// Une fois atteint l'event ciblé, on s'arrête
 			if (event_tmp.getId() == event.getId())
@@ -134,7 +118,7 @@ public class EventLogUI {
 		}
 
 		return following_events;
-	}
+	}*/
 
 	private JLabel findLabel(int id) {
 
@@ -143,6 +127,43 @@ public class EventLogUI {
 				return (JLabel)c;
 
 		return null;
+	}
+
+	@Override
+	public void acquireBoard(Board board) {
+
+		System.out.println("EventLog Plugin acquired board: " + board.getName());
+
+		log = new EventLog(board);
+
+		controller = new EventLogController(log, BddConnection.getInstance());
+
+		controller.loadEvents();
+
+		log_zone.removeAll();
+
+		// Les events sont triés du plus récent au plus vieux
+		// donc on les insère chacun après tous les autres
+		for (Event event : log.getEvents())
+			setup_event(event, LAST);
+
+		log_zone.revalidate();
+	}
+
+	@Override
+	public String getTargetContainer() {
+
+		return "GUI.Tableau:frame";
+	}
+
+	@Override
+	public void acquireContainer(Container container) {
+
+		System.out.println("EventLog Plugin acquired container");
+
+		container.add(log_zone, BorderLayout.EAST);
+		container.revalidate();
+		container.repaint();
 	}
 
 	private class EventMenu extends JPopupMenu {
@@ -167,14 +188,14 @@ public class EventLogUI {
 						int id = Integer.parseInt(e.getComponent().getName());
 
 						// On récupère l'event et le garde en mémoire pour les actions du menu
-						for (Plugins.EventLog.Event event : events)
+						/*for (Plugins.Plugins.EventLog.Event event : events)
 							if (event.getId() == id)
 							{
 								setEventClicked(event);
 								show(e.getComponent(), e.getX(), e.getY());
 								break;
 							}
-
+*/
 					}
 				}
 			};
@@ -189,8 +210,8 @@ public class EventLogUI {
 
 					if (clicked_event == null)
 						System.out.println("Le clicked label était null");
-					else
-						revertTo(clicked_event);
+					//else
+					//	revertTo(clicked_event);
 				}
 			};
 

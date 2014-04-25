@@ -28,8 +28,8 @@ public class ItemDAO {
 			if (res.next())
 				item.setId(res.getInt(1));
 
-			EventDAO dao = new EventDAO(link);
-			dao.add(null, item, user_id);
+//			Plugins.EventLog.EventLogController dao = new Plugins.EventLog.EventLogController(link);
+//			dao.add(null, item, user_id);
 
 			} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -64,8 +64,8 @@ public class ItemDAO {
 
 	        item.delete();
 
-	        EventDAO dao = new EventDAO(link);
-	        dao.add(item, null, user_id);
+//	        Plugins.EventLog.EventLogController dao = new Plugins.EventLog.EventLogController(link);
+//	        dao.add(item, null, user_id);
 
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
