@@ -9,18 +9,22 @@
 		{
 			if(isset($_POST['password']) && $data[2] == $_POST['password'])
 			{
-				echo 'Vous êtes maintenant connecté';
+				echo '<span id="errorfield" class="textok" style="color: green">Vous êtes maintenant connecté</span>';
+				session_start();
+				$_SESSION = array();
+				$_SESSION['login'] = $_POST['login'];
+				$_SESSION['id'] = $data[0];
 				exit();
 			}
 			else
 			{
-				echo 'Mauvaise combinaison login/password'.$data[2];
+				echo '<span id="errorfield" class="texterror" style="color: red">Mauvaise combinaison login/password</span>';
 				exit();
 			}
 		}
 		else
 		{
-				echo "Ce login n'existe pas ";
+				echo "<span id='errorfield' class='texterror' style='color: red'>Ce login n'existe pas </span>";
 				exit();
 		}
 	}

@@ -1,4 +1,5 @@
 <!DOCTYPE HTML>
+<?php session_start(); ?>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -14,8 +15,30 @@
 				data: { login: $("#co_login").val(), password: $("#co_pass").val() }
 			})
 			.done(function( msg ) {
-				$(".error").text(msg);
-				$("#ttglobal").delay(400).fadeOut(200);
+				$(".error").html(msg);
+				if($("#errorfield").hasClass("textok"))
+				{
+					$("#ttglobal").delay(400).fadeOut(200);
+				}
+			});
+		}
+		
+		function validerInscription()
+		{
+			$.ajax({
+				type: "POST",
+				url: "inscription.php",
+				data: { login: $("#ins_login").val(), 
+						mail: $("#ins_mail").val(),
+						pass: $("#ins_pass").val(),
+						pass2: $("#ins_pass2").val()}
+			})
+			.done(function( msg ) {
+				$(".error").html(msg);
+				if($("#errorfield").hasClass("textok"))
+				{
+					$("#ttglobal").delay(600).fadeOut(200);
+				}
 			});
 		}
 	</script>
@@ -36,8 +59,18 @@
 					<a href="features.php">Téléchargement</a>
 					<a href="news.php">News</a>
 					<a href="contact.php">Contact</a>
-					<a href="#" class="connexion">Connexion</a>
-                    <a href="#" class="inscription">Inscription</a>
+					<?php
+						if(isset($_SESSION['login']))
+						{
+							echo '<a>'.$_SESSION['login'].'</a>';
+							echo '<a href="deconnexion.php" class="deconnexion">Déconnexion</a>';
+						}
+						else
+						{
+							echo '<a href="#" class="connexion">Connexion</a>';
+							echo '<a href="#" class="inscription">Inscription</a>';
+						}
+					?>
 			</div>
 			<script type="text/javascript">
 				$(".inscription").click(function(){
