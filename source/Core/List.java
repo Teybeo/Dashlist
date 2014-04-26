@@ -112,11 +112,12 @@ public class List extends Observable implements Observer {
 
 		if (sender.equals("Core.Item"))
 		{
-			String param = ((String)arg);
-			if (param.equals("Item deleted"))
+			if (arg.equals("Item deleted"))
 			{
+				setChanged();
+				notifyObservers("Item deleted: "+((Item)o).getId());
+				clearChanged();
 				items.remove(o);
-
 			}
 		}
 

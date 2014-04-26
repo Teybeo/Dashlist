@@ -83,7 +83,7 @@ public class Board extends Observable implements Observer {
 		if (sender.equals("Core.List"))
 		{
 			// On transmet la notification pour les plugins
-			if (((String)arg).startsWith("Item added: ")) {
+			if (((String)arg).startsWith("Item added: ") || ((String)arg).startsWith("Item deleted: ")) {
 				setChanged();
 				notifyObservers(arg);
 				clearChanged();

@@ -167,6 +167,11 @@ public class EventLogUI implements PluginInterface, Observer {
 				Item item = log.getBoard().getItemById(Integer.parseInt(((String)arg).replace("Item added: ", "")));
 				controller.addItemEvent(null, item);
 			}
+			if (((String)arg).startsWith("Item deleted: "))
+			{
+				Item item = log.getBoard().getItemById(Integer.parseInt(((String)arg).replace("Item deleted: ", "")));
+				controller.addItemEvent(item, null);
+			}
 		}
 		else if (sender.equals("Plugins.EventLog.EventLog"))
 		{
