@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Tableau extends Observable implements Observer{
+public class BoardUI extends Observable implements Observer{
 
 	private JPanel main;
 	private JPanel lists_zone;
@@ -28,7 +28,7 @@ public class Tableau extends Observable implements Observer{
 	private ItemMenu item_menu;
 	Board board;
 
-	public Tableau(Board board, PluginInterface[] plugins) {
+	public BoardUI(Board board, PluginInterface[] plugins) {
 
 		this.board = board;
 		this.board.addObserver(this);
@@ -136,7 +136,7 @@ public class Tableau extends Observable implements Observer{
 
 		String sender = o.getClass().getName();
 
-		System.out.println("Tableau received: "+arg+" from: "+sender);
+		System.out.println("BoardUI received: "+arg+" from: "+sender);
 
 		if (((String)arg).startsWith("List added"))
 		{

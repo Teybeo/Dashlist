@@ -105,7 +105,7 @@ public class Accueil implements Observer {
 		for (PluginInterface plugin : plugins)
 			plugin.acquireBoard(board);
 
-		Tableau current = new Tableau(board, plugins);
+		BoardUI current = new BoardUI(board, plugins);
 		current.addObserver(this);
 
 		System.out.println("Board " + board.getName() + " Loaded");
@@ -150,7 +150,7 @@ public class Accueil implements Observer {
 
 		if (sender.equals("GUI.Login"))
 			loadAccount();
-		if (sender.equals("GUI.Tableau"))
+		if (sender.equals("GUI.BoardUI"))
 			frame.setVisible(true);
 
 	}

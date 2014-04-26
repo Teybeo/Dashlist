@@ -155,7 +155,7 @@ public class EventLogUI implements PluginInterface, Observer {
 	@Override
 	public String getTargetContainer() {
 
-		return "GUI.Tableau:frame";
+		return "GUI.BoardUI:frame";
 	}
 
 	@Override
