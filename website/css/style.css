@@ -72,7 +72,6 @@ a
 	/*padding: 27px 0;*/
 }
 
-
 #header > div, #footer > div {
 	width: 920px;
 	height: 80px;
@@ -457,5 +456,5 @@ p a {
 .newp
 {
 	width: 95%;
-	font-size: 9pt;
+	font-size: 10pt;
 }
