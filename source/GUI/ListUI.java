@@ -22,6 +22,7 @@ public class ListUI extends JPanel implements Observer{
     private MouseListener ml;
     private JPanel panelTitle;
     private JLabel title;
+    //private int cpt;
 
     public ListUI(List list, MouseListener ml){
 
@@ -45,15 +46,19 @@ public class ListUI extends JPanel implements Observer{
         panelTitle.add(title);
         this.add(panelTitle);
 
+        //cpt = 0;
         for (Item item : list.getItems()){
             this.add(new ItemUI(item, ml));
             this.add(Box.createRigidArea(new Dimension(0, 5)));
+            //cpt++;
         }
+
+        //this.setMaximumSize(new Dimension(200,cpt*55+60));
 
         TogglableTextInput add_item = new TogglableTextInput("Ajouter item", new AjoutItemListener());
         this.add(add_item);
 
-        this.revalidate();
+        //this.revalidate();
     }
 
 
@@ -94,6 +99,7 @@ public class ListUI extends JPanel implements Observer{
     @Override protected void paintComponent(Graphics g) {
         g.setColor(getBackground());
         g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+        revalidate();
 	}
 
 

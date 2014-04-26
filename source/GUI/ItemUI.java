@@ -32,6 +32,7 @@ public class ItemUI extends JPanel implements Observer {
         text.setFont(new Font("Arial", Font.PLAIN, 16));
         text.setSize(180, 50);
 
+        this.setMinimumSize(new Dimension(200, 50));
         this.setPreferredSize(new Dimension(200, 50));
         this.setMaximumSize(new Dimension(200, 50));
         this.setOpaque(true);
