@@ -18,7 +18,7 @@
 				$(".error").html(msg);
 				if($("#errorfield").hasClass("textok"))
 				{
-					$("#ttglobal").delay(400).fadeOut(200);
+					setTimeout(function(){ location.reload(); }, 1200);
 				}
 			});
 		}
@@ -35,6 +35,7 @@
 			})
 			.done(function( msg ) {
 				$(".error").html(msg);
+				
 				if($("#errorfield").hasClass("textok"))
 				{
 					$("#ttglobal").delay(600).fadeOut(200);
@@ -62,7 +63,7 @@
 					<?php
 						if(isset($_SESSION['login']))
 						{
-							echo '<a>'.$_SESSION['login'].'</a>';
+							echo '<a href="account.php">'.$_SESSION['login'].'</a>';
 							echo '<a href="deconnexion.php" class="deconnexion">Déconnexion</a>';
 						}
 						else

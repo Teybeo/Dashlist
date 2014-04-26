@@ -55,8 +55,15 @@ img
 
 /*------------------------------ HEADER ------------------------------*/
 #header {
-	background-color: #1FD39A;
-	border-bottom: 1px solid #e6e6e6;
+	background: rgb(31,211,154); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(31,211,154,1) 0%, rgba(94,229,173,1) 50%, rgba(94,229,173,1) 51%, rgba(31,211,154,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(31,211,154,1)), color-stop(50%,rgba(94,229,173,1)), color-stop(51%,rgba(94,229,173,1)), color-stop(100%,rgba(31,211,154,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(31,211,154,1) 0%,rgba(94,229,173,1) 50%,rgba(94,229,173,1) 51%,rgba(31,211,154,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(31,211,154,1) 0%,rgba(94,229,173,1) 50%,rgba(94,229,173,1) 51%,rgba(31,211,154,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(31,211,154,1) 0%,rgba(94,229,173,1) 50%,rgba(94,229,173,1) 51%,rgba(31,211,154,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom, rgba(31,211,154,1) 0%,rgba(94,229,173,1) 50%,rgba(94,229,173,1) 51%,rgba(31,211,154,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1fd39a', endColorstr='#1fd39a',GradientType=0 ); /* IE6-9 */
+	border-bottom: 1px solid #000000;
 	/*padding: 27px 0;*/
 }
 
@@ -89,12 +96,12 @@ img
 }
 
 #navigation a:hover {
-	text-shadow: #ffffff 1px 1px 8px;
+	color: #ff9950;
 	transition: text-shadow .2s ease-in, text-indent .2s ease-in;
 	
 }
 #navigation a:active {
-	color: #f99600;
+	color: #ff9950;
 }
 #adbox {
 	background: url(../images/bg-adbox.jpg) repeat-x left top;
@@ -247,7 +254,8 @@ p a {
 /** sidebar **/
 .sidebar {
 	float: left;
-	min-height: 848px;
+	background: url(../images/divider.png) repeat-y right top;
+	min-height: 500px;
 	width: 216px;
 	margin-left: 20px;
 }
@@ -420,4 +428,12 @@ p a {
 	margin-top: 150px;
 	color: black;
 	padding: 40px;
+}
+
+#no_selected_project
+{
+	background-color: #DEDEDE;
+	padding: 10px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
