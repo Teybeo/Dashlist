@@ -63,7 +63,7 @@
 		</div>
 		
 		<div class="main" id="no_selected_project" style="height: 400px;">
-			Selectionnez un projet dans la liste de gauche ou creez en un <a href="#">en cliquant ici</a>.
+			Selectionnez un projet dans la liste de gauche ou creez en un <a class="newp" href="#">en cliquant ici</a>.
 		</div>
 	</div>
 	

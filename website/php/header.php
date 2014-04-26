@@ -6,6 +6,7 @@
 	<meta charset="UTF-8">
 	<title>Dashlist</title>
 	<link rel="stylesheet" href="../css/style.css" type="text/css">
+	<link rel="icon" type="image/png" href="../images/logo.png" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>   
 	<script type="text/javascript">
 		function validerConnexion()
@@ -58,7 +59,7 @@
 			
 			<div id="navigation">
 					<a href="index.php">Accueil</a>
-					<a href="features.php">Téléchargement</a>
+					<a href="download.php">Téléchargement</a>
 					<a href="news.php">News</a>
 					<a href="contact.php">Contact</a>
 					<?php
