@@ -82,10 +82,12 @@ public class Board extends Observable implements Observer {
 
 		if (sender.equals("Core.List"))
 		{
-//			if (arg.equals("List added")) {
-//				setChanged();
-//				notifyObservers();
-//			}
+			// On transmet la notification pour les plugins
+			if (((String)arg).startsWith("Item added: ")) {
+				setChanged();
+				notifyObservers(arg);
+				clearChanged();
+			}
 
 		}
 //		if (((String)arg).equals("List added")) {
@@ -114,6 +116,17 @@ public class Board extends Observable implements Observer {
 				return l;
 
 		return null;
+	}
+
+	// Et ouais
+	public Item getItemById(int id) {
+
+		for (List l : lists)
+			for (Item item : l.getItems())
+				if (item.getId() == id)
+					return item;
+
+		return null;  //To change body of created methods use File | Settings | File Templates.
 	}
 }
 

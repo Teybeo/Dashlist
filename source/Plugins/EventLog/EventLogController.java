@@ -97,4 +97,13 @@ public class EventLogController {
 
 		log.add(event);
 	}
+
+	public void addItemEvent(Item old_item, Item new_item) {
+
+		EventDAO dao = new EventDAO(BddConnection.getInstance());
+
+		Event event = dao.add(old_item, new_item);
+
+		log.add(event);
+	}
 }

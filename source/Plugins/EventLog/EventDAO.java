@@ -83,7 +83,7 @@ public class EventDAO {
 			String new_item_id_str = (new_item == null) ? "null" : Integer.toString(new_item.getId());
 
 			query.execute("INSERT INTO event "+
-					"VALUES ( default, null, null, "+ old_item_id +", "+ new_item_id +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
+					"VALUES ( default, null, null, "+ old_item_id_str +", "+ new_item_id_str +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
