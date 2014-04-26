@@ -96,7 +96,6 @@ public class Board extends Observable implements Observer {
 
 	public List getListById(int id) {
 
-		List list = null;
 		for (List l : lists)
 			if (l.getId() == id)
 				return l;

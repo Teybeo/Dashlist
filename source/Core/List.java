@@ -99,7 +99,7 @@ public class List extends Observable implements Observer {
 		item.addObserver(this);
 		// On a modifié les données, on notifie les observers
 		setChanged();
-		notifyObservers(item);
+		notifyObservers();
 		clearChanged();
 	}
 
@@ -120,5 +120,23 @@ public class List extends Observable implements Observer {
 			}
 		}
 
+	}
+
+	public void add(Item item) {
+
+		items.add(item);
+		item.addObserver(this);
+		setChanged();
+		notifyObservers("Item added: "+item.getId());
+		clearChanged();
+	}
+
+	public Item getItemById(int id) {
+
+		for (Item item : items)
+			if (item.getId() == id)
+				return item;
+
+		return null;  //To change body of created methods use File | Settings | File Templates.
 	}
 }

@@ -35,7 +35,6 @@ public class ListDAO {
 
 				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-//				lists.add(new List(list_id, res.getString("name"), res.getInt("position"), dao.getListItems(list_id)));
 				lists.add(get(list_id, true));
 			}
 
@@ -48,7 +47,7 @@ public class ListDAO {
 
 	public List add(String list_name, int position, int board_id) {
 
-		List list = null;
+		List list = new List(list_name, position);
 
 		try {
 
@@ -56,13 +55,13 @@ public class ListDAO {
 
 			query.execute("" +
 					"INSERT INTO list " +
-					"VALUES(default, " + board_id + ",'" + list_name + "', " + position + ");", Statement.RETURN_GENERATED_KEYS);
+					"VALUES(default, " + board_id + ",'" + list.getName() + "', " + list.getPosition() + ");", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
 
 			if (res.next())
-				list = new List(res.getInt(1), list_name, position);;
+				list.setId(res.getInt(1));
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -159,5 +158,14 @@ public class ListDAO {
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 		list.setItems(dao.getListItems(list.getId()));
 
+	}
+
+	public void addItem(List list, String item_name) {
+
+		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+
+		Item item = dao.add(item_name, list.getItems().size() + 1, list.getId());
+
+		list.add(item);
 	}
 }

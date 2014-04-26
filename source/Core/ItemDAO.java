@@ -13,9 +13,12 @@ public class ItemDAO {
 		this.link = link;
 	}
 
-	public void add(Item item, int list_id, int user_id) {
+	public Item add(String item_name, int position, int list_id) {
+
+		Item item = new Item(item_name, position);
 
 		try {
+
 			Statement query = link.createStatement();
 
 			query.execute("" +
@@ -28,12 +31,11 @@ public class ItemDAO {
 			if (res.next())
 				item.setId(res.getInt(1));
 
-//			Plugins.EventLog.EventLogController dao = new Plugins.EventLog.EventLogController(link);
-//			dao.add(null, item, user_id);
-
-			} catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
+
+		return item;
 	}
 
     public void edit(Item item, int list_id) {
@@ -164,5 +166,6 @@ public class ItemDAO {
 	private void loadComments(Item item) {
 		//TODO: fonction loadcomments()
 	}
+
 
 }

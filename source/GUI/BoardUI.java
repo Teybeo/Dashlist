@@ -76,7 +76,7 @@ public class BoardUI extends Observable implements Observer{
 
 		for (Core.List list : board.getLists())
 		{
-			list.addObserver(this);
+//			list.addObserver(this);
 			//setup_list(list);
             lists_zone.add(new ListUI(list, label_menu_listener));
             lists_zone.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -142,7 +142,6 @@ public class BoardUI extends Observable implements Observer{
 		{
 			// Au lieu de recevoir la notification de board, il vaudrait peut-être mieux la
 			// recevoir directement de la liste créée pour éviter à avoir à faire ca :
-			Board board = (Board)o;
 			List list = board.getListById(Integer.parseInt(((String)arg).replace("List added:", "")));
 
 			// 1. On enlève la liste vide
