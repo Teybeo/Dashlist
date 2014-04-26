@@ -34,6 +34,10 @@ public class EventLog extends Observable implements Observer {
 	public void add(Event event) {
 
 		events.add(event);
+
+		setChanged();
+		notifyObservers("Event added: "+event.getId());
+		clearChanged();
 	}
 
 	@Override
@@ -43,5 +47,13 @@ public class EventLog extends Observable implements Observer {
 
 		System.out.println("EventLog received ["+ arg +"] from ["+ sender +"]");
 
+	}
+
+	public Event getEventById(int id) {
+
+		for (Event event : events)
+			if (event.getId() == id)
+				return event;
+		return null;
 	}
 }

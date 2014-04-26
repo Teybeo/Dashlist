@@ -1,9 +1,6 @@
 package Plugins.EventLog;
 
-import Core.BddConnection;
-import Core.Item;
-import Core.ItemDAO;
-import Core.List;
+import Core.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,27 +13,49 @@ import java.util.Date;
 public class EventDAO {
 
 	private Connection link;
-	private EventLog log;
 
-	public EventDAO(EventLog log, Connection link) {
+	public EventDAO(Connection link) {
 
 		this.link = link;
-		this.log = log;
 	}
 
-	public void add(List list, int user_id) {
+	/**
+	 * Enregistre un event de list dans la base
+	 *<P> Si old_list est null et new_list est valide, cet event est un ajout </P>
+	 *<P> Si old_list est valide et new_list est null, cet event est un suppression </P>
+	 *<P> Si old_list et new_list sont valides, cet event est une modification </P>
+	 *
+	 * @param old_list Id de l'ancien list
+	 * @param new_list Id du nouvel list
+	 */
+	public Event add(List old_list, List new_list) {
+
+		int old_list_id = (old_list == null) ? 0 : old_list.getId();
+		int new_list_id = (new_list == null) ? 0 : new_list.getId();
+
+		Event event = new Event(old_list_id, new_list_id, 0, 0);
 
 		try {
 
 			Statement query = link.createStatement();
 
+			String old_list_id_str = (old_list == null) ? "null" : Integer.toString(old_list.getId());
+			String new_list_id_str = (new_list == null) ? "null" : Integer.toString(new_list.getId());
+
 			query.execute("INSERT INTO event "+
-					"VALUES ( default, null, '"+ list.getId() +"', null, null, '"+ user_id +"', NOW());");
+					"VALUES ( default, null, null, "+ old_list_id_str +", "+ new_list_id_str +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
+
+			// On récupère l'id créé par MySQL
+			ResultSet res = query.getGeneratedKeys();
+
+			if (res.next())
+				event.setId(res.getInt(1));
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 
+		return event;
 	}
 
 	/**
@@ -47,66 +66,36 @@ public class EventDAO {
 	 *
 	 * @param old_item Id de l'ancien item
 	 * @param new_item Id du nouvel item
-	 * @param user_id Id de l'user ayant fait l'action
 	 */
-	public void add(Item old_item, Item new_item, int user_id) {
+	public Event add(Item old_item, Item new_item) {
+
+		int old_item_id = (old_item == null) ? 0 : old_item.getId();
+		int new_item_id = (new_item == null) ? 0 : new_item.getId();
+
+		Event event = new Event(0, 0, old_item_id, new_item_id);
+
 
 		try {
 
 			Statement query = link.createStatement();
 
-			String old_item_id = (old_item == null) ? "null" : Integer.toString(old_item.getId());
-			String new_item_id = (new_item == null) ? "null" : Integer.toString(new_item.getId());
+			String old_item_id_str = (old_item == null) ? "null" : Integer.toString(old_item.getId());
+			String new_item_id_str = (new_item == null) ? "null" : Integer.toString(new_item.getId());
 
 			query.execute("INSERT INTO event "+
-					"VALUES ( default, null, null, "+ old_item_id +", "+ new_item_id +",'"+ user_id +"', NOW());");
+					"VALUES ( default, null, null, "+ old_item_id +", "+ new_item_id +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
 
-		} catch (SQLException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-		}
-	}
+			// On récupère l'id créé par MySQL
+			ResultSet res = query.getGeneratedKeys();
 
-	public void loadEvents() {
-
-		loadEventsAfter(new Date(0));
-
-	}
-
-	public void loadEventsAfter(Date date) {
-
-		try {
-
-			Statement query = link.createStatement();
-
-			/* Récupérer tous les events contenant soit
-			 	- un id de liste appartenant à la board spécifié par boarad_id
-				- un id d'item appartenant à une liste appartenant à la board spécifiée par board_id  5*/
-			query.execute(
-					"SELECT * " +
-							"FROM event, list, item " +
-							"WHERE list.id_board = '"+log.getBoard().getId()+"' AND " +
-							"(" +
-							"      (list.id = event.list_id_old OR list.id = event.list_id_new) OR" +
-							"      (list.id = item.id_list AND (item.id = event.item_id_old OR item.id = event.item_id_new))" +
-							")" +
-							"AND event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "' " +
-							"GROUP BY event.id "+
-							"ORDER BY event.date DESC");
-
-			ResultSet res = query.getResultSet();
-
-			while (res.next()) {
-
-				log.add(new Event(res.getInt("id"),
-						res.getInt("list_id_old"), res.getInt("list_id_new"),
-						res.getInt("item_id_old"), res.getInt("item_id_new"),
-						res.getInt("user_id"),     new Date(res.getTimestamp("date").getTime())));
-			}
+			if (res.next())
+				event.setId(res.getInt(1));
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 
+		return event;
 	}
 
 	public boolean revert(Event event) {

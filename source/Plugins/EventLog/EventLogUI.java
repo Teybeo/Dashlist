@@ -1,13 +1,13 @@
 package Plugins.EventLog;
 
 import Core.*;
+import Core.List;
 import PluginSystem.PluginInterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -47,7 +47,7 @@ public class EventLogUI implements PluginInterface, Observer {
 	 *//*
 	public void refresh() {
 
-		EventLogController dao = new EventLogController(BddConnection.getInstance());
+		EventDAO dao = new EventDAO(BddConnection.getInstance());
 		ArrayList<Plugins.Plugins.EventLog.Event> new_events;
 
 		// On ne récupère que les events générés après le plus récent (premier) de ceux qu'on à déjà
@@ -74,7 +74,7 @@ public class EventLogUI implements PluginInterface, Observer {
 
 	private void revertTo(Plugins.Plugins.EventLog.Event event) {
 
-		EventLogController dao = new EventLogController(BddConnection.getInstance());
+		EventDAO dao = new EventDAO(BddConnection.getInstance());
 
 		ArrayList<Plugins.Plugins.EventLog.Event> following_events = findFollowingEvents(event);
 
@@ -96,31 +96,8 @@ public class EventLogUI implements PluginInterface, Observer {
 		scroll_pane.getParent().repaint();
 
 	}*/
-/*
-	/**
-	 * Récupère la liste de tous les events du journal actuel qui se sont déroulés après l'event donné en paramètre
-	 * @param event L'event auquel sont postérieurs les events renvoyés par la fonction
-	 * @return La liste des events de la board actuelle postérieurs à event. Liste vide si pas d'events postérieurs
-	 *
-	private ArrayList<Plugins.Plugins.EventLog.Event> findFollowingEvents(Event event) {
 
-		ArrayList<Plugins.Plugins.EventLog.Event> following_events = new ArrayList<>();
 
-		// Les events sont triés du plus récent au plus vieux
-		for (Plugins.Plugins.EventLog.Event event_tmp : events)
-		{
-			// Une fois atteint l'event ciblé, on s'arrête
-			if (event_tmp.getId() == event.getId())
-				break;
-
-			// Tant qu'on a pas trouvé l'event, on ajoute à la liste
-			// Vérification au cas où, le bon tri de la liste est sensé être assuré
-			if (event_tmp.getDate().after(event.getDate()))
-				following_events.add(event_tmp);
-		}
-
-		return following_events;
-	}*/
 
 	private JLabel findLabel(int id) {
 
@@ -143,6 +120,7 @@ public class EventLogUI implements PluginInterface, Observer {
 		controller.loadEvents();
 
 		board.addObserver(this);
+		log.addObserver(this);
 
 		log_zone.removeAll();
 
@@ -176,6 +154,23 @@ public class EventLogUI implements PluginInterface, Observer {
 		String sender = o.getClass().getName();
 
 		System.out.println("EventLogUI received ["+ arg +"] from ["+ sender +"]");
+
+		if (sender.equals("Core.Board"))
+		{
+			if (((String)arg).startsWith("List added: "))
+			{
+				List list = log.getBoard().getListById(Integer.parseInt(((String)arg).replace("List added: ", "")));
+				controller.addListEvent(null, list);
+			}
+		}
+		else if (sender.equals("Plugins.EventLog.EventLog"))
+		{
+			Event event = log.getEventById(Integer.parseInt(((String)arg).replace("Event added: ", "")));
+
+			setup_event(event, FIRST);
+			log_zone.revalidate();
+			log_zone.repaint();
+		}
 
 	}
 

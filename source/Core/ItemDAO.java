@@ -66,9 +66,6 @@ public class ItemDAO {
 
 	        item.delete();
 
-//	        Plugins.EventLog.EventLogController dao = new Plugins.EventLog.EventLogController(link);
-//	        dao.add(item, null, user_id);
-
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

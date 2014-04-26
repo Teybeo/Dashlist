@@ -21,6 +21,15 @@ public class Event {
 	final static int ITEM_CREATED = 8;
 	final static int ITEM_CHANGED = 12;
 
+	/**
+	 * Constructeur complet utilisé pour charger les events de la base de données
+	 * @param id
+	 * @param list_id_old
+	 * @param list_id_new
+	 * @param item_id_old
+	 * @param item_id_new
+	 * @param user_id
+	 */
 	public Event(int id, int list_id_old, int list_id_new, int item_id_old, int item_id_new, int user_id, Date date) {
 
 		this.id = id;
@@ -31,6 +40,25 @@ public class Event {
 		this.user_id = user_id;
 		this.date = date;
 	}
+
+	/**
+	 * Constructeur utilisé pour créer de nouveaux events
+	 * @param list_id_old
+	 * @param list_id_new
+	 * @param item_id_old
+	 * @param item_id_new
+	 */
+	public Event(int list_id_old, int list_id_new, int item_id_old, int item_id_new) {
+
+		this.id = 0;
+		this.list_id_old = list_id_old;
+		this.list_id_new = list_id_new;
+		this.item_id_old = item_id_old;
+		this.item_id_new = item_id_new;
+		this.user_id = CurrentUser.getInstance().getId();
+		this.date = new Date();
+	}
+
 
 	@Override
 	public String toString() {
@@ -121,5 +149,15 @@ public class Event {
 	public int getItem_id_new() {
 
 		return item_id_new;
+	}
+
+	public int getUserId() {
+
+		return user_id;
+	}
+
+	public void setId(int id) {
+
+		this.id = id;
 	}
 }
