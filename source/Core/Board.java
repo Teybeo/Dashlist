@@ -78,19 +78,32 @@ public class Board extends Observable implements Observer {
 
 		String sender = o.getClass().getName();
 
-		System.out.println("Board received ["+ arg +"] from ["+ o +"]");
+		System.out.println("Board received ["+ arg +"] from ["+ sender +"]");
 
-		if (((String)arg).equals("List added")) {
-			add((List)o);
+		if (sender.equals("Core.List"))
+		{
+//			if (arg.equals("List added")) {
+//				setChanged();
+//				notifyObservers();
+//			}
+
 		}
+//		if (((String)arg).equals("List added")) {
+//			add((List)o);
+//		}
 	}
 
+	/**
+	 * Ajout d'une liste à la board. La board s'inscrit en tant qu'observateur sur cette liste et signale ses propres
+	 * observateurs qu'elle a obtenue une nouvelle liste et envoie l'id de cette liste
+	 * @param list La liste à ajouter
+	 */
 	public void add(List list) {
 
 		lists.add(list);
 		list.addObserver(this);
 		setChanged();
-		notifyObservers("List added:"+list.getId());
+		notifyObservers("List added: "+list.getId());
 		clearChanged();
 	}
 

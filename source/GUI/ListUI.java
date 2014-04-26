@@ -89,7 +89,7 @@ public class ListUI extends JPanel implements Observer{
 
 		String sender = o.getClass().getName();
 
-		System.out.println("ListUI received ["+ arg +"] from ["+ o +"]");
+		System.out.println("ListUI received ["+ arg +"] from ["+ sender +"]");
 
 		if (sender.equals("Core.List"))
 		{

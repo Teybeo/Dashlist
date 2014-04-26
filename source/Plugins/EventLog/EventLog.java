@@ -13,7 +13,6 @@ public class EventLog extends Observable implements Observer {
 
 	public EventLog(Board board) {
 		this.board = board;
-		this.board.addObserver(this);
 	}
 
 	public void setBoard(Board board) {
@@ -39,6 +38,10 @@ public class EventLog extends Observable implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		//To change body of implemented methods use File | Settings | File Templates.
+
+		String sender = o.getClass().getName();
+
+		System.out.println("EventLog received ["+ arg +"] from ["+ sender +"]");
+
 	}
 }

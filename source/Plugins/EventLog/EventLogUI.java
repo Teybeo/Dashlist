@@ -142,6 +142,8 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		controller.loadEvents();
 
+		board.addObserver(this);
+
 		log_zone.removeAll();
 
 		// Les events sont triés du plus récent au plus vieux
@@ -173,7 +175,8 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		String sender = o.getClass().getName();
 
-		System.out.println("EventLogUI received "+arg+" from: "+sender);
+		System.out.println("EventLogUI received ["+ arg +"] from ["+ sender +"]");
+
 	}
 
 	private class EventMenu extends JPopupMenu {

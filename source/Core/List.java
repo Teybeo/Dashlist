@@ -108,7 +108,7 @@ public class List extends Observable implements Observer {
 
 		String sender = o.getClass().getName();
 
-		System.out.println("List received ["+ arg +"] from ["+ o +"]");
+		System.out.println("List received ["+ arg +"] from ["+ sender +"]");
 
 		if (sender.equals("Core.Item"))
 		{

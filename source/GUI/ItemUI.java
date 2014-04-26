@@ -72,7 +72,7 @@ public class ItemUI extends JPanel implements Observer {
 
 		String sender = o.getClass().getName();
 
-		System.out.println("ItemUI received ["+ arg +"] from ["+ o +"]");
+		System.out.println("ItemUI received ["+ arg +"] from ["+ sender +"]");
 
 		if (sender.equals("Core.Item"))
 		{

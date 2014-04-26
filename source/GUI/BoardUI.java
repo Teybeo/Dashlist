@@ -136,13 +136,13 @@ public class BoardUI extends Observable implements Observer{
 
 		String sender = o.getClass().getName();
 
-		System.out.println("BoardUI received: "+arg+" from: "+sender);
+		System.out.println("BoardUI received ["+ arg +"] from ["+ sender +"]");
 
 		if (((String)arg).startsWith("List added"))
 		{
 			// Au lieu de recevoir la notification de board, il vaudrait peut-être mieux la
 			// recevoir directement de la liste créée pour éviter à avoir à faire ca :
-			List list = board.getListById(Integer.parseInt(((String)arg).replace("List added:", "")));
+			List list = board.getListById(Integer.parseInt(((String)arg).replace("List added: ", "")));
 
 			// 1. On enlève la liste vide
 			// 2. On ajoute la nouvelle liste
