@@ -1,6 +1,11 @@
 <?php
 	include("header.php");
 	
+	if(!isset($_SESSION['user']))
+	{
+		echo "<script type='text/javascript'>document.location.replace('index.php');</script>";
+	}
+	
 	$bdd = new PDO('mysql:host=localhost;dbname=dashlist', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 	$query_board_members = $bdd->prepare('SELECT * FROM board_members WHERE user_id="'.mysql_real_escape_string($_SESSION['id']).'"');
 	$query_board_members->execute();
