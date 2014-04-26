@@ -18,7 +18,7 @@ import java.util.Observer;
 public class Accueil implements Observer {
 
 	private JFrame frame;
-	private JButton créerUnProjetButton;
+	private JButton creerUnProjetButton;
 	private JPanel panel;
 	private JPanel panel_list;
 	ArrayList<Board> boards;
@@ -99,9 +99,9 @@ public class Accueil implements Observer {
 		final JPanel panel1 = new JPanel();
 		panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
 		panel.add(panel1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		créerUnProjetButton = new JButton();
-		créerUnProjetButton.setText("Créer un projet");
-		panel1.add(créerUnProjetButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+		creerUnProjetButton = new JButton();
+		creerUnProjetButton.setText("Créer un projet");
+		panel1.add(creerUnProjetButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
 	}
 
 	/**
