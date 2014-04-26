@@ -1,12 +1,45 @@
 <?php
 	include("header.php");
+	
+	$bdd = new PDO('mysql:host=localhost;dbname=dashlist', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+	$query_board_members = $bdd->prepare('SELECT * FROM board_members WHERE user_id="'.mysql_real_escape_string($_SESSION['id']).'"');
+	$query_board_members->execute();
+	$projects1 = array();
+	$projects2 = array();
+	
+	while($data_bm = $query_board_members->fetch())
+	{
+		$query_board = $bdd->prepare('SELECT * FROM board WHERE id ="'.$data_bm[0].'"');
+		$query_board->execute();
+		
+		if($data_b = $query_board->fetch())
+		{
+			if($data_bm[2] == 1)
+			{ 
+				$projects1[$data_b[0]]= $data_b[1];
+			}
+			else
+			{
+				$projects2[$data_b[0]]= $data_b[1];
+			}
+		}
+	}
 ?>
 	
 	<div id="contents">
 		<div class="sidebar">
+			<span class="btn newp">Creer un nouveau projet</span>
+			<br/><br/>
 			<div id="my_projects">
 				<h2>Mes projets</h2>
 				<hr/>
+				<table id="my_projects_table" style="width: 100%">
+					<?php	
+						foreach($projects1 as $cle =>$valeur){
+							echo '<tr class="tr_projects"><td style="padding-top: 10px; padding-bottom: 10px; padding-left: 6px; width: 90%;">'.$valeur.'</td><td><b>></b></td></tr>';
+						}
+					?>
+				</table>
 				<br/>
 				<hr size="3" color="black"/>
 			</div>
@@ -14,13 +47,21 @@
 			<div id="all_projects">
 				<h2>Autres projets</h2>
 				<hr/>
+					<table id="my_projects_table" style="width: 100%">
+					<?php	
+						foreach($projects2 as $cle =>$valeur){
+							echo '<tr class="tr_projects"><td style="padding-top: 10px; padding-bottom: 10px; padding-left: 6px; width: 90%;">'.$valeur.'</td><td><b>></b></td></tr>';
+						}
+					?>
+				</table>
 			</div>
 			
 		</div>
 		<div class="main" id="no_selected_project" style="height: 400px;">
-			Selectionnez un projet dans la liste de gauche ou creez en un en cliquant ici.
+			Selectionnez un projet dans la liste de gauche ou creez en un <a href="#">en cliquant ici</a>.
 		</div>
 	</div>
+	
 <?php
 	include("footer.php");
 ?>

@@ -25,6 +25,11 @@ img
 	border: 0;
 }
 
+a
+{
+	color: #000000;
+}
+
 .clearfix:after, #contents:after 
 {
 	/*clear:both;*/
@@ -436,4 +441,21 @@ p a {
 	padding: 10px;
 	padding-top: 50px;
 	padding-bottom: 50px;
+}
+
+.tr_projects
+{
+	background-color: white;
+}
+
+.tr_projects:hover
+{
+	background-color: #EEEEEE;
+	cursor: pointer;
+}
+
+.newp
+{
+	width: 95%;
+	font-size: 9pt;
 }
