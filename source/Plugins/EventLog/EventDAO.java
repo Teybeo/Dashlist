@@ -13,12 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventLogController {
+public class EventDAO {
 
 	private Connection link;
 	private EventLog log;
 
-	public EventLogController(EventLog log, Connection link) {
+	public EventDAO(EventLog log, Connection link) {
 
 		this.link = link;
 		this.log = log;
