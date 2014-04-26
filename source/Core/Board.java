@@ -1,8 +1,10 @@
 package Core;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Board {
+public class Board extends Observable implements Observer {
 
 	private int id;
 	private String name;
@@ -24,6 +26,9 @@ public class Board {
 		this.id = id;
 		this.name = name;
 		this.lists = lists;
+
+		for (List list : lists)
+			list.addObserver(this);
 	}
 
 	public int getId() {
@@ -64,6 +69,39 @@ public class Board {
 	public void setLists(ArrayList<List> lists) {
 
 		this.lists = lists;
+		for (List list : lists)
+			list.addObserver(this);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+
+		System.out.println("Board received ["+ arg +"] from ["+ o +"]");
+
+		if (((String)arg).equals("List added")) {
+			add((List)o);
+		}
+	}
+
+	public void add(List list) {
+
+		lists.add(list);
+		list.addObserver(this);
+		setChanged();
+		notifyObservers("List added:"+list.getId());
+		clearChanged();
+	}
+
+	public List getListById(int id) {
+
+		List list = null;
+		for (List l : lists)
+			if (l.getId() == id)
+				return l;
+
+		return null;
 	}
 }
 

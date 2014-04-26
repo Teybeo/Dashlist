@@ -10,29 +10,37 @@ public class List extends Observable implements Observer {
 	int id;
 	String name;
 	int position;
-	ArrayList<Item> items;
+	ArrayList<Item> items = new ArrayList<>();
 
 	public List(String name, int position) {
 
 		this.name = name;
 		this.position = position;
-		this.items = new ArrayList<>();
 	}
 
-	public List(int id, String name, int position, ArrayList<Item> items) {
+	public List(int id, String name, int position) {
 
 		this.id = id;
 		this.name = name;
 		this.position = position;
-		this.items = items;
-		if (items != null)
-		for (Item item : items)
-			item.addObserver(this);
+
+	}
+
+	public List(int id, String name, int position, Observer observer) {
+
+		this.id = id;
+		this.name = name;
+		this.position = position;
+		this.addObserver(observer);
+
+		setChanged();
+		notifyObservers("List added");
+		clearChanged();
+
 	}
 
 	public int getId() {
 
-		System.out.println(id);
 		return id;
 	}
 
@@ -55,6 +63,9 @@ public class List extends Observable implements Observer {
 	public void setItems(ArrayList<Item> items) {
 
 		this.items = items;
+		if (items != null)
+		for (Item item : items)
+			item.addObserver(this);
 	}
 
 	public String getName() {

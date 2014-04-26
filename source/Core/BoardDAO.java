@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Observer;
 
 public class BoardDAO {
 
@@ -97,6 +98,15 @@ public class BoardDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
+	}
+
+	public void addList(Board board, String list_name) {
+
+		ListDAO dao = new ListDAO(BddConnection.getInstance());
+
+		List list = dao.add(list_name, board.getLists().size() + 1, board.getId());
+
+		board.add(list);
 	}
 
 	public void loadLists(Board board) {

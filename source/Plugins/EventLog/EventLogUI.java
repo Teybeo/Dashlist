@@ -8,8 +8,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class EventLogUI implements PluginInterface {
+public class EventLogUI implements PluginInterface, Observer {
 
 	private JPanel log_zone;
 	private JScrollPane scroll_pane;
@@ -26,7 +28,7 @@ public class EventLogUI implements PluginInterface {
 		log_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
 		scroll_pane = new JScrollPane(log_zone);
-		System.out.println("lol");
+
 		event_menu = new EventMenu();
 	}
 
@@ -164,6 +166,14 @@ public class EventLogUI implements PluginInterface {
 		container.add(log_zone, BorderLayout.EAST);
 		container.revalidate();
 		container.repaint();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+
+		System.out.println("EventLogUI received "+arg+" from: "+sender);
 	}
 
 	private class EventMenu extends JPopupMenu {

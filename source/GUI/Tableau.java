@@ -31,6 +31,7 @@ public class Tableau extends Observable implements Observer{
 	public Tableau(Board board, PluginInterface[] plugins) {
 
 		this.board = board;
+		this.board.addObserver(this);
 
 		lists_zone = new JPanel();
 		lists_zone.setLayout(new BoxLayout(lists_zone, BoxLayout.X_AXIS));
@@ -88,7 +89,6 @@ public class Tableau extends Observable implements Observer{
 		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
 
-//		event_log = new Plugins.EventLog(board.getId());
 		for (PluginInterface plugin : plugins)
 		{
 			String[] target = plugin.getTargetContainer().split("[:]");
@@ -131,38 +131,30 @@ public class Tableau extends Observable implements Observer{
 		lists_zone.add(empty_list);
 	}
 
-	private void AddListAction(TogglableTextInput t) {
-
-		JPanel panel_list = (JPanel)t.getParent();
-
-		ListDAO dao = new ListDAO(BddConnection.getInstance());
-
-		int position = board.getLists().size() + 1;
-
-		// On crée la nouvelle liste et on l'entre dans la base
-		List liste = new List(t.getText(), position);
-		liste.addObserver(this);
-
-		board.getLists().add(liste);
-		dao.add(liste, board.getId(), CurrentUser.getInstance().getId());
-//		event_log.refresh();
-
-		// 1. On enlève la liste vide
-		// 2. On ajoute la nouvelle liste
-		// 3. On remet la liste vide
-		lists_zone.remove(panel_list);
-		lists_zone.add(new ListUI(liste, label_menu_listener));
-		lists_zone.add(panel_list);
-
-		lists_zone.revalidate();
-		lists_zone.repaint();
-	}
-
 	@Override
 	public void update(Observable o, Object arg) {
 
 		String sender = o.getClass().getName();
-		System.out.println(sender +" sent: "+ arg);
+
+		System.out.println("Tableau received: "+arg+" from: "+sender);
+
+		if (((String)arg).startsWith("List added"))
+		{
+			// Au lieu de recevoir la notification de board, il vaudrait peut-être mieux la
+			// recevoir directement de la liste créée pour éviter à avoir à faire ca :
+			Board board = (Board)o;
+			List list = board.getListById(Integer.parseInt(((String)arg).replace("List added:", "")));
+
+			// 1. On enlève la liste vide
+			// 2. On ajoute la nouvelle liste
+			// 3. On remet la liste vide
+			lists_zone.remove(empty_list);
+			lists_zone.add(new ListUI(list, label_menu_listener));
+			lists_zone.add(empty_list);
+
+			lists_zone.revalidate();
+			lists_zone.repaint();
+		}
 	}
 
 	private class SupprItemListener implements ActionListener
@@ -184,7 +176,11 @@ public class Tableau extends Observable implements Observer{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			AddListAction((TogglableTextInput)e.getSource());
+			String list_name = ((TogglableTextInput)e.getSource()).getText();
+
+			BoardDAO dao = new BoardDAO(BddConnection.getInstance());
+
+			dao.addList(board, list_name);
 		}
 	}
 

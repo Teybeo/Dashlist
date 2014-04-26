@@ -105,7 +105,7 @@ public class ListUI extends JPanel implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		//To change body of implemented methods use File | Settings | File Templates.
+
 		String sender = o.getClass().getName();
 
 		System.out.println("ListUI received ["+ arg +"] from ["+ o +"]");

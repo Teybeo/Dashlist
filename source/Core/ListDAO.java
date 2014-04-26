@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Observer;
 
 public class ListDAO {
 
@@ -23,9 +24,9 @@ public class ListDAO {
 			Statement query = link.createStatement();
 
 			ResultSet res = query.executeQuery(
-					"SELECT * " +
-							"FROM list " +
-							"WHERE id_board='" + board_id + "';"
+					"SELECT id " +
+					"FROM list " +
+					"WHERE id_board='" + board_id + "';"
 			);
 
 			while (res.next()) {
@@ -34,8 +35,8 @@ public class ListDAO {
 
 				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-				lists.add(new List(list_id, res.getString("name"), res.getInt("position"), dao.getListItems(list_id)));
-
+//				lists.add(new List(list_id, res.getString("name"), res.getInt("position"), dao.getListItems(list_id)));
+				lists.add(get(list_id, true));
 			}
 
 		} catch (SQLException e) {
@@ -45,27 +46,29 @@ public class ListDAO {
 		return lists;
 	}
 
-	public void add(List list, int board_id, int user_id) {
+	public List add(String list_name, int position, int board_id) {
+
+		List list = null;
 
 		try {
+
 			Statement query = link.createStatement();
 
 			query.execute("" +
 					"INSERT INTO list " +
-					"VALUES(default, " + board_id + ",'" + list.getName() + "', " + list.getPosition() + ");", Statement.RETURN_GENERATED_KEYS);
+					"VALUES(default, " + board_id + ",'" + list_name + "', " + position + ");", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
 
 			if (res.next())
-				list.setId(res.getInt(1));
-
-//			Plugins.EventLog.EventLogController dao = new Plugins.EventLog.EventLogController(link);
-//			dao.add(list, user_id);
+				list = new List(res.getInt(1), list_name, position);;
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
+
+		return list;
 	}
 
 	public List get(int list_id, boolean complete_load) {
@@ -82,7 +85,7 @@ public class ListDAO {
 
 	        if (res.next())
 	        {
-		        list = new List(res.getInt("id"), res.getString("name"), res.getInt("position"), null);
+		        list = new List(res.getInt("id"), res.getString("name"), res.getInt("position"));
 
 	            if (complete_load == true)
 			        loadItems(list);
@@ -114,7 +117,7 @@ public class ListDAO {
 			ResultSet res = query.getResultSet();
 
 			if (res.next())
-				list = new List(res.getInt("id"), res.getString("name"), res.getInt("position"), null);
+				list = new List(res.getInt("id"), res.getString("name"), res.getInt("position"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
