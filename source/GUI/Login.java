@@ -9,6 +9,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.util.Observable;
 
 public class Login extends Observable {
@@ -37,6 +38,31 @@ public class Login extends Observable {
 
 	}
 
+	private void connexion() {
+
+		String login_str = login_field.getText();
+		String pwd_str = String.valueOf(pwd_field.getPassword());
+
+		Connection link = BddConnection.getInstance();
+		if (link == null)
+			return;
+
+		UserDAO dao = new UserDAO(link);
+
+		User user = dao.login(login_str, pwd_str);
+
+		if (user != null) // User is logged in
+		{
+			CurrentUser.getInstance();
+			CurrentUser.setCurrentUser(user);
+			frame.setVisible(false);
+			setChanged();
+			notifyObservers(user);
+			clearChanged();
+		} else             // Failed login
+			System.out.println("Error: Wrong login or password");
+	}
+
 	private void createUIComponents() {
 
 		connexion_btn = new JButton("Connexion");
@@ -44,23 +70,7 @@ public class Login extends Observable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String login_str = login_field.getText();
-				String pwd_str = String.valueOf(pwd_field.getPassword());
-
-				UserDAO dao = new UserDAO(BddConnection.getInstance());
-
-				User user = dao.login(login_str, pwd_str);
-
-				if (user != null) // User is logged in
-				{
-                    CurrentUser.getInstance();
-                    CurrentUser.setCurrentUser(user);
-					frame.setVisible(false);
-					setChanged();
-					notifyObservers(user);
-					clearChanged();
-				} else             // Failed login
-					System.out.println("Error: Wrong login or password");
+				connexion();
 			}
 		});
 	}

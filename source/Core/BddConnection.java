@@ -1,5 +1,6 @@
 package Core;
 
+import javax.swing.*;
 import java.sql.*;
 
 public class BddConnection {
@@ -8,10 +9,13 @@ public class BddConnection {
 	private static String mysql_base = "dashlist";
 	private static String mysql_user = "root";
 	private static String mysql_pass = "";
-	private Connection connect = null;
-
 	private static Connection link = null;
 
+	/**
+	 * Lors du premier appel, une connexion est créée et stockée de manière statique
+	 * Tous les appels suivants retourneront cette connexion sans jamais en recréer une nouvelle
+	 * @return Une connexion à la base de données
+	 */
 	public static Connection getInstance() {
 
 		if (link == null)
@@ -20,6 +24,9 @@ public class BddConnection {
 		return link;
 	}
 
+	/**
+	 * Constructeur privé pour empêcher la création d'instances multiples
+	 */
 	private BddConnection() {
 		try
 		{
@@ -28,7 +35,7 @@ public class BddConnection {
 			link = DriverManager.getConnection("jdbc:mysql:"+mysql_url+"/"+mysql_base, mysql_user, mysql_pass);
 
 		} catch (Exception e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			JOptionPane.showMessageDialog(null, "La connexion a la base de données n'a pas pu être établie", "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
