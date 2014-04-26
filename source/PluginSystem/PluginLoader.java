@@ -24,7 +24,7 @@ public class PluginLoader {
 
 		if (files == null) {
 			System.out.println("Folder ["+ folder +"] is empty (No plugin detected!)");
-			return null;
+			return new PluginInterface[0];
 		}
 
 		// On récupère les class implémentant notre interface
