@@ -60,9 +60,31 @@
 			exit();
 		}
 		
-		echo '<span id="errorfield" class="textok" style="color: green">Inscription réussie !</span>';
-		$query2 = $bdd->query("INSERT INTO user VALUES ('', '".$login."' , '".$pass."', '".$mail."')");
-		exit();
+		$query2 = $bdd->prepare('SELECT * FROM user WHERE mail="'.mysql_real_escape_string($mail).'"');
+		$query2->execute();
+
+		if ($data2 = $query2->fetch()) 
+		{
+			if($data2[4] == 1)
+			{
+				echo '<span id="errorfield" class="textok" style="color: green">Inscription réussie !</span>';
+				$query2 = $bdd->query("UPDATE user SET name ='".mysql_real_escape_string($login)."', password='".mysql_real_escape_string($pass)."', is_pending='0' WHERE mail='".mysql_real_escape_string($mail)."'");
+				exit();
+			}
+			
+			else
+			{
+				echo '<span id="errorfield" class="texterror" style="color: red">Le mail est déjà utilisé</span>';
+				exit();
+			}
+		}
+		
+		else 
+		{
+			echo '<span id="errorfield" class="textok" style="color: green">Inscription réussie !</span>';
+			$query2 = $bdd->query("INSERT INTO user VALUES ('', '".$login."' , '".$pass."', '".$mail."', 0)");
+			exit();
+		}
 	}
 ?>
 		
