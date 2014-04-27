@@ -92,7 +92,7 @@ public class BoardDAO {
 			// On enregistre l'user actuel comme membre de cette board
 			query.execute("" +
 					"INSERT INTO board_members " +
-					"VALUES('" + board.getId() + "', '" + user_id + "', '0');");
+					"VALUES('" + board.getId() + "', '" + user_id + "', '1');");
 
 
 		} catch (SQLException e) {
