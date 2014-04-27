@@ -97,8 +97,6 @@ public class EventLogController {
 			// Dans ces cas-la, on ne fait rien non plus dans l'appli sur ces events
 			if (dao.revert(event_to_revert, log.getBoard()) == true)
 				log.remove(event_to_revert);
-
-
 		}
 
 	}

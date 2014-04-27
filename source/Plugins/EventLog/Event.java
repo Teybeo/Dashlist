@@ -2,7 +2,9 @@ package Plugins.EventLog;
 
 import Core.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Event {
 
@@ -99,10 +101,13 @@ public class Event {
 		if (list_id_old - list_id_new == 0)
 			event_list_code = 0;
 
+		Locale language = Locale.ENGLISH;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM 'at' HH:mm", language);
+
 		switch (event_list_code + event_item_code)
 		{
 			case LIST_CREATED:
-				string.append(user.getName() + " created list: " + list_new.getName());
+				string.append(user.getName() + " created list: " + list_new.getName()+ " on " + dateFormat.format(getDate()));
 				break;
 			case LIST_DELETED:
 				string.append(user.getName() + " deleted list: " + list_old.getName());
@@ -110,10 +115,10 @@ public class Event {
 			case LIST_CHANGED:
 				break;
 			case ITEM_CREATED:
-				string.append(user.getName() + " added item: " + item_new.getName() + " to list: " + list_dao.get(item_id_new).getName());
+				string.append(user.getName() + " added item: " + item_new.getName() + " to list: " + list_dao.get(item_id_new).getName() + " on " + dateFormat.format(getDate()));
 				break;
 			case ITEM_DELETED:
-				string.append(user.getName() + " deleted item: " + item_old.getName() + " from list: " + list_dao.get(item_id_old).getName());
+				string.append(user.getName() + " deleted item: " + item_old.getName() + " from list: " + list_dao.get(item_id_old).getName() + " on " + dateFormat.format(getDate()));
 				break;
 			case ITEM_CHANGED:
 				break;
