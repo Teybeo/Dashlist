@@ -32,17 +32,7 @@ public class EventLogUI implements PluginInterface, Observer {
 		event_menu = new EventMenu();
 	}
 
-	private void setup_event(Plugins.EventLog.Event event, int position) {
-
-		JLabel label = new JLabel(event.getReadableDescription());
-		label.setName(String.valueOf(event.getId()));
-		label.addMouseListener(event_menu.getLabelListener());
-		System.out.println(event.toString());
-
-		log_zone.add(label, position);
-	}
-
-	/**
+	 /**
 	 *	Va chercher les nouveaux events et met à jour l'affichage
 	 *//*
 	public void refresh() {
@@ -100,7 +90,7 @@ public class EventLogUI implements PluginInterface, Observer {
 		// Les events sont triés du plus récent au plus vieux
 		// donc on les insère chacun après tous les autres
 		for (Event event : log.getEvents())
-			setup_event(event, LAST);
+			log_zone.add(new EventUI(event), LAST);
 
 		log_zone.revalidate();
 	}
@@ -164,7 +154,7 @@ public class EventLogUI implements PluginInterface, Observer {
 
 				Event event = log.getEventById(Integer.parseInt(message.replace("Event added: ", "")));
 
-				setup_event(event, FIRST);
+				log_zone.add(new EventUI(event), FIRST);
 				log_zone.revalidate();
 				log_zone.repaint();
 			}
