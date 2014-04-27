@@ -130,7 +130,7 @@ public class List extends Observable implements Observer {
 	public void add(Item item, boolean from_history) {
 
 		System.out.println("Position: "+item.getPosition());
-		items.add(item.getPosition()-1, item);
+		items.add(Math.min(item.getPosition()-1, items.size()), item);
 		item.addObserver(this);
 
 		setChanged();
