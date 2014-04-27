@@ -105,7 +105,8 @@ public class Login extends Observable {
 			notifyObservers(user);
 			clearChanged();
 		} else             // Failed login
-			System.out.println("Error: Wrong login or password");
+			JOptionPane.showMessageDialog(frame, "Login ou mot de passe incorrect", "Erreur", JOptionPane.ERROR_MESSAGE);
+
 	}
 
 	private void createUIComponents() {
