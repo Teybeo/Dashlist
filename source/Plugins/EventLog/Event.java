@@ -5,8 +5,9 @@ import Core.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Observable;
 
-public class Event {
+public class Event extends Observable {
 
 	private int id;
 	private int list_id_old;
@@ -107,10 +108,10 @@ public class Event {
 		switch (event_list_code + event_item_code)
 		{
 			case LIST_CREATED:
-				string.append(user.getName() + " created list: " + list_new.getName()+ " on " + dateFormat.format(getDate()));
+				string.append(user.getName() + " created list: " + list_new.getName() + " on " + dateFormat.format(getDate()));
 				break;
 			case LIST_DELETED:
-				string.append(user.getName() + " deleted list: " + list_old.getName());
+				string.append(user.getName() + " deleted list: " + list_old.getName() + " on " + dateFormat.format(getDate()));
 				break;
 			case LIST_CHANGED:
 				break;
@@ -178,5 +179,11 @@ public class Event {
 	public int getList_id_old() {
 
 		return list_id_old;
+	}
+
+	public void delete() {
+		setChanged();
+		notifyObservers("Event deleted");
+		clearChanged();
 	}
 }

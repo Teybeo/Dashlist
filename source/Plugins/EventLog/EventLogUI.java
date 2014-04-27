@@ -17,7 +17,7 @@ public class EventLogUI implements PluginInterface, Observer {
 	private JScrollPane scroll_pane;
 	EventLog log;
 	EventLogController controller;
-	private EventMenu event_menu;
+	private static EventMenu event_menu;
 	private static final int FIRST = 0;
 	private static final int LAST = -1;
 
@@ -28,8 +28,6 @@ public class EventLogUI implements PluginInterface, Observer {
 		log_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
 		scroll_pane = new JScrollPane(log_zone);
-
-		event_menu = new EventMenu();
 	}
 
 	private JLabel findLabel(int id) {
@@ -57,10 +55,12 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		log_zone.removeAll();
 
+		event_menu = new EventMenu(controller);
+
 		// Les events sont triés du plus récent au plus vieux
 		// donc on les insère chacun après tous les autres
 		for (Event event : log.getEvents())
-			log_zone.add(new EventUI(event), LAST);
+			log_zone.add(new EventUI(event, event_menu.mouse_listener), LAST);
 
 		log_zone.revalidate();
 	}
@@ -132,89 +132,53 @@ public class EventLogUI implements PluginInterface, Observer {
 
 				Event event = log.getEventById(Integer.parseInt(message.replace("Event added: ", "")));
 
-				log_zone.add(new EventUI(event), FIRST);
+				log_zone.add(new EventUI(event, event_menu.mouse_listener), FIRST);
 				log_zone.revalidate();
 				log_zone.repaint();
 			}
-			if (message.startsWith("Event deleted: ")) {
-
-				Event event = log.getEventById(Integer.parseInt(message.replace("Event deleted: ", "")));
-
-				log_zone.remove(findLabel(event.getId()));
-				log_zone.revalidate();
-				log_zone.repaint();
-			}
-
-
 		}
-
 	}
 
-	private class EventMenu extends JPopupMenu {
+	private static class EventMenu extends JPopupMenu {
 
-		private Plugins.EventLog.Event event_clicked;
-		private MouseAdapter label_listener;
+		private EventUI clicked_event;
+		private static MouseAdapter mouse_listener;
+		private EventLogController controller;
 
-		public EventMenu() {
+		public EventMenu(final EventLogController controller) {
 
-			super();
+			this.controller = controller;
 
-			// Ecouteur de clics de souris pour afficher le menu contextuel
-			label_listener = new MouseAdapter() {
-				@Override
-				public void mouseReleased(MouseEvent e) {
-
-					super.mouseReleased(e);
-
-					if (e.isPopupTrigger()) {
-
-						// HACK: On récupère l'id de l'event stocké dans le name du JLabel
-						// La bonne façon serait d'avoir une classe EventUI stockant l'event
-						int id = Integer.parseInt(e.getComponent().getName());
-
-						// On récupère l'event et le garde en mémoire pour les actions du menu
-						setEventClicked(log.getEventById(id));
-						show(e.getComponent(), e.getX(), e.getY());
-
-					}
-				}
-			};
-
+			JMenuItem revert_option = new JMenuItem("Revenir à ce point");
 			// Cet écouteur se déclenche quand on clique sur l'option "Revenir à ce point" du menu
-			ActionListener revert_listener = new ActionListener() {
+			revert_option.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
-					// On récupère l'event sur lequel avait été invoqué le menu contextuel
-					Plugins.EventLog.Event clicked_event = ((EventMenu)((JMenuItem)e.getSource()).getParent()).getEventClicked();
 
 					if (clicked_event == null)
 						System.out.println("Le clicked label était null");
 					else
-						controller.revertTo(clicked_event);
+						controller.revertTo(clicked_event.getEvent());
+				}
+			});
+			add(revert_option);
+
+			// Ecouteur de clics de souris pour afficher le menu contextuel
+			mouse_listener = new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					super.mouseReleased(e);
+
+					if (e.isPopupTrigger()) {
+						// On récupère l'event et le garde en mémoire pour les actions du menu
+						clicked_event = (EventUI)e.getComponent();
+						show(e.getComponent(), e.getX(), e.getY());
+					}
 				}
 			};
 
-			JMenuItem revert_option = new JMenuItem("Revenir à ce point");
-			revert_option.addActionListener(revert_listener);
-			add(revert_option);
-
 		}
 
-		private void setEventClicked(Plugins.EventLog.Event event_clicked) {
-
-			this.event_clicked = event_clicked;
-		}
-
-		private Plugins.EventLog.Event getEventClicked() {
-
-
-			return event_clicked;
-		}
-
-		public MouseListener getLabelListener() {
-
-			return label_listener;
-		}
 	}
+
 }

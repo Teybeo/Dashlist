@@ -1,23 +1,30 @@
 package Plugins.EventLog;
 
+import Core.*;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Guillaume on 27/04/14.
  */
-public class EventUI extends JPanel {
+public class EventUI extends JPanel implements Observer{
 
 	private Event event;
 	private JPanel panelEvent;
 	private JLabel labelStr;
 	private JLabel labelDate;
 
-	public EventUI(Plugins.EventLog.Event event) {
+	public EventUI(Event event, MouseAdapter mouse_listener) {
 
 		this.event = event;
+		this.event.addObserver(this);
+		this.addMouseListener(mouse_listener);
 
-		String str[] = event.getReadableDescription().split("on");
+		String str[] = event.getReadableDescription().split(" on ");
 		panelEvent = new JPanel();
 		labelStr = new JLabel(str[0]);
 		labelDate = new JLabel(str[1]);
@@ -43,5 +50,26 @@ public class EventUI extends JPanel {
 	}
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+
+		String sender = o.getClass().getName();
+
+		System.out.println("EventUI received ["+ arg +"] from ["+ sender +"]");
+
+		if (sender.equals("Plugins.EventLog.Event"))
+		{
+			String message = ((String)arg);
+
+			if (message.startsWith("Event deleted")) {
+				Container parent = getParent();
+				parent.remove(this);
+				parent.revalidate();
+				parent.repaint();
+			}
+
+		}
 	}
 }

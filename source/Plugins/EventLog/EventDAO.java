@@ -159,6 +159,7 @@ public class EventDAO {
 
 			query.execute("DELETE FROM event WHERE id ='" + event.getId() + "'");
 
+			event.delete();
 		} catch (SQLException e) {
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
