@@ -69,7 +69,8 @@
 	
 	<script type="text/javascript">
 		$(".newp").click(function(){
-					$("#ttbox").css("height", "100px").css("width", "360px").css("margin-left", "-180px");
+					$("#ttbox").css("height", "150px").css("width", "360px").css("margin-left", "-180px");
+					$("#ttbox").load("forms/form_projet.php");
 					$("#ttglobal").fadeIn(200);
 				});
 	</script>
