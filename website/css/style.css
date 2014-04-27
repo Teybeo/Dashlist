@@ -427,6 +427,15 @@ p a {
 	padding: 40px;
 }
 
+#selected_project
+{
+	min-height: 499px;
+	width: 610px;
+	padding-top: 50px;
+	padding-left: 10px;
+	padding-bottom: 50px;
+}
+
 #no_selected_project
 {
 	background-color: #DEDEDE;
@@ -456,4 +465,17 @@ p a {
 #no_selected_project .newp
 {
 	font-size: 12pt;
+}
+
+
+#table_membres tbody tr:nth-child(even) {
+background-color:#FFFFFF;
+}
+#table_membres tbody tr:nth-child(odd) {
+background-color:#EEEEEE;
+}
+#table_membres tbody td {
+border: solid 1px #EEEEEE;
+padding-top: 10px;
+padding-bottom: 10px;
 }

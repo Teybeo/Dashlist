@@ -37,10 +37,10 @@
 			<div id="my_projects">
 				<h2>Mes projets</h2>
 				<hr/>
-				<table id="my_projects_table" style="width: 100%">
+				<table class="projects_table" id="my_projects_table" style="width: 100%">
 					<?php	
 						foreach($projects1 as $cle =>$valeur){
-							echo '<tr class="tr_projects"><td style="padding-top: 10px; padding-bottom: 10px; padding-left: 6px; width: 90%;">'.$valeur.'</td><td><b>></b></td></tr>';
+							echo '<tr class="tr_projects" id="'.$cle.'"><td style="padding-top: 10px; padding-bottom: 10px; padding-left: 6px; width: 90%;">'.$valeur.'</td><td><b>></b></td></tr>';
 						}
 					?>
 				</table>
@@ -51,17 +51,17 @@
 			<div id="all_projects">
 				<h2>Autres projets</h2>
 				<hr/>
-					<table id="my_projects_table" style="width: 100%">
+					<table class="projects_table" id="all_projects_table" style="width: 100%">
 					<?php	
 						foreach($projects2 as $cle =>$valeur){
-							echo '<tr class="tr_projects"><td style="padding-top: 10px; padding-bottom: 10px; padding-left: 6px; width: 90%;">'.$valeur.'</td><td><b>></b></td></tr>';
+							echo '<tr class="tr_projects" id="'.$cle.'"><td style="padding-top: 10px; padding-bottom: 10px; padding-left: 6px; width: 90%;">'.$valeur.'</td><td><b>></b></td></tr>';
 						}
 					?>
 				</table>
 			</div>
 			
 		</div>
-		
+		<div class="main" id="selected_project" style="display: none;"></div>
 		<div class="main" id="no_selected_project" style="height: 400px;">
 			Selectionnez un projet dans la liste de gauche ou creez en un <a class="newp" href="#">en cliquant ici</a>.
 		</div>
@@ -69,10 +69,34 @@
 	
 	<script type="text/javascript">
 		$(".newp").click(function(){
-					$("#ttbox").css("height", "150px").css("width", "360px").css("margin-left", "-180px");
-					$("#ttbox").load("forms/form_projet.php");
-					$("#ttglobal").fadeIn(200);
-				});
+			$("#ttbox").css("height", "150px").css("width", "360px").css("margin-left", "-180px");
+			$("#ttbox").load("forms/form_projet.php");
+			$("#ttglobal").fadeIn(200);
+		});
+		
+		$('td').click(function(e){
+			e.preventDefault();
+			var id = $(this).parent().attr("id");
+			var title = $(this).text();
+			var admin = 0;
+			$("#selected_project").fadeOut(300);
+			if($(this).closest('table').attr('id') == "my_projects_table")
+				admin = 1;
+	
+			$.ajax({
+				type: "POST",
+				url: "get_project.php",
+				data: {	id: id,
+						nom: title,
+						admin: admin}
+			})
+			.done(function( msg ) {
+				$("#selected_project").fadeIn(300);
+				$("#selected_project").html(msg);
+			});
+			
+			$("#no_selected_project").fadeOut(300);
+		});
 	</script>
 	
 <?php
