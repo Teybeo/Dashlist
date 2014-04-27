@@ -87,7 +87,8 @@ public class BoardUI extends Observable implements Observer{
 		create_empty_list();
 
 		horizontal_scroll = new JScrollPane(lists_zone);
-
+		horizontal_scroll.getHorizontalScrollBar().setUnitIncrement(14);
+		
 		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
 

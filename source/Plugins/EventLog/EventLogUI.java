@@ -28,6 +28,7 @@ public class EventLogUI implements PluginInterface, Observer {
 		log_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
 		scroll_pane = new JScrollPane(log_zone, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll_pane.getVerticalScrollBar().setUnitIncrement(14);
 	}
 
 	private JLabel findLabel(int id) {
