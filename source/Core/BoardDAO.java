@@ -106,7 +106,7 @@ public class BoardDAO {
 
 		List list = dao.add(list_name, board.getLists().size() + 1, board.getId());
 
-		board.add(list);
+		board.add(list, List.Action_Source.USER);
 	}
 
 	public void loadLists(Board board) {

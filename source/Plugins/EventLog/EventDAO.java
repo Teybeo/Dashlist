@@ -106,7 +106,8 @@ public class EventDAO {
 
 		int event_type = event.getEventType();
 
-		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
+		ItemDAO item_dao = new ItemDAO(BddConnection.getInstance());
+		ListDAO list_dao = new ListDAO(BddConnection.getInstance());
 
 		switch (event_type)
 		{
@@ -114,7 +115,10 @@ public class EventDAO {
 				System.out.println("Not implemented yet");
 				break;
 			case Event.LIST_DELETED:
-				System.out.println("Not implemented yet");
+				delete(event);
+				list_dao.revertDelete(event.getList_id_old());
+				board.add(list_dao.get(event.getList_id_old(), true, false), List.Action_Source.EVENT_LOG);
+				done = true;
 				break;
 			case Event.LIST_CHANGED:
 				System.out.println("Not implemented yet");
@@ -124,7 +128,7 @@ public class EventDAO {
 				// 2. On supprime l'item dans la BDD
 				// 3. On supprime l'item de la mémoire
 				delete(event);
-				dao.revertCreate(event.getItem_id_new());
+				item_dao.revertCreate(event.getItem_id_new());
 				board.getItemById(event.getItem_id_new()).delete(Item.Delete_Type.HARD_DELETE);
 				done = true;
 				break;
@@ -133,8 +137,8 @@ public class EventDAO {
 				// 2. On reflag   l'item dans la BDD comme n'étant pas supprimé
 				// 3. On recrée l'item dans la mémoire
 				delete(event);
-				dao.revertDelete(event.getItem_id_old());
-				board.getListById(event.getList_id_old()).add(dao.get(event.getItem_id_old(), true), true);
+				item_dao.revertDelete(event.getItem_id_old());
+				board.getListById(event.getList_id_old()).add(item_dao.get(event.getItem_id_old(), true), List.Action_Source.EVENT_LOG);
 				done = true;
 				break;
 			case Event.ITEM_CHANGED:

@@ -42,36 +42,6 @@ public class EventLogUI implements PluginInterface, Observer {
 		log_zone.add(label, position);
 	}
 
-	/**
-	 *	Va chercher les nouveaux events et met à jour l'affichage
-	 *//*
-	public void refresh() {
-
-		EventDAO dao = new EventDAO(BddConnection.getInstance());
-		ArrayList<Plugins.Plugins.EventLog.Event> new_events;
-
-		// On ne récupère que les events générés après le plus récent (premier) de ceux qu'on à déjà
-		if (events.size() > 0)
-			new_events = dao.getEventsByBoardAfter(board_id, events.get(0).getDate());
-		else
-			new_events = dao.getEventsByBoard(board_id); // Si on en avait pas, on prend tout
-
-		System.out.println(new_events.size() + " new events found");
-
-		// On les insère en haut de la liste d'affichage
-		for (Plugins.Plugins.EventLog.Event event : new_events) {
-			setup_event(event, FIRST);
-		}
-
-		// Et on les insère en premier dans la mémoire
-		new_events.addAll(events);
-		events = new_events;
-
-		scroll_pane.getParent().revalidate();
-		scroll_pane.getParent().repaint();
-
-	}*/
-
 	private JLabel findLabel(int id) {
 
 		for (Component c : log_zone.getComponents())
@@ -134,6 +104,14 @@ public class EventLogUI implements PluginInterface, Observer {
 			{
 				List list = log.getBoard().getListById(Integer.parseInt(message.replace("List added: ", "")));
 				controller.addListEvent(null, list);
+			}
+			else if (message.startsWith("List deleted: "))
+			{
+				message = message.replace("List deleted: ", "");
+
+				List list = log.getListById(Integer.parseInt(message));
+
+				controller.addListEvent(list, null);
 			}
 			if (message.startsWith("Item added: "))
 			{

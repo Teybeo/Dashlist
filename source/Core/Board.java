@@ -82,17 +82,20 @@ public class Board extends Observable implements Observer {
 
 		if (sender.equals("Core.List"))
 		{
+			String message = (String) arg;
 			// On transmet la notification pour les plugins
-			if (((String)arg).startsWith("Item added: ") || ((String)arg).startsWith("Item deleted: ")) {
+			// Seulement si le message ne contient pas (by eventlog)
+			if (message.startsWith("Item added: ")   ||
+				message.startsWith("Item deleted: ") ||
+				message.startsWith("List deleted: "))
+			{
 				setChanged();
 				notifyObservers(arg);
 				clearChanged();
 			}
 
 		}
-//		if (((String)arg).equals("List added")) {
-//			add((List)o);
-//		}
+
 	}
 
 	/**
@@ -100,12 +103,16 @@ public class Board extends Observable implements Observer {
 	 * observateurs qu'elle a obtenue une nouvelle liste et envoie l'id de cette liste
 	 * @param list La liste à ajouter
 	 */
-	public void add(List list) {
+	public void add(List list, List.Action_Source source) {
 
-		lists.add(list);
+		lists.add(Math.min(list.getPosition()-1, lists.size()), list);
 		list.addObserver(this);
+
 		setChanged();
-		notifyObservers("List added: "+list.getId());
+		if (source == List.Action_Source.EVENT_LOG)
+			notifyObservers("List added (by eventlog): "+list.getId());
+		else if (source == List.Action_Source.USER)
+			notifyObservers("List added: "+list.getId());
 		clearChanged();
 	}
 

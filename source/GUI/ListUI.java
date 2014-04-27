@@ -8,9 +8,7 @@ import Core.ListDAO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,7 +22,8 @@ public class ListUI extends JPanel implements Observer{
     private JPanel panelTitle;
     private JLabel title;
 	private TogglableTextInput add_item;
-    //private int cpt;
+	private static ListMenu listMenu = new ListMenu();
+	//private int cpt;
 
     public ListUI(List list, MouseListener ml){
 
@@ -37,6 +36,7 @@ public class ListUI extends JPanel implements Observer{
         this.setBackground(new Color(224, 224, 224));
         this.setAlignmentY(Component.TOP_ALIGNMENT);
         this.setBorder(new EmptyBorder(8, 8, 8, 8));
+		this.addMouseListener(listMenu.mouseListener);
 
         panelTitle = new JPanel();
         panelTitle.setLayout(new BoxLayout(panelTitle, BoxLayout.Y_AXIS));
@@ -64,6 +64,10 @@ public class ListUI extends JPanel implements Observer{
         //this.revalidate();
     }
 
+	public List getList() {
+
+		return list;
+	}
 
 	private class AjoutItemListener implements ActionListener
 	{
@@ -98,7 +102,7 @@ public class ListUI extends JPanel implements Observer{
 
 			if (message.startsWith("Item added"))
 			{
-				message = message.replace(" (from history)", "");
+				message = message.replace(" (by eventlog)", "");
 				String[] array = message.replace("Item added: ", "").split(" in: ");
 
 				Item item = list.getItemById(Integer.parseInt(array[0]));
@@ -111,13 +115,53 @@ public class ListUI extends JPanel implements Observer{
 				revalidate();
 				repaint();
 			}
-
-			if (message.startsWith("Item deleted: "))
-			{
-
+			else if (message.startsWith("List deleted")) {
+				Container parent = getParent();
+				parent.remove(this);
+				parent.revalidate();
+				parent.repaint();
 			}
 
 		}
 	}
 
+	private static class ListMenu extends JPopupMenu {
+
+		private static ListUI clicked_list;
+		private MouseAdapter mouseListener;
+
+		public ListMenu() {
+
+			JMenuItem delete_list = new JMenuItem("Supprimer");
+			delete_list.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					if (clicked_list == null)
+						System.out.println("La liste sélectionnée était null");
+					else {
+						ListDAO dao = new ListDAO(BddConnection.getInstance());
+						dao.delete(clicked_list.getList(), List.Action_Source.USER);
+					}
+				}
+			});
+
+			add(delete_list);
+
+			mouseListener = new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+
+					super.mouseReleased(e);
+
+					if (e.isPopupTrigger()) {
+						System.out.println(e.getComponent()+" clicked");
+						// On récupère le ListUI sur lequel on a cliqué
+						clicked_list = (ListUI) e.getComponent();
+						show(e.getComponent(), e.getX(), e.getY());
+					}
+				}
+			};
+		}
+	}
 }

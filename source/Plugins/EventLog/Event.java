@@ -85,8 +85,8 @@ public class Event {
 		User user = user_dao.get(user_id);
 
 		ListDAO list_dao = new ListDAO(BddConnection.getInstance());
-		List list_old = list_dao.get(list_id_old, false);
-		List list_new = list_dao.get(list_id_new, false);
+		List list_old = list_dao.get(list_id_old, false, false);
+		List list_new = list_dao.get(list_id_new, false, false);
 
 		ItemDAO item_dao = new ItemDAO(BddConnection.getInstance());
 		Item item_old = item_dao.get(item_id_old, false);
@@ -105,6 +105,7 @@ public class Event {
 				string.append(user.getName() + " created list: " + list_new.getName());
 				break;
 			case LIST_DELETED:
+				string.append(user.getName() + " deleted list: " + list_old.getName());
 				break;
 			case LIST_CHANGED:
 				break;

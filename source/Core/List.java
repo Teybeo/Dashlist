@@ -11,6 +11,10 @@ public class List extends Observable implements Observer {
 	String name;
 	int position;
 	ArrayList<Item> items = new ArrayList<>();
+	public static enum Action_Source {
+		USER,
+		EVENT_LOG
+	}
 
 	public List(String name, int position) {
 
@@ -112,14 +116,18 @@ public class List extends Observable implements Observer {
 
 		if (sender.equals("Core.Item"))
 		{
-			if (arg.equals("Item deleted (soft)"))
+			// L'user a supprimé l'item en cliquant dessus
+			// On transmet pour créer un event
+			if (arg.equals("Item deleted"))
 			{
 				setChanged();
 				notifyObservers("Item deleted: "+((Item)o).getId() + " from: "+ id);
 				clearChanged();
 				items.remove(o);
 			}
-			else if (arg.equals("Item deleted"))
+			// Dans ce cas-la, c'est une création qui est annulée
+			// Donc on ne transmet pas pour ne pas regénérer d'évent
+			else if (arg.equals("Item deleted (by eventlog)"))
 			{
 				items.remove(o);
 			}
@@ -127,18 +135,18 @@ public class List extends Observable implements Observer {
 
 	}
 
-	public void add(Item item, boolean from_history) {
+	public void add(Item item, Action_Source source) {
 
 		System.out.println("Position: "+item.getPosition());
 		items.add(Math.min(item.getPosition()-1, items.size()), item);
 		item.addObserver(this);
 
 		setChanged();
-		if (from_history == true)
-			notifyObservers("Item added (from history): "+item.getId() + " in: "+id);
-		else
+		if (source == Action_Source.EVENT_LOG)
+			notifyObservers("Item added (by eventlog): "+item.getId() + " in: "+id);
+		else if (source == Action_Source.USER)
 			notifyObservers("Item added: "+item.getId() + " in: "+id);
-			clearChanged();
+		clearChanged();
 	}
 
 	public Item getItemById(int id) {
@@ -149,4 +157,14 @@ public class List extends Observable implements Observer {
 
 		return null;  //To change body of created methods use File | Settings | File Templates.
 	}
+
+	public void delete(Action_Source source) {
+		setChanged();
+		if (source == Action_Source.USER)
+			notifyObservers("List deleted: "+id);
+		else if (source == Action_Source.EVENT_LOG)
+			notifyObservers("List deleted (by eventlog): "+id);
+		clearChanged();
+	}
+
 }

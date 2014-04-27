@@ -85,9 +85,9 @@ public class Item extends Observable {
 
 		setChanged();
 		if (type == Delete_Type.SOFT_DELETE)
-			notifyObservers("Item deleted (soft)");
-		else if (type == Delete_Type.HARD_DELETE)
 			notifyObservers("Item deleted");
+		else if (type == Delete_Type.HARD_DELETE)
+			notifyObservers("Item deleted (by eventlog)");
 		clearChanged();
 	}
 }

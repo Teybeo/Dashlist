@@ -26,7 +26,8 @@ public class ListDAO {
 			ResultSet res = query.executeQuery(
 					"SELECT id " +
 					"FROM list " +
-					"WHERE id_board='" + board_id + "';"
+					"WHERE id_board='" + board_id + "' " +
+					"AND is_deleted = FALSE;"
 			);
 
 			while (res.next()) {
@@ -35,7 +36,7 @@ public class ListDAO {
 
 				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-				lists.add(get(list_id, true));
+				lists.add(get(list_id, true, true));
 			}
 
 		} catch (SQLException e) {
@@ -55,7 +56,7 @@ public class ListDAO {
 
 			query.execute("" +
 					"INSERT INTO list " +
-					"VALUES(default, " + board_id + ",'" + list.getName() + "', " + list.getPosition() + ");", Statement.RETURN_GENERATED_KEYS);
+					"VALUES(default, "+ board_id +",'"+ list.getName() +"', "+ list.getPosition() +", FALSE);", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
@@ -70,15 +71,22 @@ public class ListDAO {
 		return list;
 	}
 
-	public List get(int list_id, boolean complete_load) {
+	public List get(int list_id, boolean complete_load, boolean only_alive) {
 
 		List list = null;
 
         try {
             Statement query = link.createStatement();
 
-            query.execute("" +
-		            "SELECT * FROM list WHERE id = '" + list_id + "';");
+            StringBuilder request = new StringBuilder("SELECT * " +
+					         "FROM list " +
+					         "WHERE id = '" + list_id + "'");
+	        if (only_alive)
+		        request.append(" AND is_deleted = FALSE;");
+	        else
+		        request.append(";");
+
+	        query.execute(String.valueOf(request));
 
 	        ResultSet res = query.getResultSet();
 
@@ -140,18 +148,38 @@ public class ListDAO {
         }
     }
 
-    public void delete(List list) {
+    public void delete(List list, List.Action_Source source) {
 
         try {
             Statement query = link.createStatement();
 
-            query.execute("" +
-                    "DELETE list " +
-                    " WHERE id ="+ list.getId());
+	        if (source == List.Action_Source.USER)
+				query.execute("UPDATE list SET is_deleted = TRUE WHERE id ="+ list.getId());
+//	        else if (type == List.Delete_Type.HARD)
+//		        query.execute("DELETE FROM list WHERE id ="+ list.getId());
+
+			list.delete(source);
+
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
+
+	/**
+	 * Annule la suppression d'une liste. Le flag is_deleted de cette liste est simplement remis à false
+	 * @param list_id l'id de la liste dont la suppression est à annuler
+	 */
+	public void revertDelete(int list_id) {
+
+		try {
+			Statement query = link.createStatement();
+
+			query.execute("UPDATE list SET is_deleted=FALSE WHERE id = '" + list_id + "';");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
 
 	public void loadItems(List list) {
 
@@ -166,6 +194,7 @@ public class ListDAO {
 
 		Item item = dao.add(item_name, list.getItems().size() + 1, list.getId());
 
-		list.add(item, false);
+		list.add(item, List.Action_Source.USER);
 	}
+
 }
