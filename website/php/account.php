@@ -67,37 +67,7 @@
 		</div>
 	</div>
 	
-	<script type="text/javascript">
-		$(".newp").click(function(){
-			$("#ttbox").css("height", "150px").css("width", "360px").css("margin-left", "-180px");
-			$("#ttbox").load("forms/form_projet.php");
-			$("#ttglobal").fadeIn(200);
-		});
-		
-		$('td').click(function(e){
-			e.preventDefault();
-			var id = $(this).parent().attr("id");
-			var title = $(this).text();
-			var admin = 0;
-			$("#selected_project").fadeOut(300);
-			if($(this).closest('table').attr('id') == "my_projects_table")
-				admin = 1;
-	
-			$.ajax({
-				type: "POST",
-				url: "get_project.php",
-				data: {	id: id,
-						nom: title,
-						admin: admin}
-			})
-			.done(function( msg ) {
-				$("#selected_project").fadeIn(300);
-				$("#selected_project").html(msg);
-			});
-			
-			$("#no_selected_project").fadeOut(300);
-		});
-	</script>
+	<script type="text/javascript" src="../js/project.js"></script>
 	
 <?php
 	include("footer.php");
