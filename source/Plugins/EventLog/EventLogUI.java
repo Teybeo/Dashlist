@@ -27,7 +27,7 @@ public class EventLogUI implements PluginInterface, Observer {
 		log_zone.setLayout(new BoxLayout(log_zone, BoxLayout.Y_AXIS));
 		log_zone.setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
 
-		scroll_pane = new JScrollPane(log_zone);
+		scroll_pane = new JScrollPane(log_zone, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	private JLabel findLabel(int id) {
@@ -76,7 +76,7 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		System.out.println("EventLog Plugin acquired container");
 
-		container.add(log_zone, BorderLayout.EAST);
+		container.add(scroll_pane, BorderLayout.EAST);
 		container.revalidate();
 		container.repaint();
 	}
