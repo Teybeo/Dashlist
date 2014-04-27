@@ -41,7 +41,7 @@
 				echo '</td>';
 				if($is_admin == 0 && $_POST['admin'] == 1)
 				{
-					echo '<td><img style="width: 30px; height: 30px;" src="http://icdn.pro/images/fr/b/o/bouton-erreur-icone-3840-96.png"/></td>';
+					echo '<td><img style="width: 30px; height: 30px;" src="../images/delete.png"/></td>';
 				}
 				echo '</tr>';
 			}

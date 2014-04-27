@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 25 Avril 2014 à 17:57
+-- Généré le: Dim 27 Avril 2014 à 18:02
 -- Version du serveur: 5.1.41-community-log
 -- Version de PHP: 5.4.12
 
@@ -32,14 +32,16 @@ CREATE TABLE IF NOT EXISTS `board` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Contenu de la table `board`
 --
 
 INSERT INTO `board` (`id`, `name`) VALUES
-(12, 'Test1');
+(12, 'Test1'),
+(13, 'Mathématiques'),
+(14, 'SQL');
 
 -- --------------------------------------------------------
 
@@ -51,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `board_members` (
   `board_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `is_admin` tinyint(1) NOT NULL,
-  `is_pending` tinyint(1) NOT NULL,
   KEY `board_id` (`board_id`,`user_id`),
   KEY `user_id` (`user_id`),
   KEY `board_id_2` (`board_id`)
@@ -61,8 +62,14 @@ CREATE TABLE IF NOT EXISTS `board_members` (
 -- Contenu de la table `board_members`
 --
 
-INSERT INTO `board_members` (`board_id`, `user_id`, `is_admin`, `is_pending`) VALUES
-(12, 1, 1, 0);
+INSERT INTO `board_members` (`board_id`, `user_id`, `is_admin`) VALUES
+(12, 1, 1),
+(13, 1, 1),
+(14, 1, 0),
+(12, 2, 0),
+(12, 7, 0),
+(12, 3, 0),
+(12, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -145,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `item` (
   `cover` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_list` (`id_list`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=124 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=133 ;
 
 --
 -- Contenu de la table `item`
@@ -162,13 +169,17 @@ INSERT INTO `item` (`id`, `id_list`, `name`, `date`, `description`, `position`, 
 (114, 99, 'crac', '2014-04-23', NULL, 7, 0, NULL),
 (115, 99, 'weep', '2014-04-23', NULL, 8, 0, NULL),
 (116, 99, 'node', '2014-04-23', NULL, 9, 0, NULL),
-(117, 99, 'js', '2014-04-23', NULL, 10, 0, NULL),
+(117, 99, 'js', '2014-04-23', NULL, 10, 1, NULL),
 (118, 99, 'php', '2014-04-23', NULL, 11, 0, NULL),
-(119, 99, 'html', '2014-04-23', NULL, 12, 0, NULL),
-(120, 99, 'css', '2014-04-23', NULL, 13, 0, NULL),
-(121, 99, '.net', '2014-04-23', NULL, 14, 0, NULL),
-(122, 99, 'crack', '2014-04-23', NULL, 15, 0, NULL),
-(123, 99, 'cuir', '2014-04-23', NULL, 16, 0, NULL);
+(119, 99, 'html', '2014-04-23', NULL, 12, 1, NULL),
+(120, 99, 'css', '2014-04-23', NULL, 13, 1, NULL),
+(121, 99, '.net', '2014-04-23', NULL, 14, 1, NULL),
+(122, 99, 'crack', '2014-04-23', NULL, 15, 1, NULL),
+(123, 99, 'cuir', '2014-04-23', NULL, 16, 1, NULL),
+(124, 99, 'pouet', '2014-04-26', NULL, 11, 0, NULL),
+(125, 100, 'ama', '2014-04-27', NULL, 2, 0, NULL),
+(126, 100, 'matt', '2014-04-27', NULL, 3, 0, NULL),
+(127, 100, 'tai', '2014-04-27', NULL, 4, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -181,6 +192,7 @@ CREATE TABLE IF NOT EXISTS `list` (
   `id_board` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `position` int(11) NOT NULL,
+  `is_deleted` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_board` (`id_board`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
@@ -189,9 +201,9 @@ CREATE TABLE IF NOT EXISTS `list` (
 -- Contenu de la table `list`
 --
 
-INSERT INTO `list` (`id`, `id_board`, `name`, `position`) VALUES
-(99, 12, 'pokemon', 1),
-(100, 12, 'digimon', 2);
+INSERT INTO `list` (`id`, `id_board`, `name`, `position`, `is_deleted`) VALUES
+(99, 12, 'pokemon', 1, 0),
+(100, 12, 'digimon', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -204,18 +216,22 @@ CREATE TABLE IF NOT EXISTS `user` (
   `name` varchar(30) NOT NULL,
   `password` varchar(40) NOT NULL,
   `mail` varchar(50) NOT NULL,
+  `is_pending` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Contenu de la table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `password`, `mail`) VALUES
-(1, 'Pierre', 'azerty', 'pierre@hotmail.fr'),
-(2, 'Paul', 'azerty', 'paul@free.fr'),
-(3, 'Jacques', 'azerty', 'jacques@gmail.com'),
-(4, 'Bernard', 'azerty', 'bernard@pivot.com');
+INSERT INTO `user` (`id`, `name`, `password`, `mail`, `is_pending`) VALUES
+(1, 'Pierre', 'azerty', 'pierre@hotmail.fr', 0),
+(2, 'Paul', 'azerty', 'paul@free.fr', 0),
+(3, 'Jacques', 'azerty', 'jacques@gmail.com', 0),
+(4, 'Bernard', 'azerty', 'bernard@pivot.com', 0),
+(5, 'Louis', 'azerty', 'louis@labrocante.fr', 0),
+(6, 'Robby', 'azerty', 'robby@ybbor.fr', 0),
+(7, '_', '_', 'unknow@caller.fr', 1);
 
 --
 -- Contraintes pour les tables exportées
