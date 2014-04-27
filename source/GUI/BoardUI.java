@@ -153,7 +153,7 @@ public class BoardUI extends Observable implements Observer{
 			// 2. On ajoute la nouvelle liste
 			// 3. On remet la liste vide
 			lists_zone.remove(empty_list);
-			lists_zone.add(new ListUI(list, label_menu_listener), list.getPosition()-1);
+			lists_zone.add(new ListUI(list, label_menu_listener), Math.min(list.getPosition()-1, board.getLists().size()));
 			lists_zone.add(empty_list);
 
 			lists_zone.revalidate();
