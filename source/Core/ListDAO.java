@@ -166,6 +166,6 @@ public class ListDAO {
 
 		Item item = dao.add(item_name, list.getItems().size() + 1, list.getId());
 
-		list.add(item);
+		list.add(item, false);
 	}
 }

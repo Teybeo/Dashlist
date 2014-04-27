@@ -10,6 +10,10 @@ public class Item extends Observable {
 	int position;
 	Date date;
 	String text;
+	public static enum Delete_Type {
+		SOFT_DELETE,
+		HARD_DELETE
+	};
 
 	public Item(int id, Date date, String name, int position, String text) {
 
@@ -77,10 +81,13 @@ public class Item extends Observable {
 		this.id = id;
 	}
 
-	public void delete() {
+	public void delete(Delete_Type type) {
 
 		setChanged();
-		notifyObservers("Item deleted");
+		if (type == Delete_Type.SOFT_DELETE)
+			notifyObservers("Item deleted (soft)");
+		else if (type == Delete_Type.HARD_DELETE)
+			notifyObservers("Item deleted");
 		clearChanged();
 	}
 }

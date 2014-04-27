@@ -1,6 +1,8 @@
 package GUI;
 
-import Core.*;
+import Core.BddConnection;
+import Core.Board;
+import Core.BoardDAO;
 import Core.List;
 import PluginSystem.PluginInterface;
 

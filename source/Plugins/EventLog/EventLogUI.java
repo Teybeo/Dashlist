@@ -70,34 +70,7 @@ public class EventLogUI implements PluginInterface, Observer {
 		scroll_pane.getParent().revalidate();
 		scroll_pane.getParent().repaint();
 
-	}
-
-	private void revertTo(Plugins.Plugins.EventLog.Event event) {
-
-		EventDAO dao = new EventDAO(BddConnection.getInstance());
-
-		ArrayList<Plugins.Plugins.EventLog.Event> following_events = findFollowingEvents(event);
-
-		for (Plugins.Plugins.EventLog.Event event_to_revert : following_events) {
-
-			System.out.println("Annulation de "+event_to_revert.getReadableDescription());
-
-			// Temporaire, revert() n'est pas implémentée pour tous les types d'events
-			// Si un type n'est pas implémentée, elle renvoie false et ne change rien à la base
-			// Dans ces cas-la, on ne fait rien non plus dans l'appli sur ces events
-			if (dao.revert(event_to_revert) == true)
-			{
-				events.remove(event_to_revert);
-				log_zone.remove(findLabel(event_to_revert.getId()));
-			}
-		}
-
-		scroll_pane.getParent().revalidate();
-		scroll_pane.getParent().repaint();
-
 	}*/
-
-
 
 	private JLabel findLabel(int id) {
 
@@ -152,34 +125,59 @@ public class EventLogUI implements PluginInterface, Observer {
 	public void update(Observable o, Object arg) {
 
 		String sender = o.getClass().getName();
-
+		String message = (String)arg;
 		System.out.println("EventLogUI received ["+ arg +"] from ["+ sender +"]");
 
 		if (sender.equals("Core.Board"))
 		{
-			if (((String)arg).startsWith("List added: "))
+			if (message.startsWith("List added: "))
 			{
-				List list = log.getBoard().getListById(Integer.parseInt(((String)arg).replace("List added: ", "")));
+				List list = log.getBoard().getListById(Integer.parseInt(message.replace("List added: ", "")));
 				controller.addListEvent(null, list);
 			}
-			if (((String)arg).startsWith("Item added: "))
+			if (message.startsWith("Item added: "))
 			{
-				Item item = log.getBoard().getItemById(Integer.parseInt(((String)arg).replace("Item added: ", "")));
-				controller.addItemEvent(null, item);
+				message = message.replace("Item added: ", "");
+
+				String[] array = message.split(" in: ");
+
+				List list = log.getListById(Integer.parseInt(array[1]));
+				Item item = list.getItemById(Integer.parseInt(array[0]));
+
+				controller.addItemEvent(null, item, list);
 			}
-			if (((String)arg).startsWith("Item deleted: "))
+			if (message.startsWith("Item deleted: "))
 			{
-				Item item = log.getBoard().getItemById(Integer.parseInt(((String)arg).replace("Item deleted: ", "")));
-				controller.addItemEvent(item, null);
+				message = message.replace("Item deleted: ", "");
+
+				String[] array = message.split(" from: ");
+
+				List list = log.getListById(Integer.parseInt(array[1]));
+				Item item = list.getItemById(Integer.parseInt(array[0]));
+
+				controller.addItemEvent(item, null, list);
 			}
 		}
 		else if (sender.equals("Plugins.EventLog.EventLog"))
 		{
-			Event event = log.getEventById(Integer.parseInt(((String)arg).replace("Event added: ", "")));
+			if (message.startsWith("Event added: ")) {
 
-			setup_event(event, FIRST);
-			log_zone.revalidate();
-			log_zone.repaint();
+				Event event = log.getEventById(Integer.parseInt(message.replace("Event added: ", "")));
+
+				setup_event(event, FIRST);
+				log_zone.revalidate();
+				log_zone.repaint();
+			}
+			if (message.startsWith("Event deleted: ")) {
+
+				Event event = log.getEventById(Integer.parseInt(message.replace("Event deleted: ", "")));
+
+				log_zone.remove(findLabel(event.getId()));
+				log_zone.revalidate();
+				log_zone.repaint();
+			}
+
+
 		}
 
 	}
@@ -202,18 +200,14 @@ public class EventLogUI implements PluginInterface, Observer {
 
 					if (e.isPopupTrigger()) {
 
-						// On récupère l'id de l'event stocké dans le name du JLabel
+						// HACK: On récupère l'id de l'event stocké dans le name du JLabel
+						// La bonne façon serait d'avoir une classe EventUI stockant l'event
 						int id = Integer.parseInt(e.getComponent().getName());
 
 						// On récupère l'event et le garde en mémoire pour les actions du menu
-						/*for (Plugins.Plugins.EventLog.Event event : events)
-							if (event.getId() == id)
-							{
-								setEventClicked(event);
-								show(e.getComponent(), e.getX(), e.getY());
-								break;
-							}
-*/
+						setEventClicked(log.getEventById(id));
+						show(e.getComponent(), e.getX(), e.getY());
+
 					}
 				}
 			};
@@ -228,8 +222,8 @@ public class EventLogUI implements PluginInterface, Observer {
 
 					if (clicked_event == null)
 						System.out.println("Le clicked label était null");
-					//else
-					//	revertTo(clicked_event);
+					else
+						controller.revertTo(clicked_event);
 				}
 			};
 

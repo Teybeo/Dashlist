@@ -35,15 +35,16 @@ public class EventDAO {
 
 		Event event = new Event(old_list_id, new_list_id, 0, 0);
 
+		String old_list_id_str = (old_list == null) ? "null" : Integer.toString(old_list.getId());
+		String new_list_id_str = (new_list == null) ? "null" : Integer.toString(new_list.getId());
+
 		try {
 
 			Statement query = link.createStatement();
 
-			String old_list_id_str = (old_list == null) ? "null" : Integer.toString(old_list.getId());
-			String new_list_id_str = (new_list == null) ? "null" : Integer.toString(new_list.getId());
 
 			query.execute("INSERT INTO event "+
-					"VALUES ( default, null, null, "+ old_list_id_str +", "+ new_list_id_str +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
+					"VALUES ( default, "+ old_list_id_str +", "+ new_list_id_str +", null, null, '"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
@@ -52,6 +53,7 @@ public class EventDAO {
 				event.setId(res.getInt(1));
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 		}
 
@@ -67,12 +69,12 @@ public class EventDAO {
 	 * @param old_item Id de l'ancien item
 	 * @param new_item Id du nouvel item
 	 */
-	public Event add(Item old_item, Item new_item) {
+	public Event add(Item old_item, Item new_item, List list) {
 
 		int old_item_id = (old_item == null) ? 0 : old_item.getId();
 		int new_item_id = (new_item == null) ? 0 : new_item.getId();
 
-		Event event = new Event(0, 0, old_item_id, new_item_id);
+		Event event = new Event(list.getId(), list.getId(), old_item_id, new_item_id);
 
 
 		try {
@@ -83,7 +85,7 @@ public class EventDAO {
 			String new_item_id_str = (new_item == null) ? "null" : Integer.toString(new_item.getId());
 
 			query.execute("INSERT INTO event "+
-					"VALUES ( default, null, null, "+ old_item_id_str +", "+ new_item_id_str +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
+					"VALUES ( default,'"+list.getId()+"','"+list.getId()+"', "+ old_item_id_str +", "+ new_item_id_str +",'"+ event.getUserId() +"', NOW());", Statement.RETURN_GENERATED_KEYS);
 
 			// On récupère l'id créé par MySQL
 			ResultSet res = query.getGeneratedKeys();
@@ -98,7 +100,7 @@ public class EventDAO {
 		return event;
 	}
 
-	public boolean revert(Event event) {
+	public boolean revert(Event event, Board board) {
 
 		boolean done = false;
 
@@ -118,14 +120,21 @@ public class EventDAO {
 				System.out.println("Not implemented yet");
 				break;
 			case Event.ITEM_CREATED:
-				// On supprime d'abord l'event dans la BDD car il référence l'id de l'event à supprimer
+				// 1. On supprime l'event dans la BDD
+				// 2. On supprime l'item dans la BDD
+				// 3. On supprime l'item de la mémoire
 				delete(event);
 				dao.revertCreate(event.getItem_id_new());
+				board.getItemById(event.getItem_id_new()).delete(Item.Delete_Type.HARD_DELETE);
 				done = true;
 				break;
 			case Event.ITEM_DELETED:
+				// 1. On supprime l'event dans la BDD
+				// 2. On reflag   l'item dans la BDD comme n'étant pas supprimé
+				// 3. On recrée l'item dans la mémoire
 				delete(event);
 				dao.revertDelete(event.getItem_id_old());
+				board.getListById(event.getList_id_old()).add(dao.get(event.getItem_id_old(), true), true);
 				done = true;
 				break;
 			case Event.ITEM_CHANGED:

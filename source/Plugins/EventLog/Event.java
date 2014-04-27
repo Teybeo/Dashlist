@@ -95,6 +95,10 @@ public class Event {
 		int event_list_code = (list_id_old != 0 ? LIST_DELETED : 0) + (list_id_new != 0 ? LIST_CREATED : 0);
 		int event_item_code = (item_id_old != 0 ? ITEM_DELETED : 0) + (item_id_new != 0 ? ITEM_CREATED : 0);
 
+		// Si les 2 list id sont égaux, on les ignore
+		if (list_id_old - list_id_new == 0)
+			event_list_code = 0;
+
 		switch (event_list_code + event_item_code)
 		{
 			case LIST_CREATED:
@@ -143,6 +147,10 @@ public class Event {
 		int event_list_code = (list_id_old != 0 ? LIST_DELETED : 0) + (list_id_new != 0 ? LIST_CREATED : 0);
 		int event_item_code = (item_id_old != 0 ? ITEM_DELETED : 0) + (item_id_new != 0 ? ITEM_CREATED : 0);
 
+		// Si les 2 list id sont égaux, on les ignore
+		if (list_id_old - list_id_new == 0)
+			event_list_code = 0;
+
 		return event_item_code + event_list_code;
 	}
 
@@ -159,5 +167,10 @@ public class Event {
 	public void setId(int id) {
 
 		this.id = id;
+	}
+
+	public int getList_id_old() {
+
+		return list_id_old;
 	}
 }

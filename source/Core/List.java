@@ -112,24 +112,33 @@ public class List extends Observable implements Observer {
 
 		if (sender.equals("Core.Item"))
 		{
-			if (arg.equals("Item deleted"))
+			if (arg.equals("Item deleted (soft)"))
 			{
 				setChanged();
-				notifyObservers("Item deleted: "+((Item)o).getId());
+				notifyObservers("Item deleted: "+((Item)o).getId() + " from: "+ id);
 				clearChanged();
+				items.remove(o);
+			}
+			else if (arg.equals("Item deleted"))
+			{
 				items.remove(o);
 			}
 		}
 
 	}
 
-	public void add(Item item) {
+	public void add(Item item, boolean from_history) {
 
-		items.add(item);
+		System.out.println("Position: "+item.getPosition());
+		items.add(item.getPosition()-1, item);
 		item.addObserver(this);
+
 		setChanged();
-		notifyObservers("Item added: "+item.getId());
-		clearChanged();
+		if (from_history == true)
+			notifyObservers("Item added (from history): "+item.getId() + " in: "+id);
+		else
+			notifyObservers("Item added: "+item.getId() + " in: "+id);
+			clearChanged();
 	}
 
 	public Item getItemById(int id) {

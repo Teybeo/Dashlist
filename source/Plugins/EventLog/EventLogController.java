@@ -46,7 +46,7 @@ public class EventLogController {
 							")" +
 							"AND event.date > '" + new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(date) + "' " +
 							"GROUP BY event.id "+
-							"ORDER BY event.date DESC");
+							"ORDER BY event.date ASC");
 
 			ResultSet res = query.getResultSet();
 
@@ -63,31 +63,6 @@ public class EventLogController {
 		}
 
 	}
-	/**
-	 * Récupère la liste de tous les events du journal actuel qui se sont déroulés après l'event donné en paramètre
-	 * @param event L'event auquel sont postérieurs les events renvoyés par la fonction
-	 * @return La liste des events de la board actuelle postérieurs à event. Liste vide si pas d'events postérieurs
-	 * */
-	private ArrayList<Plugins.EventLog.Event> findFollowingEvents(Event event) {
-
-	ArrayList<Plugins.EventLog.Event> following_events = new ArrayList<>();
-
-	// Les events sont triés du plus récent au plus vieux
-	for (Plugins.EventLog.Event event_tmp : log.getEvents())
-	{
-	// Une fois atteint l'event ciblé, on s'arrête
-	if (event_tmp.getId() == event.getId())
-	break;
-
-	// Tant qu'on a pas trouvé l'event, on ajoute à la liste
-	// Vérification au cas où, le bon tri de la liste est sensé être assuré
-	if (event_tmp.getDate().after(event.getDate()))
-	following_events.add(event_tmp);
-	}
-
-	return following_events;
-	}
-
 
 	public void addListEvent(List old_list, List new_list) {
 
@@ -98,12 +73,34 @@ public class EventLogController {
 		log.add(event);
 	}
 
-	public void addItemEvent(Item old_item, Item new_item) {
+	public void addItemEvent(Item old_item, Item new_item, List list) {
 
 		EventDAO dao = new EventDAO(BddConnection.getInstance());
 
-		Event event = dao.add(old_item, new_item);
+		Event event = dao.add(old_item, new_item, list);
 
 		log.add(event);
 	}
+
+	public void revertTo(Event event) {
+
+		EventDAO dao = new EventDAO(BddConnection.getInstance());
+
+		ArrayList<Event> following_events = log.findFollowingEvents(event);
+
+		for (Event event_to_revert : following_events) {
+
+			System.out.println("Annulation de "+event_to_revert.getReadableDescription());
+
+			// Temporaire, revert() n'est pas implémentée pour tous les types d'events
+			// Si un type n'est pas implémentée, elle renvoie false et ne change rien à la base
+			// Dans ces cas-la, on ne fait rien non plus dans l'appli sur ces events
+			if (dao.revert(event_to_revert, log.getBoard()) == true)
+				log.remove(event_to_revert);
+
+
+		}
+
+	}
+
 }

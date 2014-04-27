@@ -55,7 +55,7 @@ public class ItemDAO {
         }
     }
 
-    public void delete(Item item, int user_id) {
+    public void delete(Item item, boolean soft_delete) {
         try {
             Statement query = link.createStatement();
 
@@ -64,7 +64,7 @@ public class ItemDAO {
                     "SET is_deleted = TRUE " +
 		            "WHERE id ="+item.getId());
 
-	        item.delete();
+	        item.delete(Item.Delete_Type.SOFT_DELETE);
 
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

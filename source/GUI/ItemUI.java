@@ -1,7 +1,6 @@
 package GUI;
 
 import Core.BddConnection;
-import Core.CurrentUser;
 import Core.Item;
 import Core.ItemDAO;
 
@@ -55,7 +54,7 @@ public class ItemUI extends JPanel implements Observer {
 
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-		dao.delete(getItem(), CurrentUser.getInstance().getId());
+		dao.delete(getItem(), true);
 
 	}
 
@@ -77,7 +76,7 @@ public class ItemUI extends JPanel implements Observer {
 		if (sender.equals("Core.Item"))
 		{
 			String param = ((String)arg);
-			if (param.equals("Item deleted"))
+			if (param.startsWith("Item deleted"))
 			{
 				Container parent = getParent();
 				parent.remove(this);

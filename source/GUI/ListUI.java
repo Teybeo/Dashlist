@@ -1,11 +1,12 @@
 package GUI;
 
-import Core.*;
+import Core.BddConnection;
+import Core.Item;
 import Core.List;
+import Core.ListDAO;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -93,14 +94,17 @@ public class ListUI extends JPanel implements Observer{
 
 		if (sender.equals("Core.List"))
 		{
-			String param = ((String)arg);
+			String message = ((String)arg);
 
-			if (param.startsWith("Item added: "))
+			if (message.startsWith("Item added"))
 			{
-				Item item = list.getItemById(Integer.parseInt(((String)arg).replace("Item added: ", "")));
+				message = message.replace(" (from history)", "");
+				String[] array = message.replace("Item added: ", "").split(" in: ");
+
+				Item item = list.getItemById(Integer.parseInt(array[0]));
 
 				remove(add_item);
-				add(new ItemUI(item, ml));
+				add(new ItemUI(item, ml), item.getPosition());
 				this.add(Box.createRigidArea(new Dimension(0, 5)));
 				add(add_item);
 
@@ -108,7 +112,7 @@ public class ListUI extends JPanel implements Observer{
 				repaint();
 			}
 
-			if (param.startsWith("Item deleted: "))
+			if (message.startsWith("Item deleted: "))
 			{
 
 			}
