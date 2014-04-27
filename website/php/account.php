@@ -1,7 +1,7 @@
 <?php
 	include("header.php");
 	
-	if(!isset($_SESSION['user']))
+	if(!isset($_SESSION['login']))
 	{
 		echo "<script type='text/javascript'>document.location.replace('index.php');</script>";
 	}
@@ -30,7 +30,6 @@
 		}
 	}
 ?>
-	
 	<div id="contents">
 		<div class="sidebar">
 			<span class="btn newp">Creer un nouveau projet</span>
@@ -62,10 +61,18 @@
 			</div>
 			
 		</div>
+		
 		<div class="main" id="no_selected_project" style="height: 400px;">
-			Selectionnez un projet dans la liste de gauche ou creez en un <a href="#">en cliquant ici</a>.
+			Selectionnez un projet dans la liste de gauche ou creez en un <a class="newp" href="#">en cliquant ici</a>.
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+		$(".newp").click(function(){
+					$("#ttbox").css("height", "100px").css("width", "360px").css("margin-left", "-180px");
+					$("#ttglobal").fadeIn(200);
+				});
+	</script>
 	
 <?php
 	include("footer.php");

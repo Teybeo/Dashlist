@@ -6,6 +6,7 @@
 	<meta charset="UTF-8">
 	<title>Dashlist</title>
 	<link rel="stylesheet" href="../css/style.css" type="text/css">
+	<link rel="icon" type="image/png" href="../images/logo.png" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>   
 	<script type="text/javascript">
 		function validerConnexion()
@@ -58,7 +59,7 @@
 			
 			<div id="navigation">
 					<a href="index.php">Accueil</a>
-					<a href="features.php">Téléchargement</a>
+					<a href="download.php">Téléchargement</a>
 					<a href="news.php">News</a>
 					<a href="contact.php">Contact</a>
 					<?php
@@ -77,13 +78,13 @@
 			<script type="text/javascript">
 				$(".inscription").click(function(){
 					$("#ttbox").css("height", "300px").css("width", "360px").css("margin-left", "-180px");
-					$("#ttbox").load("form_inscription.html");
+					$("#ttbox").load("forms/form_inscription.php");
 					$("#ttglobal").fadeIn(200);
 				});
 				
 				$(".connexion").click(function(){
 					$("#ttbox").css("height", "210px").css("width", "360px").css("margin-left", "-180px");
-					$("#ttbox").load("form_connexion.html");
+					$("#ttbox").load("forms/form_connexion.php");
 					$("#ttglobal").fadeIn(200);
 				});
 				

@@ -5,13 +5,6 @@
 	font-weight: normal;
 	font-style: normal;
 }
-@font-face {
-	font-family: 'Play';
-	src: url('../fonts/Play-Regular.eot');
-	src: local('☺'), url('../fonts/Play-Regular.woff') format('woff'), url('../fonts/Play-Regular.ttf') format('truetype'), url('../fonts/Play-Regular.svg') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
 
 body 
 {
@@ -71,7 +64,6 @@ a
 	border-bottom: 1px solid #000000;
 	/*padding: 27px 0;*/
 }
-
 
 #header > div, #footer > div {
 	width: 920px;
@@ -441,6 +433,7 @@ p a {
 	padding: 10px;
 	padding-top: 50px;
 	padding-bottom: 50px;
+	font-size: 12pt;
 }
 
 .tr_projects
@@ -457,5 +450,10 @@ p a {
 .newp
 {
 	width: 95%;
-	font-size: 9pt;
+	font-size: 10pt;
+}
+
+#no_selected_project .newp
+{
+	font-size: 12pt;
 }
