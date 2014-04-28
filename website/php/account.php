@@ -6,16 +6,20 @@
 		echo "<script type='text/javascript'>document.location.replace('index.php');</script>";
 	}
 	
+	$user_id = mysql_real_escape_string($_SESSION['id']);
+	
 	$bdd = new PDO('mysql:host=localhost;dbname=dashlist', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
-	$query_board_members = $bdd->prepare('SELECT * FROM board_members WHERE user_id="'.mysql_real_escape_string($_SESSION['id']).'"');
-	$query_board_members->execute();
+	
+	$query_board_members = $bdd->prepare('SELECT * FROM board_members WHERE user_id=?');
+	$query_board_members->execute(array($user_id));
+	
 	$projects1 = array();
 	$projects2 = array();
 	
 	while($data_bm = $query_board_members->fetch())
 	{
-		$query_board = $bdd->prepare('SELECT * FROM board WHERE id ="'.$data_bm[0].'"');
-		$query_board->execute();
+		$query_board = $bdd->prepare('SELECT * FROM board WHERE id =?');
+		$query_board->execute(array($data_bm[0]));
 		
 		if($data_b = $query_board->fetch())
 		{
