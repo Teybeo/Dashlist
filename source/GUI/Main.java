@@ -6,7 +6,7 @@ import PluginSystem.PluginLoader;
 import javax.swing.*;
 import java.io.IOException;
 
-public class Main {
+class Main {
 
 	public static void main(String[] args) {
 

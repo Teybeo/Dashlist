@@ -23,7 +23,7 @@ public class ItemEdit {
         JFrame frame = new JFrame("ItemEdit");
         $$$setupUI$$$();
         frame.setContentPane(new ItemEdit().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         Dimension current_resolution = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setMinimumSize(new Dimension((int) (current_resolution.width * 0.5), (int) (current_resolution.height * 0.5)));

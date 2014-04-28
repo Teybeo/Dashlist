@@ -6,18 +6,18 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TogglableTextInput extends JPanel {
+class TogglableTextInput extends JPanel {
 
-	JButton button;
-	JTextArea text_area;
-	static final String keycode_enter = "ENTER";
-	static final String keycode_escape = "ESCAPE";
-	static final int BUTTON = 0;
-	static final int TEXTINPUT = 1;
-	int current_mode = BUTTON;
-	List<ActionListener> listenerList = new ArrayList<ActionListener>();
+	private JButton button;
+	private JTextArea text_area;
+	private static final String keycode_enter = "ENTER";
+	private static final String keycode_escape = "ESCAPE";
+	private static final int BUTTON = 0;
+	private static final int TEXTINPUT = 1;
+	private int current_mode = BUTTON;
+	private List<ActionListener> listenerList = new ArrayList<ActionListener>();
 
-	public TogglableTextInput(String text) {
+	private TogglableTextInput(String text) {
 
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -149,7 +149,7 @@ public class TogglableTextInput extends JPanel {
 		}
 	}
 
-	public void addActionListener(ActionListener al)
+	void addActionListener(ActionListener al)
 	{
 		listenerList.add(al);
 	}
@@ -175,7 +175,7 @@ public class TogglableTextInput extends JPanel {
 		return text_area.getText();
 	}
 
-	public int getCurrent_mode() {
+	int getCurrent_mode() {
 
 		return current_mode;
 	}

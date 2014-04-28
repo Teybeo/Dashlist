@@ -82,8 +82,6 @@ public class Event extends Observable {
 		if (readable_description != null)
 			return readable_description;
 
-		StringBuilder string = new StringBuilder();
-
 		UserDAO user_dao = new UserDAO(BddConnection.getInstance());
 		User user = user_dao.get(user_id);
 
@@ -108,18 +106,18 @@ public class Event extends Observable {
 		switch (event_list_code + event_item_code)
 		{
 			case LIST_CREATED:
-				string.append(user.getName() + " created list: " + list_new.getName() + " on " + dateFormat.format(getDate()));
+				readable_description = user.getName() + " created list: " + list_new.getName() + " on " + dateFormat.format(date);
 				break;
 			case LIST_DELETED:
-				string.append(user.getName() + " deleted list: " + list_old.getName() + " on " + dateFormat.format(getDate()));
+				readable_description = user.getName() + " deleted list: " + list_old.getName() + " on " + dateFormat.format(date);
 				break;
 			case LIST_CHANGED:
 				break;
 			case ITEM_CREATED:
-				string.append(user.getName() + " added item: " + item_new.getName() + " to list: " + list_dao.get(item_id_new).getName() + " on " + dateFormat.format(getDate()));
+				readable_description = user.getName() + " added item: " + item_new.getName() + " to list: " + list_dao.get(item_id_new).getName() + " on " + dateFormat.format(date);
 				break;
 			case ITEM_DELETED:
-				string.append(user.getName() + " deleted item: " + item_old.getName() + " from list: " + list_dao.get(item_id_old).getName() + " on " + dateFormat.format(getDate()));
+				readable_description = user.getName() + " deleted item: " + item_old.getName() + " from list: " + list_dao.get(item_id_old).getName() + " on " + dateFormat.format(date);
 				break;
 			case ITEM_CHANGED:
 				break;
@@ -128,8 +126,6 @@ public class Event extends Observable {
 						"item_code: "+event_item_code+"\n"+this);
 				break;
 		}
-
-		readable_description = string.toString();
 
 		return readable_description;
 	}

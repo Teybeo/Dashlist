@@ -21,16 +21,6 @@ public class Board extends Observable implements Observer {
 		this.name = name;
 	}
 
-	public Board(int id, String name, ArrayList<List> lists) {
-
-		this.id = id;
-		this.name = name;
-		this.lists = lists;
-
-		for (List list : lists)
-			list.addObserver(this);
-	}
-
 	public int getId() {
 
 		return id;
@@ -49,16 +39,6 @@ public class Board extends Observable implements Observer {
 	public void setName(String name) {
 
 		this.name = name;
-	}
-
-	public List getListByName(String name) {
-
-		List list = null;
-		for (List l : lists)
-			if (l.getName().equals(name))
-				return l;
-
-		return null;
 	}
 
 	public ArrayList<List> getLists() {

@@ -15,7 +15,7 @@ import java.util.Observer;
 /**
  * Created by Guillaume on 23/04/14.
  */
-public class ListUI extends JPanel implements Observer{
+class ListUI extends JPanel implements Observer{
 
     private List list;
     private MouseListener ml;
@@ -64,7 +64,7 @@ public class ListUI extends JPanel implements Observer{
         //this.revalidate();
     }
 
-	public List getList() {
+	List getList() {
 
 		return list;
 	}

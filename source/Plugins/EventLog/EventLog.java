@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class EventLog extends Observable implements Observer {
+class EventLog extends Observable implements Observer {
 
-	ArrayList<Event> events = new ArrayList<>();
-	Board board;
+	private ArrayList<Event> events = new ArrayList<>();
+	private Board board;
 
 	public EventLog(Board board) {
 		this.board = board;

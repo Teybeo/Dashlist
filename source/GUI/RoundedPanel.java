@@ -6,7 +6,7 @@ import java.awt.*;
 /**
  * Created by Guillaume on 26/04/14.
  */
-public class RoundedPanel extends JPanel {
+class RoundedPanel extends JPanel {
 
 	/** Défini la taille de la bordure */
 	protected int borderSize = 0;

@@ -15,15 +15,13 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Accueil implements Observer {
+class Accueil implements Observer {
 
 	private JFrame frame;
-	private JButton creerUnProjetButton;
 	private JPanel panel;
 	private JPanel panel_list;
-	private JLabel label;
-	ArrayList<Board> boards;
-	PluginInterface[] plugins;
+	private ArrayList<Board> boards;
+	private PluginInterface[] plugins;
 
 	public Accueil(PluginInterface[] plugins) {
 
@@ -32,14 +30,14 @@ public class Accueil implements Observer {
 
 		panel_list = new RoundedPanel(1, true);
 		panel = new JPanel();
-		label = new JLabel("Mes projets");
+		JLabel label = new JLabel("Mes projets");
 		label.setFont(new Font("Arial", Font.BOLD, 16));
 
 		panel.setLayout(new BoxLayout(panel , BoxLayout.X_AXIS));
 		panel_list.setLayout(new BoxLayout(panel_list, BoxLayout.Y_AXIS));
 		panel_list.setMaximumSize(new Dimension(200, 200));
 
-		creerUnProjetButton = new JButton();
+		JButton creerUnProjetButton = new JButton();
 		creerUnProjetButton.setText("Créer un projet");
 
 		panel_list.add(Box.createRigidArea(new Dimension(30, 10)));
@@ -66,7 +64,7 @@ public class Accueil implements Observer {
 	/**
 	 *
 	 */
-	public void loadAccount() {
+	void loadAccount() {
 
 		BoardDAO dao = new BoardDAO(BddConnection.getInstance());
 
@@ -93,7 +91,7 @@ public class Accueil implements Observer {
 		panel_list.add(tmp);
 	}
 
-	public void launchBoard(Board board) {
+	void launchBoard(Board board) {
 
 		frame.setVisible(false);
 

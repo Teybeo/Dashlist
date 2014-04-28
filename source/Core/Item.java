@@ -5,11 +5,11 @@ import java.util.Observable;
 
 public class Item extends Observable {
 
-    int id;
-	String name;
-	int position;
-	Date date;
-	String text;
+    private int id;
+	private String name;
+	private int position;
+	private Date date;
+	private String text;
 	public static enum Action_Source {
 		USER,
 		EVENT_LOG

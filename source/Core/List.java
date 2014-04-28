@@ -7,10 +7,10 @@ import java.util.Observer;
 
 public class List extends Observable implements Observer {
 
-	int id;
-	String name;
-	int position;
-	ArrayList<Item> items = new ArrayList<>();
+	private int id;
+	private String name;
+	private int position;
+	private ArrayList<Item> items = new ArrayList<>();
 	public static enum Action_Source {
 		USER,
 		EVENT_LOG
@@ -46,17 +46,6 @@ public class List extends Observable implements Observer {
 	public int getId() {
 
 		return id;
-	}
-
-	public Item getItem(String name) {
-
-		for (Item item : items)
-		{
-			if (item.getName().equals(name) == true)
-				return item;
-
-		}
-		return null;
 	}
 
 	public ArrayList<Item> getItems() {

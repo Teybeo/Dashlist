@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventLogController {
+class EventLogController {
 
 	private Connection link;
 	private EventLog log;
@@ -27,7 +27,7 @@ public class EventLogController {
 
 	}
 
-	public void loadEventsAfter(Date date) {
+	void loadEventsAfter(Date date) {
 
 		try {
 

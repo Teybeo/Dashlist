@@ -11,7 +11,7 @@ import java.util.Observer;
 /**
  * Created by Guillaume on 27/04/14.
  */
-public class EventUI extends JPanel implements Observer{
+class EventUI extends JPanel implements Observer{
 
 	private Event event;
 	private JPanel panelEvent;

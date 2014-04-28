@@ -5,10 +5,10 @@ import java.sql.*;
 
 public class BddConnection {
 
-	private static String mysql_url = "//localhost";
-	private static String mysql_base = "dashlist";
-	private static String mysql_user = "root";
-	private static String mysql_pass = "";
+	private static final String mysql_url = "//localhost";
+	private static final String mysql_base = "dashlist";
+	private static final String mysql_user = "root";
+	private static final String mysql_pass = "";
 	private static Connection link = null;
 
 	/**

@@ -15,8 +15,8 @@ public class EventLogUI implements PluginInterface, Observer {
 
 	private JPanel log_zone;
 	private JScrollPane scroll_pane;
-	EventLog log;
-	EventLogController controller;
+	private EventLog log;
+	private EventLogController controller;
 	private static EventMenu event_menu;
 	private static final int FIRST = 0;
 	private static final int LAST = -1;
@@ -29,15 +29,6 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		scroll_pane = new JScrollPane(log_zone, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll_pane.getVerticalScrollBar().setUnitIncrement(14);
-	}
-
-	private JLabel findLabel(int id) {
-
-		for (Component c : log_zone.getComponents())
-			if (Integer.parseInt(c.getName()) == id)
-				return (JLabel)c;
-
-		return null;
 	}
 
 	@Override
@@ -151,11 +142,8 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		private EventUI clicked_event;
 		private static MouseAdapter mouse_listener;
-		private EventLogController controller;
 
 		public EventMenu(final EventLogController controller) {
-
-			this.controller = controller;
 
 			JMenuItem revert_option = new JMenuItem("Revenir à ce point");
 			// Cet écouteur se déclenche quand on clique sur l'option "Revenir à ce point" du menu

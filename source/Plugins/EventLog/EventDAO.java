@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventDAO {
+class EventDAO {
 
 	private Connection link;
 
@@ -115,7 +115,6 @@ public class EventDAO {
 				delete(event);
 				List list = board.getListById(event.getList_id_new());
 				list_dao.delete(list, List.Action_Source.EVENT_LOG);
-//				board.delete(event.getList_id_new()).delete(Item.Delete_Type.HARD_DELETE);
 				done = true;
 				break;
 			case Event.LIST_DELETED:
@@ -156,7 +155,7 @@ public class EventDAO {
 		return done;
 	}
 
-	public void delete(Event event) {
+	void delete(Event event) {
 		try {
 
 			Statement query = link.createStatement();

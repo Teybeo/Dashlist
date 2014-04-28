@@ -34,8 +34,6 @@ public class ListDAO {
 
 				int list_id = res.getInt("id");
 
-				ItemDAO dao = new ItemDAO(BddConnection.getInstance());
-
 				lists.add(get(list_id, true, true));
 			}
 
@@ -181,7 +179,7 @@ public class ListDAO {
 		}
 	}
 
-	public void loadItems(List list) {
+	void loadItems(List list) {
 
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 		list.setItems(dao.getListItems(list.getId()));

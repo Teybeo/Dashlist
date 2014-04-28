@@ -13,7 +13,7 @@ import java.util.Observer;
 /**
  * Created by Guillaume on 23/04/14.
  */
-public class ItemUI extends JPanel implements Observer {
+class ItemUI extends JPanel implements Observer {
 
     private Item item;
     private JTextArea text;
@@ -54,15 +54,11 @@ public class ItemUI extends JPanel implements Observer {
 
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-		dao.delete(getItem(), Item.Action_Source.USER);
+		dao.delete(item, Item.Action_Source.USER);
 
 	}
 
-    public JTextArea getLabel() {
-        return text;
-    }
-
-    public Item getItem() {
+    Item getItem() {
         return item;
     }
 

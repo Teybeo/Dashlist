@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Observable;
 
-public class Login extends Observable {
+class Login extends Observable {
 
 	private JPanel panel;
 	private JTextField login_field;

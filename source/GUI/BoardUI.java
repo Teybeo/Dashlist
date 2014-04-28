@@ -13,22 +13,14 @@ import java.awt.event.*;
 import java.util.Observable;
 import java.util.Observer;
 
-public class BoardUI extends Observable implements Observer{
+class BoardUI extends Observable implements Observer{
 
-	private JPanel main;
 	private JPanel lists_zone;
 	private JPanel empty_list;
-	private JScrollPane horizontal_scroll;
-	private JButton button1;
-	private JButton button2;
-	private JPanel north;
-	private JPanel center;
-	private JPanel east;
-	private JLabel board_title;
 	private JFrame frame;
 	private MouseListener label_menu_listener;
 	private ItemMenu item_menu;
-	Board board;
+	private Board board;
 
 	public BoardUI(Board board, PluginInterface[] plugins) {
 
@@ -86,9 +78,9 @@ public class BoardUI extends Observable implements Observer{
 
 		create_empty_list();
 
-		horizontal_scroll = new JScrollPane(lists_zone);
+		JScrollPane horizontal_scroll = new JScrollPane(lists_zone);
 		horizontal_scroll.getHorizontalScrollBar().setUnitIncrement(14);
-		
+
 		frame = new JFrame(board.getName() + " - Dashlist");
 		frame.add(horizontal_scroll, BorderLayout.CENTER);
 
@@ -101,9 +93,7 @@ public class BoardUI extends Observable implements Observer{
 			{
 				try {
 					plugin.acquireContainer(((Container) (getClass().getDeclaredField(target[1]).get(this))));
-				} catch (NoSuchFieldException e) {
-					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-				} catch (IllegalAccessException e) {
+				} catch (NoSuchFieldException | IllegalAccessException e) {
 					e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 				}
 
@@ -112,7 +102,7 @@ public class BoardUI extends Observable implements Observer{
 
 		buildMenuBar();
 		frame.setIconImage(frame.getToolkit().getImage("icon2.png"));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		Dimension current_resolution = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setMinimumSize(new Dimension((int)(current_resolution.width*0.5), (int)(current_resolution.height*0.5)));
 		frame.setPreferredSize(new Dimension((int)(current_resolution.width*0.7), (int)(current_resolution.height*0.7)));
