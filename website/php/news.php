@@ -5,6 +5,7 @@
 	
 	<div id="contents">
 		<div class="main">
+		<br/>
 			<h1>News</h1>
 			<ul class="news">
 				<li>
