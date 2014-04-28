@@ -58,10 +58,17 @@ public class EventLogUI implements PluginInterface, Observer {
 
 		event_menu = new EventMenu(controller);
 
+		UserDAO dao = new UserDAO(BddConnection.getInstance());
+		MouseAdapter mouse_listener = null;
+
+		// Seuls les admins peuvent annuler des events
+		if (dao.isAdminForBoard(CurrentUser.getInstance().getId(), board.getId()))
+			mouse_listener = event_menu.mouse_listener;
+
 		// Les events sont triés du plus récent au plus vieux
 		// donc on les insère chacun après tous les autres
 		for (Event event : log.getEvents())
-			log_zone.add(new EventUI(event, event_menu.mouse_listener), LAST);
+			log_zone.add(new EventUI(event, mouse_listener), LAST);
 
 		log_zone.revalidate();
 	}

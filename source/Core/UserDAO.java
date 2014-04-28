@@ -57,4 +57,26 @@ public class UserDAO {
 
 		return null;
 	}
+
+	public boolean isAdminForBoard(int user_id, int board_id) {
+
+		boolean is_admin = false;
+
+		try {
+			Statement query = link.createStatement();
+			ResultSet res = query.executeQuery(
+					"SELECT is_admin " +
+					"FROM board_members " +
+					"WHERE user_id = '" + user_id + "' " +
+					"AND board_id = '"+ board_id +"';");
+
+
+			if (res.next())
+				is_admin = res.getBoolean("is_admin");
+
+		} catch (SQLException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+		return is_admin;
+	}
 }
