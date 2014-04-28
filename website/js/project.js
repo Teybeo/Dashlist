@@ -15,8 +15,8 @@ $('td').click(function(e){
 				admin: admin}
 	})
 	.done(function( msg ) {
+		$("#table_project").delay(300).html(msg);
 		$("#selected_project").fadeIn(300);
-		$("#table_project").html(msg);
 	});
 	
 	$("#no_selected_project").fadeOut(300);

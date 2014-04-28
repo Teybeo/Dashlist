@@ -18,6 +18,6 @@ $("#ttglobal").click(function(e) {
 
 $(".newp").click(function(){
 	$("#ttbox").css("height", "150px").css("width", "360px").css("margin-left", "-180px");
-	$("#ttbox").load("/forms/form_projet.php");
+	$("#ttbox").load("forms/form_projet.php");
 	$("#ttglobal").fadeIn(200);
 });

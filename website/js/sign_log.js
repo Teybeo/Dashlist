@@ -33,3 +33,18 @@ function validerInscription()
 		}
 	});
 }
+
+function inviteMembre()
+{
+	var id = $("#table_membres").attr("class");
+	var entry = $("#invite_field").val();
+	$.ajax({
+		type: "POST",
+		url: "add_member.php",
+		data: {	entry: entry,
+					id: id}
+	})
+	.done(function( msg ) {
+		$(".error").html(msg);
+	});
+}

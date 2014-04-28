@@ -67,7 +67,9 @@
 				<br/><br/>
 				<h2><b>Ajouter un membre</b></h2>
 					<p>Vous pouvez inviter d'autres personnes à rejoindre ce projet<br/>Il suffit d'entrer le pseudonyme ou l'adresse mail de votre contact</p>
-					<input type="text" id="invite" placeholder="Entrez un nom ou une adresse mail"/> <input type="button" size="55" value="Inviter"/>
+					<input type="text" id="invite_field" placeholder="Entrez un nom ou une adresse mail" size="55" /> <input type="button" onclick="javascript:inviteMembre()" value="Inviter"/>
+					<br/><span class="error"></span>
+				
 			</div>
 		</div>
 		<div class="main" id="no_selected_project" style="height: 400px;">

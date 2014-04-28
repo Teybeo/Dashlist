@@ -1,11 +1,11 @@
 <?php
 
-		echo '<h1 style="font-size: 26pt"><b>'.$_POST['nom'].'</b></h1>';
+		echo '<h1 id="'.$_POST['id'].'" style="font-size: 26pt"><b>'.$_POST['nom'].'</b></h1>';
 		$bdd = new PDO('mysql:host=localhost;dbname=dashlist', 'root', '', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 		$query_member = $bdd->prepare('SELECT * FROM board_members WHERE board_id="'.mysql_real_escape_string($_POST['id']).'"');
 		$query_member->execute();
 		
-		echo '<table style="width: 92%" id="table_membres">';
+		echo '<table style="width: 92%" id="table_membres" class="'.$_POST["id"].'">';
 		while($data = $query_member->fetch())
 		{
 			$query_user = $bdd->prepare('SELECT * FROM user WHERE id="'.$data[1].'"');
