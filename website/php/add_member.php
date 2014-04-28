@@ -14,7 +14,7 @@
 		
 		if($data = $query_mail->fetch())
 		{
-			$query_board_member = $bdd->prepare('SELECT * FROM board_member WHERE user_id="'.$data[0].'" AND board_id="'.$_POST['id'].'"');
+			$query_board_member = $bdd->prepare('SELECT * FROM board_members WHERE user_id="'.$data[0].'" AND board_id="'.$_POST['id'].'"');
 			$query_board_member->execute();
 			
 			if($data2 = $query_board_member->fetch())
@@ -25,7 +25,7 @@
 			
 			else
 			{
-				$insert_member = $bdd->query("INSERT INTO board_member VALUES ('".$_POST['id']."'', '".$data[0]."'' , '0')");
+				$insert_member = $bdd->query("INSERT INTO board_members VALUES ('".$_POST['id']."'', '".$data[0]."'' , '0')");
 				echo '<span style="color: green">L\'utilisateur "'.$entry.'" à été intégré au projet. Il pourra y participer dés son inscription sur Dashlist</span>';
 				exit();
 			}
@@ -34,7 +34,8 @@
 		else
 		{
 			$insert_member = $bdd->query("INSERT INTO user VALUES ('', '' , '', '".$entry."', 1)");
-			
+			$lastid = $bdd->lastInsertId();
+			$insert_member2 = $bdd->query("INSERT INTO board_members VALUES ('".$_POST['id']."', '".$lastid."', '0')");
 			echo '<span style="color: green">L\'utilisateur "'.$entry.'" à été intégré au projet. Il pourra y participer dés son inscription sur Dashlist</span>';
 			exit();
 		}

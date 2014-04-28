@@ -4,6 +4,7 @@ $('td').click(function(e){
 	var title = $(this).text();
 	var admin = 0;
 	$("#selected_project").fadeOut(300);
+	$(".error").html("");
 	if($(this).closest('table').attr('id') == "my_projects_table")
 		admin = 1;
 	
