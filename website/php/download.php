@@ -4,30 +4,32 @@
 	
 	<div id="contents">
 		<div class="features">
-			<h1>Features</h1>
+			<h1>Téléchargement</h1>
 			<p>
-				Change, add, and remove items as you like. If you're having problems editing this website template, then don't hesitate to ask for help on the Forums.
+				Pour commencer à utiliser <b>Dashlist</b>, veillez à bien être inscrit sur le site puis téléchargez le client JAVA ci-dessous.
 			</p>
 			<div>
 				<img src="../images/recycle.png" alt="Img">
-				<h2>Customizable and Easy</h2>
+				<h2><b><a href="C://wamp/www/Dashlist.jar">Dashlist</a></b> v1.0</h2>
 				<p>
-					You can replace all this text with your own text. Want an easier solution for a Free Website? Head straight to Wix and immediately start customizing your website!
+					Téléchargez la dernière version du client <b>Dashlist</b> en cliquant ci-dessus.
 				</p>
-				<h2>Online in an Instant</h2>
+
 				<p>
-					Wix is an online website builder with a simple drag & drop interface, meaning you do the work online and instantly publish to the web. All Wix templates are fully customizable and free to use. Just pick one you like, click Edit, and enter the online editor.
+					Il vous suffit alors de vous connecter sur l'application avec vos identifiants <b>Dashlist</b> pour commencer à organiser vos projets.
+					Faites également participer vos contacts en les invitant via l'interface d'administration qui vous est réservé une fois connecté sur le site.				
 				</p>
 			</div>
 			<div>
 				<img src="../images/box-of-icons.png" alt="Img">
-				<h2>More Design Elements</h2>
+				<h2>Plugins</h2>
 				<p>
-					Wix also offers a ton of free design elements right inside the editor, like images, icons, galleries, videos and large selection of Add Ons and social feeds.
+					Vous trouverez ici quelques outils pratiques pour améliorer votre expérience <b>Dashlist</b>.<br/>
+					Pour en profiter, téléchargez le plugin et placez le dans un dossier nommé "plugins" situé au même endroit que votre application.
 				</p>
-				<h2>Free to Use</h2>
+				<h3><a href="C://wamp/www/EventLog.jar">EventLog</a></h3>
 				<p>
-					Publish your Free Website in minutes! You can remove any link to our website from this website template, you're free to use this website template without linking back to us.
+					Gardez le contrôle sur tout ce qu'il se passe sur vos projets grâce à ce gestionnaire d'evenements.
 				</p>
 			</div>
 		</div>
