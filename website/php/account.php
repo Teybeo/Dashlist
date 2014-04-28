@@ -61,10 +61,19 @@
 			</div>
 			
 		</div>
-		<div class="main" id="selected_project" style="display: none;"></div>
+		<div class="main" id="selected_project" style="display: none;">
+			<div id="table_project"></div>
+			<div id="add_member">
+				<br/><br/>
+				<h2><b>Ajouter un membre</b></h2>
+					<p>Vous pouvez inviter d'autres personnes à rejoindre ce projet<br/>Il suffit d'entrer le pseudonyme ou l'adresse mail de votre contact</p>
+					<input type="text" id="invite" placeholder="Entrez un nom ou une adresse mail"/> <input type="button" size="55" value="Inviter"/>
+			</div>
+		</div>
 		<div class="main" id="no_selected_project" style="height: 400px;">
 			Selectionnez un projet dans la liste de gauche ou creez en un <a class="newp" href="#">en cliquant ici</a>.
 		</div>
+		
 	</div>
 	
 	<script type="text/javascript" src="../js/project.js"></script>

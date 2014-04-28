@@ -16,7 +16,7 @@ $('td').click(function(e){
 	})
 	.done(function( msg ) {
 		$("#selected_project").fadeIn(300);
-		$("#selected_project").html(msg);
+		$("#table_project").html(msg);
 	});
 	
 	$("#no_selected_project").fadeOut(300);
