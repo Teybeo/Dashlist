@@ -155,7 +155,6 @@ class ListUI extends JPanel implements Observer{
 					super.mouseReleased(e);
 
 					if (e.isPopupTrigger()) {
-						System.out.println(e.getComponent()+" clicked");
 						// On récupère le ListUI sur lequel on a cliqué
 						clicked_list = (ListUI) e.getComponent();
 						show(e.getComponent(), e.getX(), e.getY());

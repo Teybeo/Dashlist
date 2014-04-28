@@ -78,9 +78,9 @@ class Login extends Observable {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		login_field.requestFocus();
-		frame.setVisible(true);
 		frame.setResizable(false);
 		connexion_btn.requestFocusInWindow();
+		frame.setVisible(true);
 	}
 
 	private void connexion() {

@@ -65,16 +65,21 @@ public class Board extends Observable implements Observer {
 			String message = (String) arg;
 			// On transmet la notification pour les plugins
 			// Seulement si le message ne contient pas (by eventlog)
-			if (message.startsWith("Item added: ")   ||
-				message.startsWith("Item deleted: ") ||
-				message.startsWith("List deleted: "))
+			if (message.startsWith("Item added: ") || message.startsWith("Item deleted: "))
 			{
 				setChanged();
 				notifyObservers(arg);
 				clearChanged();
 			}
-			if (message.startsWith("List deleted (by eventlog)"))
+			if (message.startsWith("List deleted"))
 			{
+
+				if (message.contains("(by eventlog)") == false)
+				{
+					setChanged();
+					notifyObservers(arg);
+					clearChanged();
+				}
 				lists.remove(o);
 			}
 
