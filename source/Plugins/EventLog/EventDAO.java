@@ -112,7 +112,11 @@ public class EventDAO {
 		switch (event_type)
 		{
 			case Event.LIST_CREATED:
-				System.out.println("Not implemented yet");
+				delete(event);
+				List list = board.getListById(event.getList_id_new());
+				list_dao.delete(list, List.Action_Source.EVENT_LOG);
+//				board.delete(event.getList_id_new()).delete(Item.Delete_Type.HARD_DELETE);
+				done = true;
 				break;
 			case Event.LIST_DELETED:
 				delete(event);
@@ -128,8 +132,8 @@ public class EventDAO {
 				// 2. On supprime l'item dans la BDD
 				// 3. On supprime l'item de la mémoire
 				delete(event);
-				item_dao.revertCreate(event.getItem_id_new());
-				board.getItemById(event.getItem_id_new()).delete(Item.Delete_Type.HARD_DELETE);
+				Item item = board.getItemById(event.getItem_id_new());
+				item_dao.delete(item, Item.Action_Source.EVENT_LOG);
 				done = true;
 				break;
 			case Event.ITEM_DELETED:

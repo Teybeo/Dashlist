@@ -155,8 +155,8 @@ public class ListDAO {
 
 	        if (source == List.Action_Source.USER)
 				query.execute("UPDATE list SET is_deleted = TRUE WHERE id ="+ list.getId());
-//	        else if (type == List.Delete_Type.HARD)
-//		        query.execute("DELETE FROM list WHERE id ="+ list.getId());
+	        else if (source == List.Action_Source.EVENT_LOG)
+		        query.execute("DELETE FROM list WHERE id ="+ list.getId());
 
 			list.delete(source);
 

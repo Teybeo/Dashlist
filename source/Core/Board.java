@@ -93,6 +93,10 @@ public class Board extends Observable implements Observer {
 				notifyObservers(arg);
 				clearChanged();
 			}
+			if (message.startsWith("List deleted (by eventlog)"))
+			{
+				lists.remove(o);
+			}
 
 		}
 

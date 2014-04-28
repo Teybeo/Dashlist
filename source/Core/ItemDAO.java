@@ -55,16 +55,16 @@ public class ItemDAO {
         }
     }
 
-    public void delete(Item item, boolean soft_delete) {
+    public void delete(Item item, Item.Action_Source source) {
         try {
             Statement query = link.createStatement();
 
-            query.execute("" +
-                    "UPDATE item " +
-                    "SET is_deleted = TRUE " +
-		            "WHERE id ="+item.getId());
+	        if (source == Item.Action_Source.USER)
+	            query.execute("UPDATE item SET is_deleted = TRUE WHERE id ="+item.getId());
+	        else if (source == Item.Action_Source.EVENT_LOG)
+		        query.execute("DELETE FROM item WHERE id = '" + item.getId() + "';");
 
-	        item.delete(Item.Delete_Type.SOFT_DELETE);
+	        item.delete(source);
 
         } catch (SQLException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

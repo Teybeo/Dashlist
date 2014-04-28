@@ -54,7 +54,7 @@ public class ItemUI extends JPanel implements Observer {
 
 		ItemDAO dao = new ItemDAO(BddConnection.getInstance());
 
-		dao.delete(getItem(), true);
+		dao.delete(getItem(), Item.Action_Source.USER);
 
 	}
 

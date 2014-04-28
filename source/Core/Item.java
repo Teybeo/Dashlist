@@ -10,10 +10,10 @@ public class Item extends Observable {
 	int position;
 	Date date;
 	String text;
-	public static enum Delete_Type {
-		SOFT_DELETE,
-		HARD_DELETE
-	};
+	public static enum Action_Source {
+		USER,
+		EVENT_LOG
+	}
 
 	public Item(int id, Date date, String name, int position, String text) {
 
@@ -81,12 +81,12 @@ public class Item extends Observable {
 		this.id = id;
 	}
 
-	public void delete(Delete_Type type) {
+	public void delete(Action_Source source) {
 
 		setChanged();
-		if (type == Delete_Type.SOFT_DELETE)
+		if (source == Action_Source.USER)
 			notifyObservers("Item deleted");
-		else if (type == Delete_Type.HARD_DELETE)
+		else if (source == Action_Source.EVENT_LOG)
 			notifyObservers("Item deleted (by eventlog)");
 		clearChanged();
 	}

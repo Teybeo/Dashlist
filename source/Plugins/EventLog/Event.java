@@ -186,4 +186,9 @@ public class Event extends Observable {
 		notifyObservers("Event deleted");
 		clearChanged();
 	}
+
+	public int getList_id_new() {
+
+		return list_id_new;
+	}
 }
